@@ -1,6 +1,6 @@
 # AndroidPortfolio
 
-Collection of Android apps used to showcase knowledge of Android APK.
+Collection of Android apps used to showcase knowledge of the Android APK.
 
 ## Installation
 
@@ -9,7 +9,7 @@ Collection of Android apps used to showcase knowledge of Android APK.
 
 ## Projects
 
-1. FunFacts:        Fact repository	
+1. FlixFriend:        App to allow users to discover the most popular movies playing	
 
 ## Contributing
 
