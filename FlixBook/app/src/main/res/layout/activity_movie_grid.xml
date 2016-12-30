@@ -12,7 +12,8 @@
     tools:context="com.alvinsvitzer.flixbook.MovieGridActivity">
 
     <TextView
+        android:id="@+id/text_view_query_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"/>
+        tools:text="Hello World!"/>
 </RelativeLayout>
