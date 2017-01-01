@@ -15,6 +15,9 @@ public class MovieDBUtils {
     final static String TAG = MovieDBUtils.class.getSimpleName();
 
     final static String MOVIEDB_BASE_URL = "https://api.themoviedb.org/3/discover/movie";
+    final static String MOVIE_POSTER_BASE_URL = "http://image.tmdb.org/t/p";
+
+    final static String MOVIE_POSTER_SIZE_W185 = "w185";
 
     final static String PARAM_API_KEY = "api_key";
     final static String PARAM_LANGUAGE = "language";
@@ -57,6 +60,21 @@ public class MovieDBUtils {
         return url;
 
 
+    }
+
+    public static URL buildMoviePosterURL(String posterFilePath){
+
+        String movieUrlString = MOVIE_POSTER_BASE_URL + "/" + MOVIE_POSTER_SIZE_W185 + "/" + posterFilePath;
+
+        URL url = null;
+
+        try {
+            url = new URL(movieUrlString);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
     }
 
 }

@@ -12,7 +12,9 @@ import com.android.volley.toolbox.Volley;
 /**
  * Created by Alvin on 12/29/16.
  *
- * Used to create one instance of Volley's RequestQueue that will last the lifetime of the app
+ * Used to create one instance of Volley's RequestQueue that will last the lifetime of the app. This
+ * is especially useful for the image cache so that it will be used for the entire application as well
+ * as not having to recreate this every time a network request needs to be made.
  */
 
 public class VolleyNetworkSingleton {

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/grid_item_card_view"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    card_view:cardCornerRadius="8dp"
+    card_view:cardBackgroundColor="#EEEEEE"
+    card_view:cardElevation="4dp"
+>
+
+    <!-- TODO Might have to change constraints on height -->
+
+    <!--
+
+    Volley's NetworkImageView is designed in such a way that it creates an image request, sends it and even displays
+    the image, after it is downloaded from the URL. Also it cancels the request on its own if it is detached
+    from the view hierarchy.
+
+    -->
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/movie_poster_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:maxHeight="70dp"
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true"
+        android:src="@drawable/small_movie_placeholder"
+        />
+
+
+</android.support.v7.widget.CardView>
+
+

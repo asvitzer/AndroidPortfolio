@@ -11,6 +11,15 @@ public class Movie {
     private String plotSynopsis;
     private Double userRating;
     private String releaseDate;
+    private int movieId;
+
+    public int getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(int movieId) {
+        this.movieId = movieId;
+    }
 
     public String getMovieTitle() {
         return movieTitle;
@@ -50,6 +59,12 @@ public class Movie {
 
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
+    }
+
+    public String toString(){
+
+        return movieId + " | " + movieTitle + " | " + releaseDate;
+
     }
 
 
