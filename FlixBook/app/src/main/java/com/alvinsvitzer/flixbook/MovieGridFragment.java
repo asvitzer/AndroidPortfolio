@@ -4,8 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -35,7 +33,7 @@ import java.util.List;
 
 public class MovieGridFragment extends Fragment {
 
-    private static final String TAG = MovieDashboardActivity.class.getSimpleName();
+    private static final String TAG = MovieGridActivity.class.getSimpleName();
     private static final String MOVIE_DB_API_KEY = "movieDbApiKey";
 
     private String mMovieDBApiKey;
@@ -70,7 +68,7 @@ public class MovieGridFragment extends Fragment {
 
         mVolleyNetworkSingleton = VolleyNetworkSingleton.getInstance(getActivity());
 
-        setHasOptionsMenu(true);
+        //setHasOptionsMenu(true);
 
     }
 
@@ -112,8 +110,6 @@ public class MovieGridFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(false);
     }
 
     @Override
