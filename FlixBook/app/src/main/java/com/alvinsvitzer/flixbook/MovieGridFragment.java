@@ -1,15 +1,18 @@
 package com.alvinsvitzer.flixbook;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alvinsvitzer.flixbook.model.Movie;
@@ -27,11 +30,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MovieGridFragment extends Fragment {
 
-    private static final String TAG = MovieGridActivity.class.getSimpleName();
+    private static final String TAG = MovieDashboardActivity.class.getSimpleName();
     private static final String MOVIE_DB_API_KEY = "movieDbApiKey";
 
     private String mMovieDBApiKey;
@@ -39,12 +43,13 @@ public class MovieGridFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private MovieAdapter mMovieAdapter;
     private VolleyNetworkSingleton mVolleyNetworkSingleton;
+    private TextView mNoDataTextView;
 
     private OnFragmentInteractionListener mListener;
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+
+        void onMovieClick(Movie movie);
     }
 
     public static MovieGridFragment newInstance(String movieDBApiKey) {
@@ -59,12 +64,12 @@ public class MovieGridFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
+        if (getArguments() != null && mMovieDBApiKey == null) {
             mMovieDBApiKey = getArguments().getString(MOVIE_DB_API_KEY);
         }
 
         mVolleyNetworkSingleton = VolleyNetworkSingleton.getInstance(getActivity());
-        grabHomeMovies();
+
 
 
     }
@@ -75,12 +80,22 @@ public class MovieGridFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_movie_grid, container, false);
 
+        mNoDataTextView = (TextView) v.findViewById(R.id.no_data_text_view);
+
         mRecyclerView = (RecyclerView) v.findViewById(R.id.movie_recycler_view);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3, GridLayoutManager.HORIZONTAL, false));
+
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+
+        //Pass in an empty ArrayList for now. Data is added after Volley Network call.
+        mMovieList = new ArrayList<>();
+
+        mMovieAdapter = new MovieAdapter(mMovieList);
+        mRecyclerView.setAdapter(mMovieAdapter);
+
+        grabHomeMovies();
 
         return v;
     }
-
 
     @Override
     public void onAttach(Context context) {
@@ -94,17 +109,26 @@ public class MovieGridFragment extends Fragment {
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(false);
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        //updateUI();
+        updateUI();
     }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
 
     private void grabHomeMovies() {
 
@@ -117,12 +141,18 @@ public class MovieGridFragment extends Fragment {
                     public void onResponse(JSONObject response) {
 
                         try {
-                            mMovieList = MovieDBJSONUtils.getMovieDataFromJSONObject(getActivity(), response);
+
+                            List<Movie> addMovie = MovieDBJSONUtils.getMovieDataFromJSONObject(getActivity(), response);
+
+                            for (Movie m: addMovie){
+
+                                mMovieList.add(m);
+
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
 
-                        Log.d(TAG, "onResponse: " + "Just finished JSON calls. " + mMovieList.get(0).toString());
                         updateUI();
 
                     }
@@ -132,11 +162,12 @@ public class MovieGridFragment extends Fragment {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // TODO Auto-generated method stub
 
                         Log.e(TAG, "onErrorResponse: ", error);
 
-                        Toast.makeText(getActivity(), "Unable to retrieve movie data.", Toast.LENGTH_SHORT)
+                        showNoDataTextView();
+
+                        Toast.makeText(getActivity(), getString(R.string.no_movie_data_text), Toast.LENGTH_SHORT)
                                 .show();
 
                     }
@@ -153,19 +184,41 @@ public class MovieGridFragment extends Fragment {
             mMovieAdapter = new MovieAdapter(mMovieList);
             mRecyclerView.setAdapter(mMovieAdapter);
 
+        } else{
+
+            mMovieAdapter.notifyDataSetChanged();
         }
 
     }
 
-    private class MovieHolder extends RecyclerView.ViewHolder{
+    private void showNoDataTextView(){
+
+        mRecyclerView.setVisibility(View.INVISIBLE);
+        mNoDataTextView.setVisibility(View.VISIBLE);
+    }
+
+    private void hideNoDataTextView(){
+
+        mRecyclerView.setVisibility(View.VISIBLE);
+        mNoDataTextView.setVisibility(View.INVISIBLE);
+
+    }
+
+    private class MovieHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private NetworkImageView mMoviePoster;
         private ImageLoader mImageLoader;
+        private TextView mMovieTitle;
+        private TextView mMovieReleaseDate;
 
         public MovieHolder(View itemView) {
             super(itemView);
 
             mMoviePoster = (NetworkImageView) itemView.findViewById(R.id.movie_poster_image);
+            mMovieTitle = (TextView) itemView.findViewById(R.id.movie_poster_title);
+            mMovieReleaseDate = (TextView) itemView.findViewById(R.id.movie_poster_release_date);
+
+            itemView.setOnClickListener(this);
         }
 
         public void bindMovie(Movie movie){
@@ -176,6 +229,16 @@ public class MovieGridFragment extends Fragment {
 
             mImageLoader = mVolleyNetworkSingleton.getImageLoader();
             mMoviePoster.setImageUrl(imageUrl,mImageLoader);
+
+            mMovieTitle.setText(movie.getMovieTitle());
+            mMovieReleaseDate.setText(movie.getReleaseDate());
+
+        }
+
+        @Override
+        public void onClick(View v) {
+
+            mListener.onMovieClick(mMovieList.get(getAdapterPosition()));
 
         }
     }

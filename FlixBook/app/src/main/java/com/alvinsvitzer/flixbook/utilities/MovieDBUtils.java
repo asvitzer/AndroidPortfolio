@@ -64,7 +64,7 @@ public class MovieDBUtils {
 
     public static URL buildMoviePosterURL(String posterFilePath){
 
-        String movieUrlString = MOVIE_POSTER_BASE_URL + "/" + MOVIE_POSTER_SIZE_W185 + "/" + posterFilePath;
+        String movieUrlString = MOVIE_POSTER_BASE_URL + "/" + MOVIE_POSTER_SIZE_W185 + posterFilePath;
 
         URL url = null;
 

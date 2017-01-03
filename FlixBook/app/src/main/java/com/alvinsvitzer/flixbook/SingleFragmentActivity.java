@@ -14,7 +14,7 @@ import android.util.Log;
 public abstract class SingleFragmentActivity extends AppCompatActivity {
 
     private String mMovieDBApiKey;
-    private static final String TAG = MovieGridActivity.class.getSimpleName();
+    private static final String TAG = MovieDashboardActivity.class.getSimpleName();
 
     @LayoutRes
     protected int getLayoutResId(){
