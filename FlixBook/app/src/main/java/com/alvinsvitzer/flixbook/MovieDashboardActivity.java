@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -43,23 +42,18 @@ public class MovieDashboardActivity extends SingleFragmentActivity implements Mo
 
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        //TODO Use the id of a fragment to hide the menu options when it's the detail fragment showing
-        // http://stackoverflow.com/questions/9294603/get-currently-displayed-fragment
-        // Shift menu to fragments as a better alternative: http://stackoverflow.com/questions/15653737/oncreateoptionsmenu-inside-fragments
-
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.dashboard, menu);
+        getMenuInflater().inflate(R.menu.dashboard, menu);
         return true;
-
-
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
 
@@ -74,12 +68,17 @@ public class MovieDashboardActivity extends SingleFragmentActivity implements Mo
             case R.id.sort_menu_item:
 
                 Toast.makeText(this, "Sorted!", Toast.LENGTH_LONG).show();
+
+                return true;
+
+            default:
+
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+
     }
 
     public void replaceFragmentContainer(Fragment fragmentToCommit, String tag, boolean addToBackStack){
-
 
         FragmentManager fragmentManager =  getSupportFragmentManager();
 
@@ -89,6 +88,20 @@ public class MovieDashboardActivity extends SingleFragmentActivity implements Mo
                     .addToBackStack(tag)
                     .commit();
         }else{
+
+            /**
+             * popBackstack done so that if the Up/Home navigation was used when going from MovieDetailFragment to
+             * MovieGridFragment, the back button will not try and reload the MovieGridFragment. Pressing the back button
+             * will either go to whatever launched the application or the home screen. This was implemented because
+             * the back button & up/home button mirror themselves in how they affect the navigation flow,
+             * at least when going from MovieGridFragment to MovieDetailFragment with both sharing 1 hosting activity.
+             * popping off the last transaction keeps their navigation flow in sync.
+             *
+             * This will need to be changed if there if ever another flow that gets to the MovieDetailFragment other
+             * than from MovieGridFragment.
+             *
+             */
+            fragmentManager.popBackStack();
 
             fragmentManager.beginTransaction()
                     .replace(mFragmentContainerId, fragmentToCommit, tag)

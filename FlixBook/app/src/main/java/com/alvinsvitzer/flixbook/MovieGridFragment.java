@@ -70,7 +70,7 @@ public class MovieGridFragment extends Fragment {
 
         mVolleyNetworkSingleton = VolleyNetworkSingleton.getInstance(getActivity());
 
-
+        setHasOptionsMenu(true);
 
     }
 

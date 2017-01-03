@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -52,6 +54,8 @@ public class MovieDetailFragment extends Fragment {
         } else {
             Toast.makeText(getActivity(), R.string.movie_data_error_text, Toast.LENGTH_SHORT).show();
         }
+
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -59,6 +63,19 @@ public class MovieDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_movie_detail, container, false);
+    }
+
+    /**
+     * Removes the sort menu item from the fragment since the menu logic is in the hosting activity
+     * that also hosts the MovieGridFragment. Another approach, if the menu becomes more complicated,
+     * is to remove the menu logic from the hosting activity and keep it in each respective fragment.
+     * @param menu
+     */
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.sort_menu_item);
+        item.setVisible(false);
     }
 
 }
