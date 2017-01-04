@@ -90,7 +90,7 @@ public class MovieGridFragment extends Fragment {
         mMovieAdapter = new MovieAdapter(mMovieList);
         mRecyclerView.setAdapter(mMovieAdapter);
 
-        grabHomeMovies();
+        grabHomeMovies(MovieDBUtils.buildMostPopularURL(mMovieDBApiKey));
 
         return v;
     }
@@ -125,17 +125,16 @@ public class MovieGridFragment extends Fragment {
         mListener = null;
     }
 
+    public void grabHomeMovies(URL movieDbUrl) {
 
-    private void grabHomeMovies() {
-
-        URL requestDefaultMovieURL = MovieDBUtils.buildDefaultUrl(mMovieDBApiKey);
 
         JsonObjectRequest jsObjectRequest  = new JsonObjectRequest
-                (Request.Method.GET, requestDefaultMovieURL.toString(), null, new Response.Listener<JSONObject>() {
+                (Request.Method.GET, movieDbUrl.toString(), null, new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
 
+                        // TODO fix List so it loads new movies when URL changes
                         try {
 
                             List<Movie> addMovie = MovieDBJSONUtils.getMovieDataFromJSONObject(getActivity(), response);

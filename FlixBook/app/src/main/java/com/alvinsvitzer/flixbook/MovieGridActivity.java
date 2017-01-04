@@ -1,20 +1,38 @@
 package com.alvinsvitzer.flixbook;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.alvinsvitzer.flixbook.model.Movie;
+import com.alvinsvitzer.flixbook.utilities.MovieDBUtils;
 
 import org.parceler.Parcels;
 
 public class MovieGridActivity extends SingleFragmentActivity
-        implements MovieGridFragment.OnFragmentInteractionListener{
+        implements MovieGridFragment.OnFragmentInteractionListener {
 
     private static final String TAG = MovieGridActivity.class.getSimpleName();
+    private static final String SORT_MENU_CHECKED_PREF = "sortMenuChecked";
+    private int sortMenuIdChecked;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Restore preferences for which sorting option was used
+        SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
+        sortMenuIdChecked = settings.getInt(SORT_MENU_CHECKED_PREF, R.id.action_sort_most_popular);
+
+    }
 
     @Override
     protected Fragment createFragment() {
@@ -38,16 +56,20 @@ public class MovieGridActivity extends SingleFragmentActivity
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.dashboard, menu);
+
         return true;
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+
         switch (item.getItemId()) {
 
             case R.id.sort_menu_item:
 
-                Toast.makeText(this, "Sorted!", Toast.LENGTH_LONG).show();
+                displayPopUpMenu();
 
                 return true;
 
@@ -57,4 +79,84 @@ public class MovieGridActivity extends SingleFragmentActivity
         }
 
     }
+
+    private void displayPopUpMenu() {
+
+        View menuItemView = findViewById(R.id.sort_menu_item);
+        PopupMenu popupMenu = new PopupMenu(this, menuItemView);
+        popupMenu.inflate(R.menu.sub_menu_filter);
+
+        MenuItem mi = popupMenu.getMenu().findItem(sortMenuIdChecked);
+
+        //Set the proper menu item to be checked based off shared preferences.
+        if (mi != null) {
+            mi.setChecked(true);
+        }
+
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+
+                switch (item.getItemId()) {
+
+                    case R.id.action_sort_highest_rated:
+                        Toast.makeText(MovieGridActivity.this, "Rating", Toast.LENGTH_LONG).show();
+
+                        saveCheckedItemState(item);
+
+                        return true;
+
+                    case R.id.action_sort_most_popular:
+                        Toast.makeText(MovieGridActivity.this, "Popular", Toast.LENGTH_LONG).show();
+
+                        saveCheckedItemState(item);
+
+                        return true;
+
+                    default:
+
+                        return false;
+                }
+
+            }
+
+            public void saveCheckedItemState(MenuItem item) {
+
+                //No need to resort grid (involving network calls) if the current sort option is picked again.
+                if (item.isChecked() == true){
+                    return;
+                }
+
+                item.setChecked(true);
+
+                sortMenuIdChecked = item.getItemId();
+
+                // Save which menu item is checked in saved preferences.
+                SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putInt(SORT_MENU_CHECKED_PREF, sortMenuIdChecked);
+
+                // Commit the edits!
+                editor.apply();
+
+                android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+                MovieGridFragment gridFragment = (MovieGridFragment) fragmentManager.findFragmentById(R.id.fragment_container);
+
+                if(item.getItemId() == R.id.action_sort_highest_rated){
+
+                    gridFragment.grabHomeMovies(MovieDBUtils.buildHighestRatingURL(getMovieDBApiKey()));
+
+                } else {
+
+                    gridFragment.grabHomeMovies(MovieDBUtils.buildMostPopularURL(getMovieDBApiKey()));
+                }
+
+            }
+
+
+        });
+
+        popupMenu.show();
+    }
+
 }

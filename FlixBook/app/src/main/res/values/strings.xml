@@ -4,6 +4,7 @@
     <string name="no_movie_data_text">Sorry, the movie data could not be pulled at this time.</string>
     <string name="menu_sort_title">Sort</string>
     <string name="title_activity_movie_detail">MovieDetailActivity</string>
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_test">TestActivity</string>
+    <string name="menu_sort_most_popular">Most Popular</string>
+    <string name="menu_sort_highest_rating">Highest Rating</string>
+    <string name="menu_sort_group_title">Sort</string>
 </resources>

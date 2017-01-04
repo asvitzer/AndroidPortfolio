@@ -37,6 +37,4 @@ public class MovieDetailActivity extends SingleFragmentActivity {
         return true;
     }
 
-
-
 }

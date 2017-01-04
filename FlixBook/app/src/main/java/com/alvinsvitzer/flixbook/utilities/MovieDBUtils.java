@@ -8,13 +8,14 @@ import java.net.URL;
 
 /**
  * Created by Alvin on 12/29/16. Class used to communicate with Movie DB API
+ * API Link -> https://developers.themoviedb.org/3
  */
 
 public class MovieDBUtils {
 
     final static String TAG = MovieDBUtils.class.getSimpleName();
 
-    final static String MOVIEDB_BASE_URL = "https://api.themoviedb.org/3/discover/movie";
+    final static String MOVIEDB_BASE_URL = "https://api.themoviedb.org/3/movie";
     final static String MOVIE_POSTER_BASE_URL = "http://image.tmdb.org/t/p";
 
     final static String MOVIE_POSTER_SIZE_W185 = "w185";
@@ -36,18 +37,38 @@ public class MovieDBUtils {
     /**
      * Builds URL for app home page that gets list of most popular movies
      */
-    public static URL buildDefaultUrl(String apiKey){
+    public static URL buildMostPopularURL(String apiKey){
 
         Uri finalUri = Uri.parse(MOVIEDB_BASE_URL).buildUpon()
+                .appendPath("popular")
                 .appendQueryParameter(PARAM_API_KEY, apiKey)
                 .appendQueryParameter(PARAM_LANGUAGE, LANGUAGE_ENGLISH_US)
-                .appendQueryParameter(PARAM_INCLUDE_ADULT, INCLUDE_TRUE)
-                .appendQueryParameter(PARAM_INCLUDE_VIDEO, INCLUDE_FALSE)
-                .appendQueryParameter(PARAM_PAGE, FIRST_PAGE)
-                .appendQueryParameter(PARAM_SORT_BY, SORT_BY_POPULARITY)
                 .build();
 
-        Log.i(TAG, "buildDefaultUrl: " + finalUri.toString());
+        Log.i(TAG, "buildMostPopularURL: " + finalUri.toString());
+
+        URL url = null;
+
+        try {
+            url = new URL(finalUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
+
+    }
+
+
+    public static URL buildHighestRatingURL(String apiKey){
+
+        Uri finalUri = Uri.parse(MOVIEDB_BASE_URL).buildUpon()
+                .appendPath("top_rated")
+                .appendQueryParameter(PARAM_API_KEY, apiKey)
+                .appendQueryParameter(PARAM_LANGUAGE, LANGUAGE_ENGLISH_US)
+                .build();
+
+        Log.i(TAG, "buildHighestRatingURL: " + finalUri.toString());
 
         URL url = null;
 
