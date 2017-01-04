@@ -1,6 +1,7 @@
 package com.alvinsvitzer.flixbook;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -35,6 +36,7 @@ public class MovieGridFragment extends Fragment {
 
     private static final String TAG = MovieGridActivity.class.getSimpleName();
     private static final String MOVIE_DB_API_KEY = "movieDbApiKey";
+    private int sortMenuIdChecked;
 
     private String mMovieDBApiKey;
     private List<Movie> mMovieList;
@@ -68,7 +70,9 @@ public class MovieGridFragment extends Fragment {
 
         mVolleyNetworkSingleton = VolleyNetworkSingleton.getInstance(getActivity());
 
-        //setHasOptionsMenu(true);
+        // Restore preferences for which sorting option was used
+        SharedPreferences settings = getActivity().getPreferences(Context.MODE_PRIVATE);
+        sortMenuIdChecked = settings.getInt(MovieGridActivity.SORT_MENU_CHECKED_PREF, R.id.action_sort_most_popular);
 
     }
 
@@ -90,7 +94,14 @@ public class MovieGridFragment extends Fragment {
         mMovieAdapter = new MovieAdapter(mMovieList);
         mRecyclerView.setAdapter(mMovieAdapter);
 
-        grabHomeMovies(MovieDBUtils.buildMostPopularURL(mMovieDBApiKey));
+        if(sortMenuIdChecked == R.id.action_sort_highest_rated){
+
+            grabHomeMovies(MovieDBUtils.buildHighestRatingURL(mMovieDBApiKey));
+
+        } else {
+
+            grabHomeMovies(MovieDBUtils.buildMostPopularURL(mMovieDBApiKey));
+        }
 
         return v;
     }
@@ -134,7 +145,6 @@ public class MovieGridFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
 
-                        // TODO fix initial load so it finds sort from preference
                         try {
 
                             //Clear out list so that when sorting changes, data is not just added

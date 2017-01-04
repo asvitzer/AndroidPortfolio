@@ -20,7 +20,7 @@ public class MovieGridActivity extends SingleFragmentActivity
         implements MovieGridFragment.OnFragmentInteractionListener {
 
     private static final String TAG = MovieGridActivity.class.getSimpleName();
-    private static final String SORT_MENU_CHECKED_PREF = "sortMenuChecked";
+    public static final String SORT_MENU_CHECKED_PREF = "sortMenuChecked";
     private int sortMenuIdChecked;
 
     @Override

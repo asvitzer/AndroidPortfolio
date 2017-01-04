@@ -67,6 +67,8 @@ public class MovieDetailFragment extends Fragment {
         mVolleyNetworkSingleton = VolleyNetworkSingleton.getInstance(getActivity());
         mImageLoader = mVolleyNetworkSingleton.getImageLoader();
 
+
+
     }
 
     @Override
