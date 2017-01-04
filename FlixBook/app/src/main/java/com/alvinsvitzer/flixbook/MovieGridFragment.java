@@ -134,8 +134,11 @@ public class MovieGridFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
 
-                        // TODO fix List so it loads new movies when URL changes
+                        // TODO fix initial load so it finds sort from preference
                         try {
+
+                            //Clear out list so that when sorting changes, data is not just added
+                            mMovieList.clear();
 
                             List<Movie> addMovie = MovieDBJSONUtils.getMovieDataFromJSONObject(getActivity(), response);
 
@@ -219,8 +222,6 @@ public class MovieGridFragment extends Fragment {
         public void bindMovie(Movie movie){
 
             String imageUrl = MovieDBUtils.buildMoviePosterURL(movie.getMoviePoster()).toString();
-
-            Log.i(TAG, "bindMovie | ImageUrl: " + imageUrl);
 
             mImageLoader = mVolleyNetworkSingleton.getImageLoader();
             mMoviePoster.setImageUrl(imageUrl,mImageLoader);

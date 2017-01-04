@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.alvinsvitzer.flixbook.model.Movie;
 import com.alvinsvitzer.flixbook.utilities.MovieDBUtils;
@@ -100,14 +99,12 @@ public class MovieGridActivity extends SingleFragmentActivity
                 switch (item.getItemId()) {
 
                     case R.id.action_sort_highest_rated:
-                        Toast.makeText(MovieGridActivity.this, "Rating", Toast.LENGTH_LONG).show();
 
                         saveCheckedItemState(item);
 
                         return true;
 
                     case R.id.action_sort_most_popular:
-                        Toast.makeText(MovieGridActivity.this, "Popular", Toast.LENGTH_LONG).show();
 
                         saveCheckedItemState(item);
 
@@ -123,7 +120,7 @@ public class MovieGridActivity extends SingleFragmentActivity
             public void saveCheckedItemState(MenuItem item) {
 
                 //No need to resort grid (involving network calls) if the current sort option is picked again.
-                if (item.isChecked() == true){
+                if (item.isChecked()){
                     return;
                 }
 

@@ -17,6 +17,7 @@ public class Movie {
      */
     public String mMovieTitle;
     public String mMoviePoster;
+    public String mMovieBackdrop;
     public String mPlotSynopsis;
     public Double mUserRating;
     public String mReleaseDate;
@@ -26,11 +27,12 @@ public class Movie {
 
     }
 
-    public Movie (int movieId, String title, String moviePoster, String plotSynopsis, Double userRating, String releaseDate){
+    public Movie (int movieId, String title, String moviePoster, String movieBackdrop, String plotSynopsis, Double userRating, String releaseDate){
         
         mMovieId = movieId;
         mMovieTitle = title;
         mMoviePoster = moviePoster;
+        mMovieBackdrop = movieBackdrop;
         mPlotSynopsis = plotSynopsis;
         mUserRating = userRating;
         mReleaseDate = releaseDate;
@@ -59,6 +61,14 @@ public class Movie {
 
     public void setMoviePoster(String moviePoster) {
         this.mMoviePoster = moviePoster;
+    }
+
+    public String getMovieBackdrop() {
+        return mMovieBackdrop;
+    }
+
+    public void setMovieBackdrop(String movieBackdrop) {
+        mMovieBackdrop = movieBackdrop;
     }
 
     public String getPlotSynopsis() {

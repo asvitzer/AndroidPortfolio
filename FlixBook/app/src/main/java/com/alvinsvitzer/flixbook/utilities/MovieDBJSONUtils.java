@@ -35,6 +35,7 @@ public class MovieDBJSONUtils {
             JSONObject movieJson = movieArray.getJSONObject(i);
 
             addMovie.setMoviePoster(movieJson.getString("poster_path"));
+            addMovie.setMovieBackdrop(movieJson.getString("backdrop_path"));
             addMovie.setMovieTitle(movieJson.getString("title"));
             addMovie.setPlotSynopsis(movieJson.getString("overview"));
             addMovie.setUserRating(movieJson.getDouble("vote_average"));
