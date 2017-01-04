@@ -19,7 +19,7 @@ public class Movie {
     public String mMoviePoster;
     public String mMovieBackdrop;
     public String mPlotSynopsis;
-    public Double mUserRating;
+    public Double mVoteAverage;
     public String mReleaseDate;
     public int mMovieId;
 
@@ -27,14 +27,14 @@ public class Movie {
 
     }
 
-    public Movie (int movieId, String title, String moviePoster, String movieBackdrop, String plotSynopsis, Double userRating, String releaseDate){
+    public Movie (int movieId, String title, String moviePoster, String movieBackdrop, String plotSynopsis, Double voteAverage, String releaseDate){
         
         mMovieId = movieId;
         mMovieTitle = title;
         mMoviePoster = moviePoster;
         mMovieBackdrop = movieBackdrop;
         mPlotSynopsis = plotSynopsis;
-        mUserRating = userRating;
+        mVoteAverage = voteAverage;
         mReleaseDate = releaseDate;
         
     }
@@ -79,12 +79,12 @@ public class Movie {
         this.mPlotSynopsis = plotSynopsis;
     }
 
-    public Double getUserRating() {
-        return mUserRating;
+    public Double getVoteAverage() {
+        return mVoteAverage;
     }
 
-    public void setUserRating(Double userRating) {
-        this.mUserRating = userRating;
+    public void setVoteAverage(Double voteAverage) {
+        this.mVoteAverage = voteAverage;
     }
 
     public String getReleaseDate() {

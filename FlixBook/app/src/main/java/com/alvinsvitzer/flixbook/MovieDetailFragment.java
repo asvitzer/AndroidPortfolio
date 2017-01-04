@@ -34,6 +34,8 @@ public class MovieDetailFragment extends Fragment {
     private TextView mPlotSynopsis;
     private ImageLoader mImageLoader;
     private VolleyNetworkSingleton mVolleyNetworkSingleton;
+    private TextView mReleaseDate;
+    private TextView mVoteAverage;
 
     public static MovieDetailFragment newInstance(Parcelable movie){
 
@@ -77,6 +79,8 @@ public class MovieDetailFragment extends Fragment {
         mPosterImage = (NetworkImageView) view.findViewById(R.id.movie_poster_image);
         mBannerText = (TextView) view.findViewById(R.id.banner_text_view);
         mPlotSynopsis = (TextView) view.findViewById(R.id.movie_plot_synopsis_textview);
+        mReleaseDate = (TextView) view.findViewById(R.id.movie_release_date_textview);
+        mVoteAverage = (TextView) view.findViewById(R.id.movie_vote_average_textview);
 
         attachMovieInformation();
 
@@ -88,6 +92,8 @@ public class MovieDetailFragment extends Fragment {
 
         mBannerText.setText(mMovie.getMovieTitle());
         mPlotSynopsis.setText(mMovie.getPlotSynopsis());
+        mReleaseDate.setText(mMovie.getReleaseDate());
+        mVoteAverage.setText(String.valueOf(mMovie.getVoteAverage()) + "/10");
 
         String posterImageUrl = MovieDBUtils.buildMoviePosterURL(mMovie.getMoviePoster()).toString();
         mPosterImage.setImageUrl(posterImageUrl,mImageLoader);

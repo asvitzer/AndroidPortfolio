@@ -38,7 +38,7 @@ public class MovieDBJSONUtils {
             addMovie.setMovieBackdrop(movieJson.getString("backdrop_path"));
             addMovie.setMovieTitle(movieJson.getString("title"));
             addMovie.setPlotSynopsis(movieJson.getString("overview"));
-            addMovie.setUserRating(movieJson.getDouble("vote_average"));
+            addMovie.setVoteAverage(movieJson.getDouble("vote_average"));
             addMovie.setReleaseDate(movieJson.getString("release_date"));
             addMovie.setMovieId(movieJson.getInt("id"));
 

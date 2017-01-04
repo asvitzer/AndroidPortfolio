@@ -7,4 +7,6 @@
     <string name="menu_sort_most_popular">Most Popular</string>
     <string name="menu_sort_highest_rating">Highest Rating</string>
     <string name="menu_sort_group_title">Sort</string>
+    <string name="movie_info_release_date_label">Release Date:</string>
+    <string name="movie_info_vote_average_label">Vote Average:</string>
 </resources>
