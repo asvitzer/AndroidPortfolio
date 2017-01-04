@@ -1,17 +1,13 @@
 <resources>
 
-    <!-- Base application theme. -->
+    <!-- Application Theme Styles -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
+    <!-- Layout Styles -->
 
     <style name="TextViewMovieDetailLabel" >
         <item name="android:paddingStart">6dp</item>
@@ -26,8 +22,32 @@
         <item name="android:paddingBottom">3dp</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <!-- Action Bar Styles -->
 
+    <style name="TransparentActionBarKeepUpNav" parent="AppTheme">
+
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="actionBarStyle">@style/ActionBarStyle.Transparent</item>
+
+        <!-- Support library compatibility -->
+        <item name="windowActionBarOverlay">true</item>
+
+    </style>
+
+    <style name="ActionBarStyle.Transparent" parent="@style/Widget.AppCompat.ActionBar">
+
+        <item name="android:background">@android:color/transparent</item>
+
+        <!-- Support library compatibility -->
+        <item name="background">@android:color/transparent</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
 </resources>

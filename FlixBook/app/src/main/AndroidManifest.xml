@@ -21,6 +21,7 @@
             android:name=".MovieDetailActivity"
             android:label="@string/title_activity_movie_detail"
             android:parentActivityName=".MovieGridActivity"
+            android:theme="@style/TransparentActionBarKeepUpNav"
             >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

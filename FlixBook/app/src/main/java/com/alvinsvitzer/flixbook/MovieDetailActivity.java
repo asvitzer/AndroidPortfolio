@@ -16,6 +16,9 @@ public class MovieDetailActivity extends SingleFragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment);
 
+        //Blanks out the title so the hero image can be shown for the movie detail
+        setTitle("");
+
     }
 
     @Override
