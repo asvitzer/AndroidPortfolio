@@ -9,7 +9,7 @@ Collection of Android apps used to showcase knowledge of the Android APK.
 
 ## Projects
 
-1. FlixFriend:        App to allow users to discover the most popular movies playing	
+1. FlixFriend:        App to allow users to discover information about the most popular movies.
 
 ## Contributing
 
