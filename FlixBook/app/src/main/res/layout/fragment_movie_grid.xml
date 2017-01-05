@@ -18,6 +18,8 @@
         android:id="@+id/no_data_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center"
         android:text="@string/no_movie_data_text"
         android:visibility="invisible"
         />

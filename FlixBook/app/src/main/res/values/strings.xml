@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">FlixBook</string>
     <string name="movie_data_error_text">Unable to retrieve movie data.</string>
-    <string name="no_movie_data_text">Sorry, the movie data could not be pulled at this time.</string>
+    <string name="no_movie_data_text">The movie data could not be loaded at this time.</string>
     <string name="menu_sort_title">Sort</string>
     <string name="title_activity_movie_detail">MovieDetailActivity</string>
     <string name="menu_sort_most_popular">Most Popular</string>

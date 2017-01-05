@@ -140,6 +140,8 @@ public class MovieGridFragment extends Fragment {
 
     public void grabHomeMovies(URL movieDbUrl) {
 
+        hideNoDataTextView();
+
         JsonObjectRequest jsObjectRequest  = new JsonObjectRequest
                 (Request.Method.GET, movieDbUrl.toString(), null, new Response.Listener<JSONObject>() {
 
