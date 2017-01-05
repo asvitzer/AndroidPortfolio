@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.view.Menu;
 
+import com.alvinsvitzer.flixbook.extensions.SingleFragmentActivity;
+
 public class MovieDetailActivity extends SingleFragmentActivity {
 
     public static final String MOVIE_DETAIL = "movieDetail";

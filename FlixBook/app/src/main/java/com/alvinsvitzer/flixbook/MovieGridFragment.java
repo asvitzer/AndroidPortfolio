@@ -79,6 +79,7 @@ public class MovieGridFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_movie_grid, container, false);
 
@@ -105,6 +106,7 @@ public class MovieGridFragment extends Fragment {
 
         return v;
     }
+
 
     @Override
     public void onAttach(Context context) {
@@ -138,7 +140,6 @@ public class MovieGridFragment extends Fragment {
 
     public void grabHomeMovies(URL movieDbUrl) {
 
-
         JsonObjectRequest jsObjectRequest  = new JsonObjectRequest
                 (Request.Method.GET, movieDbUrl.toString(), null, new Response.Listener<JSONObject>() {
 
@@ -150,7 +151,7 @@ public class MovieGridFragment extends Fragment {
                             //Clear out list so that when sorting changes, data is not just added
                             mMovieList.clear();
 
-                            List<Movie> addMovie = MovieDBJSONUtils.getMovieDataFromJSONObject(getActivity(), response);
+                            List<Movie> addMovie = MovieDBJSONUtils.getMovieDataFromJSONObject(response);
 
                             for (Movie m: addMovie){
 
@@ -212,6 +213,7 @@ public class MovieGridFragment extends Fragment {
 
     }
 
+
     private class MovieHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private NetworkImageView mMoviePoster;
@@ -231,13 +233,19 @@ public class MovieGridFragment extends Fragment {
 
         public void bindMovie(Movie movie){
 
+            mMovieTitle.setText(movie.getMovieTitle());
+            mMovieReleaseDate.setText(movie.getReleaseDate());
+
             String imageUrl = MovieDBUtils.buildMoviePosterURL(movie.getMoviePoster()).toString();
 
             mImageLoader = mVolleyNetworkSingleton.getImageLoader();
+
+            //Set Default Image & Error Images if can't be fetched from network
+            mImageLoader.get(imageUrl, ImageLoader.getImageListener(mMoviePoster,
+                    R.drawable.small_movie_placeholder, android.R.drawable
+                            .ic_dialog_alert));
             mMoviePoster.setImageUrl(imageUrl,mImageLoader);
 
-            mMovieTitle.setText(movie.getMovieTitle());
-            mMovieReleaseDate.setText(movie.getReleaseDate());
 
         }
 
@@ -281,4 +289,6 @@ public class MovieGridFragment extends Fragment {
             return mMovies.size();
         }
     }
+
+
 }

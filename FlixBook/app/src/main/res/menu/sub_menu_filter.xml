@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!--TODO Figure out how to get an icon to show up for the group header -->
+    <!--TODO Figure out how to get an icon to show up for the group header. -->
 
     <!-- menu group -->
     <group

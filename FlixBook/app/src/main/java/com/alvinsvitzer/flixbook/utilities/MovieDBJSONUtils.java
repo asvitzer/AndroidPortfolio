@@ -1,6 +1,5 @@
 package com.alvinsvitzer.flixbook.utilities;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.alvinsvitzer.flixbook.model.Movie;
@@ -20,9 +19,7 @@ public class MovieDBJSONUtils {
 
     private static final String TAG = MovieDBJSONUtils.class.getSimpleName();
 
-    // TODO Remove Context object if not being used.
-
-    public static List<Movie> getMovieDataFromJSONObject(Context context, JSONObject jsonObject)
+    public static List<Movie> getMovieDataFromJSONObject(JSONObject jsonObject)
             throws JSONException {
 
         List<Movie> movieList = new ArrayList<>();

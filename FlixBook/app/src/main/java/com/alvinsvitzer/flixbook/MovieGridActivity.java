@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.alvinsvitzer.flixbook.extensions.SingleFragmentActivity;
 import com.alvinsvitzer.flixbook.model.Movie;
 import com.alvinsvitzer.flixbook.utilities.MovieDBUtils;
 
@@ -58,6 +59,8 @@ public class MovieGridActivity extends SingleFragmentActivity
 
         return true;
     }
+
+
 
 
     @Override
@@ -119,7 +122,7 @@ public class MovieGridActivity extends SingleFragmentActivity
 
             public void saveCheckedItemState(MenuItem item) {
 
-                //No need to resort grid (involving network calls) if the current sort option is picked again.
+                //No need to re-sort grid (involving network calls) if the current sort option is picked again.
                 if (item.isChecked()){
                     return;
                 }

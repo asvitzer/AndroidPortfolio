@@ -1,4 +1,4 @@
-package com.alvinsvitzer.flixbook;
+package com.alvinsvitzer.flixbook.extensions;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -6,6 +6,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+
+import com.alvinsvitzer.flixbook.MovieGridActivity;
+import com.alvinsvitzer.flixbook.R;
 
 /**
  * Created by Alvin on 1/1/16.
