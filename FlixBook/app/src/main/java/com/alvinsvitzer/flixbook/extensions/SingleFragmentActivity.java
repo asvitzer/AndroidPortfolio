@@ -30,7 +30,7 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
         setContentView(getLayoutResId());
 
         /** Set mMovieDBApiKey below to your API key for The MovieDB**/
-        setMovieDBApiKey(getString(R.string.the_movie_db_auth_key));
+        setMovieDBApiKey("INSERT YOUR KEY HERE");
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
