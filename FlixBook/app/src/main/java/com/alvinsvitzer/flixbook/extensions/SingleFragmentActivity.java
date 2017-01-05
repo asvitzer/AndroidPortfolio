@@ -52,7 +52,7 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
 
     public void setMovieDBApiKey(String key){
 
-        if (key != null && key != ""){
+        if (key != null && !key.equals("")){
 
             mMovieDBApiKey = key;
 

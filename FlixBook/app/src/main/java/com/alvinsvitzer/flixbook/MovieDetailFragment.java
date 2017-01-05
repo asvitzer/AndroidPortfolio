@@ -33,7 +33,6 @@ public class MovieDetailFragment extends Fragment {
     private TextView mBannerText;
     private TextView mPlotSynopsis;
     private ImageLoader mImageLoader;
-    private VolleyNetworkSingleton mVolleyNetworkSingleton;
     private TextView mReleaseDate;
     private TextView mVoteAverage;
 
@@ -49,12 +48,6 @@ public class MovieDetailFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-    }
-
-    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -64,8 +57,8 @@ public class MovieDetailFragment extends Fragment {
             Toast.makeText(getActivity(), R.string.movie_data_error_text, Toast.LENGTH_SHORT).show();
         }
 
-        mVolleyNetworkSingleton = VolleyNetworkSingleton.getInstance(getActivity());
-        mImageLoader = mVolleyNetworkSingleton.getImageLoader();
+        VolleyNetworkSingleton volleyNetworkSingleton = VolleyNetworkSingleton.getInstance(getActivity());
+        mImageLoader = volleyNetworkSingleton.getImageLoader();
 
 
 
@@ -95,7 +88,7 @@ public class MovieDetailFragment extends Fragment {
         mBannerText.setText(mMovie.getMovieTitle());
         mPlotSynopsis.setText(mMovie.getPlotSynopsis());
         mReleaseDate.setText(mMovie.getReleaseDate());
-        mVoteAverage.setText(String.valueOf(mMovie.getVoteAverage()) + "/10");
+        mVoteAverage.setText(String.valueOf(mMovie.getVoteAverage()) + getString(R.string.movie_info_vote_average_denominator));
 
         String posterImageUrl = MovieDBUtils.buildMoviePosterURL(mMovie.getMoviePoster()).toString();
         mPosterImage.setImageUrl(posterImageUrl,mImageLoader);
