@@ -9,7 +9,9 @@ App to allow users to discover information about the most popular movies.
 
 ## API Keys
 
-1. The Movie DB:        Place your own key in the SingleFragmentActivity class (in package com.alvinsvitzer.flixbook.extensions) on line 33.
+1. The Movie DB:        Place own key in the SingleFragmentActivity class (in package com.alvinsvitzer.flixbook.extensions) on line 33:
+
+setMovieDBApiKey("INSERT YOUR KEY HERE")
 
 ## Contributing
 
