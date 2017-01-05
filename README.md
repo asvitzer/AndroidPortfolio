@@ -1,15 +1,17 @@
-# AndroidPortfolio
+# FlixBook
 
-Collection of Android apps used to showcase knowledge of the Android APK.
+App to allow users to discover information about the most popular movies.
 
 ## Installation
 
 1. Download Android Studio.
 2. Pull down the project files and open the them in Android Studio.
 
-## Projects
+## API Keys
 
-1. FlixFriend:        App to allow users to discover information about the most popular movies.
+1. The Movie DB:        Place own key in the SingleFragmentActivity class (in package com.alvinsvitzer.flixbook.extensions) on line 33:
+
+setMovieDBApiKey("INSERT YOUR KEY HERE")
 
 ## Contributing
 
