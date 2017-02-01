@@ -2,7 +2,6 @@ package com.alvinsvitzer.flixbook;
 
 
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -73,8 +72,8 @@ public class MovieDetailFragment extends Fragment {
         mImageLoader = volleyNetworkSingleton.getImageLoader();
 
         //Lock fragment to portrait mode until a landscape layout has been created
-        getActivity().setRequestedOrientation(
-                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        //getActivity().setRequestedOrientation(
+        //        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         getActivity().setTitle(getString(R.string.movie_detail_fragment_title));
 
