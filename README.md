@@ -1,6 +1,16 @@
 # FlixBook
 
-App to allow users to discover information about the most popular movies.
+App to help users discover popular and highly rated movies on the web. A scrolling grid of movie posters is used to display the movies however the user decides to sort them. When clicked, a details screen is shown for the particular movie is selected. This app utilizes core Android user interface components and grabs movie information using themoviedb.org web API.
+
+## Concepts Covered
+
+1. Network Requests (via the Volley API)
+2. Image Caching (via the Volley API)
+3. Activities/Fragments
+4. RecyclerView
+5. JSON (via the Movie DB API)
+6. Intents
+7. Parcelable (via the Parceler API)
 
 ## Installation
 
