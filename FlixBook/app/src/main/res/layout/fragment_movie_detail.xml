@@ -1,12 +1,18 @@
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.alvinsvitzer.flixbook.MovieDetailFragment"
+    android:scrollbars="vertical"
+    >
+
 <RelativeLayout
 
     android:id="@+id/fragment_detail_container"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scrollbars="vertical"
-    tools:context="com.alvinsvitzer.flixbook.MovieDetailFragment">
+    >
 
     <com.android.volley.toolbox.NetworkImageView
 
@@ -19,7 +25,6 @@
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
         android:src="@drawable/large_movie_placeholder"
-
         />
 
     <TextView
@@ -106,5 +111,5 @@
         style="@style/TextViewMovieDetailText"
         />
 
-
 </RelativeLayout>
+</ScrollView>
