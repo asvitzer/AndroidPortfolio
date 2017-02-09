@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">FlixBook</string>
     <string name="movie_data_error_text">Unable to retrieve movie data.</string>
     <string name="no_movie_data_text">The movie data could not be loaded at this time.</string>
@@ -9,7 +9,7 @@
     <string name="menu_sort_group_title">Sort</string>
     <string name="movie_info_release_date_label">Release Date:</string>
     <string name="movie_info_vote_average_label">Vote Average:</string>
-    <string name="movie_info_vote_average_denominator">/10</string>
+    <string name="movie_info_vote_average_rating"><xliff:g id="temp">%1.0f</xliff:g>/10</string>
     <string name="movie_detail_fragment_title">FlixBook - Movie Details</string>
     <string name="movie_grid_fragment_title">FlixBook</string>
 </resources>
