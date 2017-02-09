@@ -357,7 +357,7 @@ public class MovieGridFragment extends Fragment {
         public void bindMovie(Movie movie){
 
             mMovieTitle.setText(movie.getMovieTitle());
-            mMovieReleaseDate.setText(movie.getReleaseDate());
+            mMovieReleaseDate.setText(MovieDBUtils.getLocalDate(movie.getReleaseDate()));
 
             String imageUrl = MovieDBUtils.buildMoviePosterURL(movie.getMoviePoster()).toString();
 

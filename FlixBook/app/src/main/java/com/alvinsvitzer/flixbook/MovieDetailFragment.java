@@ -145,7 +145,7 @@ public class MovieDetailFragment extends Fragment {
 
         mBannerText.setText(mMovie.getMovieTitle());
         mPlotSynopsis.setText(mMovie.getPlotSynopsis());
-        mReleaseDate.setText(mMovie.getReleaseDate());
+        mReleaseDate.setText(MovieDBUtils.getLocalDate(mMovie.getReleaseDate()));
 
         int movieRatingId = R.string.movie_info_vote_average_rating;
 

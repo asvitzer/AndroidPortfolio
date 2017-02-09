@@ -5,6 +5,10 @@ import android.util.Log;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.text.DateFormat;
 
 /**
  * Created by Alvin on 12/29/16. Class used to communicate with Movie DB API
@@ -117,6 +121,32 @@ public class MovieDBUtils {
         }
 
         return url;
+    }
+
+    public static String getLocalDate(String dateToConvert){
+
+
+        String formattedDate = dateToConvert;
+
+        SimpleDateFormat movieDbformat = new SimpleDateFormat("yyyy-MM-dd");
+
+        DateFormat localDateFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+
+        Date date;
+
+        try {
+            date = movieDbformat.parse(dateToConvert);
+            formattedDate = localDateFormat.format(date);
+
+        } catch (ParseException e) {
+
+            Log.e(TAG, "getLocalDate: Could not parse this date: " + dateToConvert, e);
+
+        }
+
+        return formattedDate;
+
+
     }
 
 }
