@@ -38,6 +38,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.alvinsvitzer.flixbook.MovieActivity.SORT_MENU_CHECKED_PREF;
 
 public class MovieGridFragment extends Fragment {
@@ -48,11 +51,14 @@ public class MovieGridFragment extends Fragment {
 
     private String mMovieDBApiKey;
     private List<Movie> mMovieList;
-    private RecyclerView mRecyclerView;
     private MovieAdapter mMovieAdapter;
     private VolleyNetworkSingleton mVolleyNetworkSingleton;
-    private TextView mNoDataTextView;
     private SharedPreferences mSharedPreferences;
+
+    @BindView(R.id.no_data_text_view)
+    TextView mNoDataTextView;
+    @BindView(R.id.movie_recycler_view)
+    RecyclerView mRecyclerView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -96,9 +102,7 @@ public class MovieGridFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_movie_grid, container, false);
 
-        mNoDataTextView = (TextView) v.findViewById(R.id.no_data_text_view);
-
-        mRecyclerView = (RecyclerView) v.findViewById(R.id.movie_recycler_view);
+        ButterKnife.bind(this, v);
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
 
@@ -338,6 +342,8 @@ public class MovieGridFragment extends Fragment {
         private TextView mMovieTitle;
         private TextView mMovieReleaseDate;
 
+
+
         public MovieHolder(View itemView) {
             super(itemView);
 
@@ -400,6 +406,8 @@ public class MovieGridFragment extends Fragment {
             holder.bindMovie(movie);
 
         }
+
+
 
         @Override
         public int getItemCount() {

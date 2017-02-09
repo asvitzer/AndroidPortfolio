@@ -1,7 +1,6 @@
 package com.alvinsvitzer.flixbook;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -9,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,6 +25,9 @@ import com.android.volley.toolbox.NetworkImageView;
 
 import org.parceler.Parcels;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,13 +35,27 @@ import org.parceler.Parcels;
 public class MovieDetailFragment extends Fragment {
 
     private Movie mMovie;
-    private NetworkImageView mBackdropImage;
-    private NetworkImageView mPosterImage;
-    private TextView mBannerText;
-    private TextView mPlotSynopsis;
+
+    @BindView(R.id.movie_backdrop_image)
+    NetworkImageView mBackdropImage;
+
+    @BindView(R.id.movie_poster_image)
+    NetworkImageView mPosterImage;
+
+    @BindView(R.id.banner_text_view)
+    TextView mBannerText;
+
+    @BindView(R.id.movie_plot_synopsis_textview)
+    TextView mPlotSynopsis;
+
+    @BindView(R.id.movie_release_date_textview)
+    TextView mReleaseDate;
+
+    @BindView(R.id.movie_vote_average_textview)
+    TextView mVoteAverage;
+
     private ImageLoader mImageLoader;
-    private TextView mReleaseDate;
-    private TextView mVoteAverage;
+
 
     public static final String MOVIE_DETAIL = "movieDetail";
 
@@ -70,10 +85,6 @@ public class MovieDetailFragment extends Fragment {
 
         VolleyNetworkSingleton volleyNetworkSingleton = VolleyNetworkSingleton.getInstance(getActivity());
         mImageLoader = volleyNetworkSingleton.getImageLoader();
-
-        //Lock fragment to portrait mode until a landscape layout has been created
-        //getActivity().setRequestedOrientation(
-        //        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         getActivity().setTitle(getString(R.string.movie_detail_fragment_title));
 
@@ -120,28 +131,14 @@ public class MovieDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
-        // TODO Figure out why the layout override for this fragment isn't working
-
-        // create ContextThemeWrapper from the original Activity Context with the custom theme
-        final Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.TransparentActionBarKeepUpNav);
-
-        // clone the inflater using the ContextThemeWrapper
-        LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
-
-        View view = localInflater.inflate(R.layout.fragment_movie_detail, container, false);
-
-        mBackdropImage = (NetworkImageView) view.findViewById(R.id.movie_backdrop_image);
-        mPosterImage = (NetworkImageView) view.findViewById(R.id.movie_poster_image);
-        mBannerText = (TextView) view.findViewById(R.id.banner_text_view);
-        mPlotSynopsis = (TextView) view.findViewById(R.id.movie_plot_synopsis_textview);
-        mReleaseDate = (TextView) view.findViewById(R.id.movie_release_date_textview);
-        mVoteAverage = (TextView) view.findViewById(R.id.movie_vote_average_textview);
+        // Inflate the layout for this fragment
+        View v = inflater.inflate(R.layout.fragment_movie_detail, container, false);
+        ButterKnife.bind(this, v);
 
         attachMovieInformation();
 
         // Inflate the layout for this fragment
-        return view;
+        return v;
     }
 
     private void attachMovieInformation() {
@@ -149,7 +146,11 @@ public class MovieDetailFragment extends Fragment {
         mBannerText.setText(mMovie.getMovieTitle());
         mPlotSynopsis.setText(mMovie.getPlotSynopsis());
         mReleaseDate.setText(mMovie.getReleaseDate());
-        mVoteAverage.setText(String.valueOf(mMovie.getVoteAverage()) + getString(R.string.movie_info_vote_average_denominator));
+
+        int movieRatingId = R.string.movie_info_vote_average_rating;
+
+        String movieRating = String.format(getString(movieRatingId), mMovie.getVoteAverage());
+        mVoteAverage.setText(movieRating);
 
         String posterImageUrl = MovieDBUtils.buildMoviePosterURL(mMovie.getMoviePoster()).toString();
         mPosterImage.setImageUrl(posterImageUrl,mImageLoader);
