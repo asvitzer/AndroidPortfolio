@@ -23,6 +23,8 @@ App to help users discover popular and highly rated movies on the web. A scrolli
 
 setMovieDBApiKey("INSERT YOUR KEY HERE")
 
+https://www.themoviedb.org/documentation/api
+
 ## Contributing
 
 1. Fork it!
