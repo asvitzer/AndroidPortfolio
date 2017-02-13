@@ -2,6 +2,8 @@ package com.alvinsvitzer.flixbook.model;
 
 import org.parceler.Parcel;
 
+import java.util.List;
+
 /**
  * Created by Alvin on 12/29/16. Model Movie object.
  */
@@ -15,13 +17,14 @@ public class Movie {
      * The getter/setter methods are still kept just out of habit even though you can direct manipulate the
      * member variables without encapsulaton.
      */
+    public int mMovieId;
     public String mMovieTitle;
     public String mMoviePoster;
     public String mMovieBackdrop;
     public String mPlotSynopsis;
     public Double mVoteAverage;
     public String mReleaseDate;
-    public int mMovieId;
+    public List<Trailer> mTrailerList;
 
     public Movie(){
 
@@ -101,5 +104,12 @@ public class Movie {
 
     }
 
+    public List<Trailer> getTrailerList() {
+        return mTrailerList;
+    }
+
+    public void setTrailerList(List<Trailer> trailerList) {
+        mTrailerList = trailerList;
+    }
 
 }

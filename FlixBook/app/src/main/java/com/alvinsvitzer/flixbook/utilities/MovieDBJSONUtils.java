@@ -3,6 +3,7 @@ package com.alvinsvitzer.flixbook.utilities;
 import android.util.Log;
 
 import com.alvinsvitzer.flixbook.model.Movie;
+import com.alvinsvitzer.flixbook.model.Trailer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,6 +47,34 @@ public class MovieDBJSONUtils {
         }
 
         return movieList;
+
+    }
+
+    public static List<Trailer> getVideoDataFromJSONObject(JSONObject jsonObject)
+            throws JSONException {
+
+        List<Trailer> videoList = new ArrayList<>();
+
+        JSONArray trailerArray = jsonObject.getJSONArray("results");
+
+        for (int i = 0; i < trailerArray.length(); i++) {
+
+            Trailer addTrailer = new Trailer();
+            JSONObject trailerJson = trailerArray.getJSONObject(i);
+
+            addTrailer.setId(trailerJson.getString("id"));
+            addTrailer.setKey(trailerJson.getString("key"));
+            addTrailer.setName(trailerJson.getString("name"));
+            addTrailer.setSite(trailerJson.getString("site"));
+            addTrailer.setType(trailerJson.getString("type"));
+
+            videoList.add(addTrailer);
+
+            Log.d(TAG, "getVideoDataFromJSONObject: " + addTrailer.toString());
+
+        }
+
+        return videoList;
 
     }
 

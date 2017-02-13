@@ -7,13 +7,13 @@
     android:layout_height="match_parent">
 
 <android.support.design.widget.CoordinatorLayout
+    android:id="@+id/CoordLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
 
 <android.support.constraint.ConstraintLayout
     tools:context="com.alvinsvitzer.flixbook.MovieDetailFragment"
-    android:id="@+id/fragment_detail_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
@@ -139,6 +139,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:clickable="true"
+        android:src="@drawable/ic_play_arrow_white_18dp"
         app:layout_anchor="@id/movie_backdrop_image"
         app:layout_anchorGravity="bottom|right|end"
         />

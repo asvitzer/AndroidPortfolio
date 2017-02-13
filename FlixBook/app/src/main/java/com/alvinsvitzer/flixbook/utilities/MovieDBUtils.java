@@ -25,6 +25,10 @@ public class MovieDBUtils {
     final static String MOVIE_POSTER_SIZE_W185 = "w185";
     final static String MOVIE_POSTER_SIZE_W500 = "w500";
 
+    final static String PATH_POPULAR = "popular";
+    final static String PATH_VIDEO = "videos";
+    final static String PATH_TOP_RATED = "top_rated";
+
     final static String PARAM_API_KEY = "api_key";
     final static String PARAM_LANGUAGE = "language";
     final static String PARAM_INCLUDE_ADULT = "include_adult";
@@ -38,6 +42,33 @@ public class MovieDBUtils {
     final static String FIRST_PAGE = "1";
     final static String LANGUAGE_ENGLISH_US = "en-US";
 
+    public final static String ATTRIBUTE_VIDE_SITE_YOUTUBE = "YouTube";
+    public final static String ATTRIBUTE_VIDEO_TYPE_TRAILER = "Trailer";
+
+    /**
+     * Builds URL to get all the videos for a movie
+     */
+    public static URL buildMovieVideoURL(String apiKey, String movieId){
+
+        Uri finalUri = Uri.parse(MOVIEDB_BASE_URL).buildUpon()
+                .appendPath(movieId)
+                .appendPath(PATH_VIDEO)
+                .appendQueryParameter(PARAM_API_KEY, apiKey)
+                .appendQueryParameter(PARAM_LANGUAGE, LANGUAGE_ENGLISH_US)
+                .build();
+
+        Log.i(TAG, "buildMovieVideoURL: " + finalUri.toString());
+
+        URL url = null;
+
+        try {
+            url = new URL(finalUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
+    }
 
     /**
      * Builds URL for app home page that gets list of most popular movies
@@ -45,7 +76,7 @@ public class MovieDBUtils {
     public static URL buildMostPopularURL(String apiKey){
 
         Uri finalUri = Uri.parse(MOVIEDB_BASE_URL).buildUpon()
-                .appendPath("popular")
+                .appendPath(PATH_POPULAR)
                 .appendQueryParameter(PARAM_API_KEY, apiKey)
                 .appendQueryParameter(PARAM_LANGUAGE, LANGUAGE_ENGLISH_US)
                 .build();
@@ -68,7 +99,7 @@ public class MovieDBUtils {
     public static URL buildHighestRatingURL(String apiKey){
 
         Uri finalUri = Uri.parse(MOVIEDB_BASE_URL).buildUpon()
-                .appendPath("top_rated")
+                .appendPath(PATH_TOP_RATED)
                 .appendQueryParameter(PARAM_API_KEY, apiKey)
                 .appendQueryParameter(PARAM_LANGUAGE, LANGUAGE_ENGLISH_US)
                 .build();

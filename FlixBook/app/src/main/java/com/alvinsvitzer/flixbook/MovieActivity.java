@@ -23,14 +23,19 @@ public class MovieActivity extends SingleFragmentActivity
     @Override
     public void onMovieClick(Movie movie) {
 
-        Log.i(TAG, "onMovieClick | " + "Pulling up detail for movie: " + movie.toString());
+       Log.i(TAG, "onMovieClick | " + "Pulling up detail for movie: " + movie.toString());
 
-        Fragment newDetail = MovieDetailFragment.newInstance(Parcels.wrap(movie));
+        Fragment newDetail = MovieDetailFragment.newInstance(Parcels.wrap(movie), getMovieDBApiKey());
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, newDetail)
                 .addToBackStack(null)
                 .commit();
+
+/*
+        Intent myIntent = new Intent(this, ScrollingActivity.class);
+        startActivity(myIntent);
+*/
 
     }
 
