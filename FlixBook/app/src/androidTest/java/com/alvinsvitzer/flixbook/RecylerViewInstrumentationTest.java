@@ -41,7 +41,7 @@ public class RecylerViewInstrumentationTest {
         Fragment fragment = MovieGridFragment.newInstance(apiKey);
         fm.beginTransaction()
                 .add(R.id.fragment_container, fragment)
-                .commit();
+                .commitAllowingStateLoss();
 
 
         onView(allOf(withId(R.id.movie_recycler_view), hasFocus()))
