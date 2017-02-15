@@ -8,6 +8,9 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
+import com.alvinsvitzer.flixbook.movies.MovieActivity;
+import com.alvinsvitzer.flixbook.movies.MovieGridFragment;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
