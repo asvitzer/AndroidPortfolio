@@ -16,8 +16,6 @@
 
 package com.alvinsvitzer.flixbook;
 
-public interface BaseView<T> {
-
-    void setPresenter(T presenter);
+public interface BaseView {
 
 }

@@ -3,6 +3,7 @@ package com.alvinsvitzer.flixbook.data;
 import android.support.annotation.NonNull;
 
 import com.alvinsvitzer.flixbook.model.Movie;
+import com.alvinsvitzer.flixbook.model.Trailer;
 import com.alvinsvitzer.flixbook.movies.MoviesFilterType;
 
 import java.util.List;
@@ -15,23 +16,30 @@ public interface MovieDataSource {
 
     interface GetMoviesCallback {
 
-        void onTasksLoaded(List<Movie> movieList);
+        void onMoviesLoaded(List<Movie> movieList);
 
         void onDataNotAvailable();
     }
 
     interface GetMovieCallback {
 
-        void onTaskLoaded(Movie movie);
+        void onMovieLoaded(Movie movie);
+
+        void onDataNotAvailable();
+    }
+
+    interface GetTrailersCallback {
+
+        void onTrailersLoaded(List<Trailer> trailerList);
 
         void onDataNotAvailable();
     }
 
     void getMovies(@NonNull GetMoviesCallback callback
-            , @NonNull MoviesFilterType moviesFilterType
-            , @NonNull String apiKey);
+            , @NonNull MoviesFilterType moviesFilterType);
 
     void getMovie(@NonNull GetMovieCallback callback
-            , @NonNull MoviesFilterType moviesFilterType
-            , @NonNull String apiKey);
+            , @NonNull MoviesFilterType moviesFilterType);
+
+    void getTrailers(@NonNull String movieId, @NonNull GetTrailersCallback callback);
 }

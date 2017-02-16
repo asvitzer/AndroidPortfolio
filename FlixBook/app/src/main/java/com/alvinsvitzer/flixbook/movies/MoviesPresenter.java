@@ -17,28 +17,15 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class MoviesPresenter implements MoviesContract.Presenter, MovieDataSource.GetMoviesCallback {
 
     private final MovieRemoteDataStore mMovieRemoteDataStore;
-    private final MoviesContract.View mMoviesView;
-    private final String mApiKey;
+    private MoviesContract.View mMoviesView;
 
     MoviesPresenter(@NonNull MovieRemoteDataStore movieRemoteDataStore
                     , @NonNull MoviesContract.View moviesView
-                    , @NonNull String apiKey
                     ){
 
         mMovieRemoteDataStore = checkNotNull(movieRemoteDataStore, "movieRemoteDataStore cannot be null");
         mMoviesView = checkNotNull(moviesView, "moviesView cannot be null");
-        mApiKey = checkNotNull(apiKey, "apiKey cannot be null");
         mMoviesView.setPresenter(this);
-    }
-
-    @Override
-    public void attachView(MoviesContract.View view) {
-
-    }
-
-    @Override
-    public void detachView() {
-
     }
 
     @Override
@@ -54,12 +41,25 @@ public class MoviesPresenter implements MoviesContract.Presenter, MovieDataSourc
 
         MoviesFilterType sortingId = mMoviesView.getSortingId();
 
-        mMovieRemoteDataStore.getMovies(this, sortingId, mApiKey);
+        mMovieRemoteDataStore.getMovies(this, sortingId);
 
     }
 
     @Override
-    public void onTasksLoaded(List<Movie> movieList) {
+    public void attachView(MoviesContract.View view) {
+
+        mMoviesView = view;
+        mMoviesView.setPresenter(this);
+    }
+
+    @Override
+    public void detachView() {
+
+        mMoviesView = null;
+    }
+
+    @Override
+    public void onMoviesLoaded(List<Movie> movieList) {
 
         mMoviesView.showMovies(movieList);
 

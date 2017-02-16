@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
+import com.alvinsvitzer.flixbook.R;
 import com.alvinsvitzer.flixbook.data.remote.MovieRemoteDataStore;
 import com.alvinsvitzer.flixbook.extensions.SingleFragmentActivity;
 import com.alvinsvitzer.flixbook.model.Movie;
@@ -20,6 +21,7 @@ public class MovieActivity extends SingleFragmentActivity
     public static final String SORT_MENU_CHECKED_PREF = "sortMenuChecked";
     public static final String INTENT_EXTRA_API_KEY = "api_key";
     public static final String INTENT_EXTRA_MOVIE = "movie";
+    private MoviesContract.Presenter mPresenter;
 
 
     @Override
@@ -31,18 +33,26 @@ public class MovieActivity extends SingleFragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setTitle(getString(R.string.movie_grid_fragment_title));
         attachPresenter();
 
     }
 
     private void attachPresenter() {
 
-        VolleyNetworkSingleton volleyNetworkSingleton = VolleyNetworkSingleton.getInstance(this);
+        mPresenter = (MoviesContract.Presenter) getLastCustomNonConfigurationInstance();
 
-        new MoviesPresenter(
-                MovieRemoteDataStore.getInstance(volleyNetworkSingleton)
-                , (MoviesContract.View) getCurrentFragment()
-                , getMovieDBApiKey());
+        if (mPresenter == null) {
+
+            VolleyNetworkSingleton volleyNetworkSingleton = VolleyNetworkSingleton.getInstance(this);
+
+            mPresenter = new MoviesPresenter(MovieRemoteDataStore.getInstance(volleyNetworkSingleton, getMovieDBApiKey())
+                                            , (MoviesContract.View) getCurrentFragment());
+        } else {
+
+            mPresenter.attachView((MoviesContract.View) getCurrentFragment());
+        }
+
     }
 
     @Override
@@ -55,6 +65,17 @@ public class MovieActivity extends SingleFragmentActivity
         detailIntent.putExtra(INTENT_EXTRA_MOVIE ,Parcels.wrap(movie));
         startActivity(detailIntent);
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        mPresenter.detachView();
+        super.onDestroy();
+    }
+
+    @Override
+    public Object onRetainCustomNonConfigurationInstance() {
+        return mPresenter;
     }
 
 }

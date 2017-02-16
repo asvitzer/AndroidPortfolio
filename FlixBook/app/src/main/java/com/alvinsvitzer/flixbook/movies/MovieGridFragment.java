@@ -52,10 +52,10 @@ public class MovieGridFragment extends Fragment implements MoviesContract.View {
     private OnFragmentInteractionListener mListener;
 
     @Override
-    public void setPresenter(@NonNull Object presenter) {
+    public void setPresenter(@NonNull MoviesContract.Presenter presenter) {
 
         checkNotNull(presenter, "presenter cannot be null");
-        mPresenter = (MoviesContract.Presenter) presenter;
+        mPresenter = presenter;
 
     }
 
@@ -90,8 +90,6 @@ public class MovieGridFragment extends Fragment implements MoviesContract.View {
         mMovieList = new ArrayList<>();
 
         mMovieAdapter = new MovieAdapter(mMovieList, getActivity());
-
-        getActivity().setTitle(getString(R.string.movie_grid_fragment_title));
 
     }
 

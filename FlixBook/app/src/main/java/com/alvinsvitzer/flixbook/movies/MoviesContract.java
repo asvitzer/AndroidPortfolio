@@ -1,5 +1,7 @@
 package com.alvinsvitzer.flixbook.movies;
 
+import android.support.annotation.NonNull;
+
 import com.alvinsvitzer.flixbook.BasePresenter;
 import com.alvinsvitzer.flixbook.BaseView;
 import com.alvinsvitzer.flixbook.model.Movie;
@@ -23,6 +25,7 @@ public interface MoviesContract {
     interface View extends BaseView{
 
         MoviesFilterType getSortingId();
+        void setPresenter(@NonNull MoviesContract.Presenter presenter);
         void hideNoDataTextView();
         void showNoDataTextView();
         void showMovies(List<Movie> movieList);

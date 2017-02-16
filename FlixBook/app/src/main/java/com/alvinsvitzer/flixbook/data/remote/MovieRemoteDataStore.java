@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.alvinsvitzer.flixbook.data.MovieDataSource;
 import com.alvinsvitzer.flixbook.model.Movie;
+import com.alvinsvitzer.flixbook.model.Trailer;
 import com.alvinsvitzer.flixbook.movies.MoviesFilterType;
 import com.alvinsvitzer.flixbook.utilities.MovieDBJSONUtils;
 import com.alvinsvitzer.flixbook.utilities.MovieDBUtils;
@@ -29,40 +30,44 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class MovieRemoteDataStore implements MovieDataSource {
 
     private VolleyNetworkSingleton mNetworkSingleton;
+    private String mApiKey;
     private static MovieRemoteDataStore INSTANCE;
     private static final String TAG = MovieRemoteDataStore.class.getSimpleName();
 
     // Prevent direct instantiation.
-    private MovieRemoteDataStore(@NonNull VolleyNetworkSingleton volleyNetworkSingleton) {
+    private MovieRemoteDataStore(@NonNull VolleyNetworkSingleton volleyNetworkSingleton
+    ,@NonNull String apiKey) {
 
-        checkNotNull(volleyNetworkSingleton);
-        mNetworkSingleton = volleyNetworkSingleton;
+        mNetworkSingleton = checkNotNull(volleyNetworkSingleton, "volleyNetworkSingleton cannot be null");
+        mApiKey = checkNotNull(apiKey, "apiKey cannot be null");
+
 
     }
 
-    public static synchronized MovieRemoteDataStore getInstance(@NonNull VolleyNetworkSingleton volleyNetworkSingleton) {
+    public static synchronized MovieRemoteDataStore getInstance(@NonNull VolleyNetworkSingleton volleyNetworkSingleton
+                                                                ,@NonNull String apiKey) {
         checkNotNull(volleyNetworkSingleton);
+        checkNotNull(apiKey);
 
         if (INSTANCE == null) {
-            INSTANCE = new MovieRemoteDataStore(volleyNetworkSingleton);
+            INSTANCE = new MovieRemoteDataStore(volleyNetworkSingleton, apiKey);
         }
         return INSTANCE;
     }
 
     @Override
     public void getMovies(@NonNull final GetMoviesCallback callback
-            , @NonNull MoviesFilterType moviesFilterType
-            , @NonNull String apiKey) {
+            , @NonNull MoviesFilterType moviesFilterType) {
 
         URL url;
 
         if (moviesFilterType == MoviesFilterType.HIGHLY_RATED_MOVIES) {
 
-            url = MovieDBUtils.buildHighestRatingURL(apiKey);
+            url = MovieDBUtils.buildHighestRatingURL(mApiKey);
 
         } else {
 
-            url = MovieDBUtils.buildMostPopularURL(apiKey);
+            url = MovieDBUtils.buildMostPopularURL(mApiKey);
         }
 
         JsonObjectRequest jsObjectRequest  = new JsonObjectRequest
@@ -75,7 +80,7 @@ public class MovieRemoteDataStore implements MovieDataSource {
 
                             List<Movie> addMovie = MovieDBJSONUtils.getMovieDataFromJSONObject(response);
 
-                            callback.onTasksLoaded(addMovie);
+                            callback.onMoviesLoaded(addMovie);
 
                         } catch (JSONException e) {
 
@@ -104,8 +109,49 @@ public class MovieRemoteDataStore implements MovieDataSource {
 
     @Override
     public void getMovie(@NonNull GetMovieCallback callback
-            , @NonNull MoviesFilterType moviesFilterType
-            , @NonNull String apiKey) {
+            , @NonNull MoviesFilterType moviesFilterType) {
+
+    }
+
+    @Override
+    public void getTrailers(@NonNull String movieId, @NonNull final GetTrailersCallback callback) {
+
+        URL url = MovieDBUtils.buildMovieVideoURL(mApiKey,movieId);
+
+        JsonObjectRequest jsObjectRequest  = new JsonObjectRequest
+                (Request.Method.GET, url.toString(), null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+
+                            List<Trailer> addTrailer = MovieDBJSONUtils.getVideoDataFromJSONObject(response);
+
+                            callback.onTrailersLoaded(addTrailer);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+
+                    }
+
+
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Log.e(TAG, "onErrorResponse: ", error);
+
+                        callback.onDataNotAvailable();
+
+                    }
+                });
+
+        mNetworkSingleton.addToRequestQueue(jsObjectRequest);
 
     }
 
