@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.alvinsvitzer.flixbook.R;
+import com.alvinsvitzer.flixbook.moviedetail.fragments.MovieOverviewFragment;
 
 /**
  * Created by Alvin on 2/15/17.

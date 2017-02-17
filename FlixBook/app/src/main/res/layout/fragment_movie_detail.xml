@@ -1,20 +1,15 @@
-<ScrollView
+<android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.alvinsvitzer.flixbook.moviedetail.MovieOverviewFragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-<android.support.constraint.ConstraintLayout
-    tools:context="com.alvinsvitzer.flixbook.moviedetail.MovieOverviewFragment"
+    tools:context="com.alvinsvitzer.flixbook.moviedetail.fragments.MovieOverviewFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
 
     <TextView
         android:id="@+id/movie_plot_synopsis_textview"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -78,5 +73,3 @@
 
 </android.support.constraint.ConstraintLayout>
 
-
-</ScrollView>

@@ -1,4 +1,4 @@
-package com.alvinsvitzer.flixbook.moviedetail;
+package com.alvinsvitzer.flixbook.moviedetail.fragments;
 
 
 import android.os.Bundle;
@@ -9,11 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alvinsvitzer.flixbook.R;
 import com.alvinsvitzer.flixbook.model.Movie;
-import com.alvinsvitzer.flixbook.utilities.MovieDBUtils;
 
 import org.parceler.Parcels;
 
@@ -24,7 +22,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MovieOverviewFragment extends Fragment {
+public class MovieOverviewFragment extends Fragment implements MovieOverviewContract.View {
 
     @BindView(R.id.movie_plot_synopsis_textview)
     TextView mPlotSynopsis;
@@ -34,6 +32,8 @@ public class MovieOverviewFragment extends Fragment {
 
     @BindView(R.id.movie_vote_average_textview)
     TextView mVoteAverage;
+
+    private MovieOverviewContract.Presenter mPresenter;
 
     private Movie mMovie;
 
@@ -59,8 +59,6 @@ public class MovieOverviewFragment extends Fragment {
 
         if (getArguments() != null) {
             mMovie = Parcels.unwrap(getArguments().getParcelable(PARAM_MOVIE_DETAIL));
-        } else {
-            Toast.makeText(getActivity(), R.string.movie_data_error_text, Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -73,23 +71,46 @@ public class MovieOverviewFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_movie_detail, container, false);
         ButterKnife.bind(this, v);
 
-        attachMovieInformation();
+        attachPresenter();
 
         // Inflate the layout for this fragment
         return v;
     }
 
-    private void attachMovieInformation() {
+    @Override
+    public void attachPresenter() {
 
-        mPlotSynopsis.setText(mMovie.getPlotSynopsis());
-        mReleaseDate.setText(MovieDBUtils.getLocalDate(mMovie.getReleaseDate()));
-
-        int movieRatingId = R.string.movie_info_vote_average_rating;
-
-        String movieRating = String.format(getString(movieRatingId), mMovie.getVoteAverage());
-        mVoteAverage.setText(movieRating);
-
+        mPresenter = new MovieOverviewPresenter(this, mMovie);
+        mPresenter.start();
 
     }
 
+    @Override
+    public void setPlot(String plot) {
+
+        mPlotSynopsis.setText(plot);
+
+    }
+
+    @Override
+    public void setReleaseDate(String releaseDate) {
+
+        mReleaseDate.setText(releaseDate);
+    }
+
+    @Override
+    public void setVoteAverage(Double voteAverage) {
+
+        int movieRatingFormatId = R.string.movie_info_vote_average_rating;
+        String movieRating = String.format(getString(movieRatingFormatId), voteAverage);
+
+        mVoteAverage.setText(movieRating);
+
+    }
+
+    @Override
+    public void onDestroy() {
+        mPresenter.detachView();
+        super.onDestroy();
+    }
 }
