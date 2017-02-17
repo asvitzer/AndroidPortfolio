@@ -38,7 +38,21 @@ public class DetailsPagerAdapter extends FragmentPagerAdapter{
     @Override
     public Fragment getItem(int position) {
 
-        return MovieOverviewFragment.newInstance(mMovieParcelable);
+
+        switch (position) {
+            case 0:
+                MovieOverviewFragment tab1 = MovieOverviewFragment.newInstance(mMovieParcelable);
+                return tab1;
+            case 1:
+                MovieOverviewFragment tab2 =  MovieOverviewFragment.newInstance(mMovieParcelable);
+                return tab2;
+            case 2:
+                MovieOverviewFragment tab3 =  MovieOverviewFragment.newInstance(mMovieParcelable);
+                return tab3;
+            default:
+                return null;
+        }
+
     }
 
     @Override

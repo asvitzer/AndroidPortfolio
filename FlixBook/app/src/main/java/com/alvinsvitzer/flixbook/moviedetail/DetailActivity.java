@@ -4,17 +4,20 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.view.PagerAdapter;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alvinsvitzer.flixbook.R;
 import com.alvinsvitzer.flixbook.data.remote.MovieRemoteDataStore;
+import com.alvinsvitzer.flixbook.extensions.AppBarStateChangeListener;
 import com.alvinsvitzer.flixbook.model.Movie;
 import com.alvinsvitzer.flixbook.utilities.VolleyNetworkSingleton;
 import com.android.volley.toolbox.ImageLoader;
@@ -35,7 +38,10 @@ import static com.alvinsvitzer.flixbook.movies.MovieActivity.INTENT_EXTRA_MOVIE;
 public class DetailActivity extends AppCompatActivity implements MovieDetailsContract.View {
 
     @BindView(R.id.viewpager)
-    ViewPager viewPager;
+    ViewPager mViewPager;
+
+    @BindView(R.id.sliding_tabs)
+    TabLayout mTabLayout;
 
     @BindView(R.id.movie_backdrop_image)
     NetworkImageView mBackdropImage;
@@ -48,6 +54,9 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailsCon
 
     @BindView(R.id.playTrailerFab)
     FloatingActionButton mPlayMovieFab;
+
+    @BindView(R.id.appbar)
+    AppBarLayout mAppBarLayout;
 
     private MovieDetailsContract.Presenter mPresenter;
 
@@ -65,7 +74,10 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailsCon
 
         ButterKnife.bind(this);
 
-        setTitle(getString(R.string.movie_detail_fragment_title));
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent receivingIntent = getIntent();
 
@@ -79,12 +91,10 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailsCon
 
         setupSubscription();
 
-        PagerAdapter pagerAdapter = new DetailsPagerAdapter(getSupportFragmentManager()
-                                                            , this
-                                                            , mApiKey
-                                                            , Parcels.wrap(mMovie));
+        setupAdapter();
 
-        viewPager.setAdapter(pagerAdapter);
+        setupAppBar();
+
     }
 
     @Override
@@ -139,6 +149,34 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailsCon
         }));
     }
 
+    private void setupAdapter() {
+        DetailsPagerAdapter pagerAdapter = new DetailsPagerAdapter(getSupportFragmentManager()
+                , this
+                , mApiKey
+                , Parcels.wrap(mMovie));
+
+        mViewPager.setAdapter(pagerAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
+    }
+
+    private void setupAppBar() {
+        mAppBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+            @Override
+            public void onStateChanged(State state) {
+                switch (state) {
+                    case COLLAPSED:
+                        mPlayMovieFab.hide();
+                        break;
+                    case EXPANDED:
+                        mPlayMovieFab.show();
+                        break;
+                    case IDLE:
+                        mPlayMovieFab.show();
+                        break;
+                }
+            }});
+    }
+
     @Override
     public void setPosterImage(@NonNull String imageUrl, @NonNull ImageLoader imageLoader) {
 
@@ -185,13 +223,19 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailsCon
         mTrailerUri = uri;
     }
 
+
+    @Override
+    public void setActivityTitle(String title) {
+        setTitle(title);
+    }
+
     @Override
     public void notifyUserNoTrailer() {
 
-        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.MovieDetailLinearLayout);
+        CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.MovieDetailCoordLayout);
 
         Snackbar snackbar = Snackbar
-                .make(linearLayout, R.string.toast_no_trailer, Snackbar.LENGTH_LONG);
+                .make(coordinatorLayout, R.string.toast_no_trailer, Snackbar.LENGTH_LONG);
 
         snackbar.show();
     }

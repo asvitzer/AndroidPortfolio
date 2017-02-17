@@ -63,6 +63,8 @@ public class MovieDetailPresenter implements MovieDetailsContract.Presenter, Mov
 
         mView.disableTrailerFab();
 
+        mView.setActivityTitle("");
+
         String posterImageUrl = MovieDBUtils.buildMoviePosterURL(mMovie.getMoviePoster()).toString();
         mView.setPosterImage(posterImageUrl,mImageLoader);
 
