@@ -11,6 +11,7 @@ App to help users discover popular and highly rated movies on the web. A scrolli
 5. JSON (via the Movie DB API)
 6. Intents
 7. Parcelable (via the Parceler API)
+8. Testing (via Espresso)
 
 ## Installation
 
