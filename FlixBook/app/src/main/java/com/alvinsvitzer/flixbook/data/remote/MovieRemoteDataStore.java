@@ -40,7 +40,7 @@ public class MovieRemoteDataStore implements MovieDataStore {
     private MovieRemoteDataStore(@NonNull Context context) {
         checkNotNull(context);
 
-        mNetworkSingleton = VolleyNetworkSingleton.getInstance(context.getApplicationContext());
+        mNetworkSingleton = VolleyNetworkSingleton.getInstance(context);
         setMovieDBApiKey(context.getString(R.string.the_movie_db_auth_key));
 
     }

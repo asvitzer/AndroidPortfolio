@@ -1,20 +1,39 @@
 package com.alvinsvitzer.flixbook.moviedetail;
 
 
+import android.app.Instrumentation;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.ViewInteraction;
+import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import com.alvinsvitzer.flixbook.R;
 import com.alvinsvitzer.flixbook.movies.MovieActivity;
+import com.alvinsvitzer.flixbook.movies.MovieGridFragment;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Rule;
+import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.hasFocus;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.core.AllOf.allOf;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -23,7 +42,7 @@ public class MovieDetailElementsExistTest {
     @Rule
     public ActivityTestRule<MovieActivity> mActivityTestRule = new ActivityTestRule<>(MovieActivity.class);
 
-/*    @Test
+    @Test
     public void checkElementsExist() {
 
         FragmentManager fm = mActivityTestRule.getActivity().getSupportFragmentManager();
@@ -32,6 +51,10 @@ public class MovieDetailElementsExistTest {
         fm.beginTransaction()
                 .add(R.id.fragment_container, fragment)
                 .commitAllowingStateLoss();
+
+        // Wait for the fragment to be committed
+        Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
+        instrumentation.waitForIdleSync();
 
         ViewInteraction recyclerView = onView(allOf(withId(R.id.movie_recycler_view), hasFocus()))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(2, click()));
@@ -125,7 +148,7 @@ public class MovieDetailElementsExistTest {
                         isDisplayed()));
         imageButton2.check(matches(isDisplayed()));
 
-    }*/
+    }
 
     private static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
