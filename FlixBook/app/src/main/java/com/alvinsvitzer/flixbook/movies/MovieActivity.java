@@ -4,24 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 
+import com.alvinsvitzer.flixbook.Injection;
 import com.alvinsvitzer.flixbook.R;
-import com.alvinsvitzer.flixbook.data.remote.MovieRemoteDataStore;
 import com.alvinsvitzer.flixbook.extensions.SingleFragmentActivity;
-import com.alvinsvitzer.flixbook.model.Movie;
 import com.alvinsvitzer.flixbook.moviedetail.DetailActivity;
-import com.alvinsvitzer.flixbook.utilities.VolleyNetworkSingleton;
-
-import org.parceler.Parcels;
 
 public class MovieActivity extends SingleFragmentActivity
         implements MovieGridFragment.OnFragmentInteractionListener {
 
     private static final String TAG = MovieActivity.class.getSimpleName();
     public static final String SORT_MENU_CHECKED_PREF = "sortMenuChecked";
-    public static final String INTENT_EXTRA_API_KEY = "api_key";
-    public static final String INTENT_EXTRA_MOVIE = "movie";
     private MoviesContract.Presenter mPresenter;
 
 
@@ -48,9 +41,7 @@ public class MovieActivity extends SingleFragmentActivity
 
         if (mPresenter == null) {
 
-            VolleyNetworkSingleton volleyNetworkSingleton = VolleyNetworkSingleton.getInstance(this);
-
-            mPresenter = new MoviesPresenter(MovieRemoteDataStore.getInstance(volleyNetworkSingleton, getMovieDBApiKey())
+            mPresenter = new MoviesPresenter(Injection.provideMovieDataStoreRepository(this)
                                             , (MoviesContract.View) getCurrentFragment());
         } else {
 
@@ -60,13 +51,9 @@ public class MovieActivity extends SingleFragmentActivity
     }
 
     @Override
-    public void onMovieClick(Movie movie) {
-
-       Log.i(TAG, "onMovieClick | " + "Pulling up detail for movie: " + movie.toString());
+    public void onMovieClick() {
 
         Intent detailIntent = new Intent(this, DetailActivity.class);
-        detailIntent.putExtra(INTENT_EXTRA_API_KEY ,getMovieDBApiKey());
-        detailIntent.putExtra(INTENT_EXTRA_MOVIE ,Parcels.wrap(movie));
         startActivity(detailIntent);
 
     }

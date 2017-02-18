@@ -21,6 +21,8 @@ public interface MovieOverviewContract {
         void setPlot(String plot);
         void setReleaseDate(String releaseDate);
         void setVoteAverage(Double voteAverage);
+        void notifyNoMovieData();
+
 
     }
 }

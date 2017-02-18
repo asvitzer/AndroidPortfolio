@@ -1,7 +1,6 @@
 package com.alvinsvitzer.flixbook.moviedetail;
 
 import android.content.Context;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -17,18 +16,13 @@ public class DetailsPagerAdapter extends FragmentPagerAdapter{
 
     final int PAGE_COUNT = 3;
     private String tabTitles[];
-    private Context mContext;
-    private String mApiKey;
-    private Parcelable mMovieParcelable;
 
-    public DetailsPagerAdapter(FragmentManager fm, Context context, String apiKey, Parcelable movieParcelable) {
+    public DetailsPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
-        mContext = context;
-        tabTitles = new String[]{mContext.getString(R.string.tab_title_details)
-                                 ,mContext.getString(R.string.tab_title_people)
-                                 ,mContext.getString(R.string.tab_title_reviews)};
-        mApiKey = apiKey;
-        mMovieParcelable = movieParcelable;
+
+        tabTitles = new String[]{context.getString(R.string.tab_title_details)
+                                 ,context.getString(R.string.tab_title_people)
+                                 ,context.getString(R.string.tab_title_reviews)};
     }
 
     @Override
@@ -42,13 +36,13 @@ public class DetailsPagerAdapter extends FragmentPagerAdapter{
 
         switch (position) {
             case 0:
-                MovieOverviewFragment tab1 = MovieOverviewFragment.newInstance(mMovieParcelable);
+                MovieOverviewFragment tab1 = new MovieOverviewFragment();
                 return tab1;
             case 1:
-                MovieOverviewFragment tab2 =  MovieOverviewFragment.newInstance(mMovieParcelable);
+                MovieOverviewFragment tab2 =  new MovieOverviewFragment();
                 return tab2;
             case 2:
-                MovieOverviewFragment tab3 =  MovieOverviewFragment.newInstance(mMovieParcelable);
+                MovieOverviewFragment tab3 =  new MovieOverviewFragment();
                 return tab3;
             default:
                 return null;

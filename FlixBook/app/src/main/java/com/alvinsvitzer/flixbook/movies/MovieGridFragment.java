@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +31,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.android.volley.VolleyLog.TAG;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class MovieGridFragment extends Fragment implements MoviesContract.View {
@@ -58,7 +60,7 @@ public class MovieGridFragment extends Fragment implements MoviesContract.View {
 
     public interface OnFragmentInteractionListener {
 
-        void onMovieClick(Movie movie);
+        void onMovieClick();
     }
 
 
@@ -195,7 +197,7 @@ public class MovieGridFragment extends Fragment implements MoviesContract.View {
 
             }
 
-            public void saveCheckedItemState(MenuItem item, MoviesFilterType moviesFilterType) {
+            private void saveCheckedItemState(MenuItem item, MoviesFilterType moviesFilterType) {
 
                 //No need to re-sort grid (involving network calls) if the current sort option is picked again.
                 if (item.isChecked()){
@@ -288,7 +290,7 @@ public class MovieGridFragment extends Fragment implements MoviesContract.View {
             itemView.setOnClickListener(this);
         }
 
-        public void bindMovie(Movie movie, ImageLoader imageLoader, String imageUrl){
+        private void bindMovie(Movie movie, ImageLoader imageLoader, String imageUrl){
 
             mMovieTitle.setText(movie.getMovieTitle());
             mMovieReleaseDate.setText(MovieDBUtils.getLocalDate(movie.getReleaseDate()));
@@ -305,7 +307,13 @@ public class MovieGridFragment extends Fragment implements MoviesContract.View {
         @Override
         public void onClick(View v) {
 
-            mListener.onMovieClick(mMovieList.get(getAdapterPosition()));
+            Movie movie = mMovieList.get(getAdapterPosition());
+
+            Log.i(TAG, "onMovieClick | " + "Pulling up detail for movie: " + movie.toString());
+
+            mPresenter.saveMovie(movie);
+            mListener.onMovieClick();
+
 
         }
     }

@@ -67,11 +67,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/white"
-                    android:paddingStart="@dimen/movie_banner_padding_horizontal"
+                    android:paddingStart="@dimen/movie_banner_padding_horizontal_start"
+                    android:paddingEnd="@dimen/movie_banner_padding_horizontal_end"
                     app:layout_constraintTop_toTopOf="@+id/movie_banner"
                     app:layout_constraintBottom_toBottomOf="@+id/movie_banner"
                     app:layout_constraintLeft_toRightOf="@+id/movie_poster_image"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
                     tools:text="Cool Runnings"
                     />
 
@@ -83,7 +84,7 @@
                     android:background="@android:color/white"
                     android:padding="@dimen/poster_image_padding"
                     android:layout_marginBottom="@dimen/poster_image_padding_vertical"
-                    android:layout_marginStart="@dimen/movie_banner_padding_horizontal"
+                    android:layout_marginStart="@dimen/movie_banner_padding_horizontal_start"
                     android:scaleType="fitXY"
                     android:src="@drawable/small_movie_placeholder"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -108,6 +109,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_gravity="bottom"
+            app:tabIndicatorColor="@android:color/white"
             app:tabMode="fixed"
             />
 

@@ -2,22 +2,20 @@ package com.alvinsvitzer.flixbook.moviedetail.fragments;
 
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.alvinsvitzer.flixbook.Injection;
 import com.alvinsvitzer.flixbook.R;
-import com.alvinsvitzer.flixbook.model.Movie;
-
-import org.parceler.Parcels;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,31 +33,12 @@ public class MovieOverviewFragment extends Fragment implements MovieOverviewCont
 
     private MovieOverviewContract.Presenter mPresenter;
 
-    private Movie mMovie;
-
-    public static final String PARAM_MOVIE_DETAIL = "movieDetail";
-
-    public static MovieOverviewFragment newInstance(Parcelable movie){
-
-        MovieOverviewFragment movieOverviewFragment = new MovieOverviewFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(PARAM_MOVIE_DETAIL, movie);
-        movieOverviewFragment.setArguments(args);
-
-        return movieOverviewFragment;
-
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
-
-        if (getArguments() != null) {
-            mMovie = Parcels.unwrap(getArguments().getParcelable(PARAM_MOVIE_DETAIL));
-        }
 
     }
 
@@ -80,7 +59,7 @@ public class MovieOverviewFragment extends Fragment implements MovieOverviewCont
     @Override
     public void attachPresenter() {
 
-        mPresenter = new MovieOverviewPresenter(this, mMovie);
+        mPresenter = new MovieOverviewPresenter(this, Injection.provideMovieDataStoreRepository(getActivity()));
         mPresenter.start();
 
     }
@@ -109,8 +88,25 @@ public class MovieOverviewFragment extends Fragment implements MovieOverviewCont
     }
 
     @Override
-    public void onDestroy() {
-        mPresenter.detachView();
-        super.onDestroy();
+    public void notifyNoMovieData() {
+
+        mReleaseDate.setText(R.string.not_available_text);
+        mVoteAverage.setText(R.string.not_available_text);
+        mPlotSynopsis.setText(R.string.not_available_text);
+
+        ConstraintLayout constraintLayout = (ConstraintLayout) getActivity().findViewById(R.id.OverviewConstraintLayout);
+
+        Snackbar snackbar = Snackbar
+                .make(constraintLayout, R.string.text_no_movie_data, Snackbar.LENGTH_LONG);
+
+        snackbar.show();
+
     }
+
+    @Override
+    public void onDestroyView() {
+        mPresenter.detachView();
+        super.onDestroyView();
+    }
+
 }

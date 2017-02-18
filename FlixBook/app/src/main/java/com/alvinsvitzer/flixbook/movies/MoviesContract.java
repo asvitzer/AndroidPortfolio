@@ -19,6 +19,7 @@ public interface MoviesContract {
         void loadMovies();
         void attachView(View view);
         void detachView();
+        void saveMovie(Movie movie);
 
     }
 

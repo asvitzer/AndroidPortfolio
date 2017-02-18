@@ -2,8 +2,7 @@ package com.alvinsvitzer.flixbook.movies;
 
 import android.support.annotation.NonNull;
 
-import com.alvinsvitzer.flixbook.data.MovieDataSource;
-import com.alvinsvitzer.flixbook.data.remote.MovieRemoteDataStore;
+import com.alvinsvitzer.flixbook.data.MovieDataStore;
 import com.alvinsvitzer.flixbook.model.Movie;
 
 import java.util.List;
@@ -14,16 +13,16 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Created by Alvin on 2/15/17.
  */
 
-public class MoviesPresenter implements MoviesContract.Presenter, MovieDataSource.GetMoviesCallback {
+public class MoviesPresenter implements MoviesContract.Presenter, MovieDataStore.GetMoviesCallback {
 
-    private final MovieRemoteDataStore mMovieRemoteDataStore;
+    private final MovieDataStore mMovieRepo;
     private MoviesContract.View mMoviesView;
 
-    MoviesPresenter(@NonNull MovieRemoteDataStore movieRemoteDataStore
+    MoviesPresenter(@NonNull MovieDataStore movieRepo
                     , @NonNull MoviesContract.View moviesView
                     ){
 
-        mMovieRemoteDataStore = checkNotNull(movieRemoteDataStore, "movieRemoteDataStore cannot be null");
+        mMovieRepo = checkNotNull(movieRepo, "movieRepo cannot be null");
         mMoviesView = checkNotNull(moviesView, "moviesView cannot be null");
         mMoviesView.setPresenter(this);
     }
@@ -41,7 +40,7 @@ public class MoviesPresenter implements MoviesContract.Presenter, MovieDataSourc
 
         MoviesFilterType sortingId = mMoviesView.getSortingId();
 
-        mMovieRemoteDataStore.getMovies(this, sortingId);
+        mMovieRepo.getMovies(this, sortingId);
 
     }
 
@@ -59,6 +58,11 @@ public class MoviesPresenter implements MoviesContract.Presenter, MovieDataSourc
     }
 
     @Override
+    public void saveMovie(Movie movie) {
+        mMovieRepo.saveMovie(movie);
+    }
+
+    @Override
     public void onMoviesLoaded(List<Movie> movieList) {
 
         mMoviesView.showMovies(movieList);
@@ -66,11 +70,12 @@ public class MoviesPresenter implements MoviesContract.Presenter, MovieDataSourc
     }
 
     @Override
-    public void onDataNotAvailable() {
+    public void onMovieListDataNotAvailable() {
 
         mMoviesView.showNoDataTextView();
 
     }
+
 }
 
 

@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.alvinsvitzer.flixbook.data.AppRepository;
 import com.alvinsvitzer.flixbook.data.remote.MovieRemoteDataStore;
 import com.alvinsvitzer.flixbook.model.Movie;
 import com.alvinsvitzer.flixbook.model.Trailer;
@@ -19,30 +20,30 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Created by Alvin on 2/15/17.
  */
 
-public class MovieDetailPresenter implements MovieDetailsContract.Presenter, MovieRemoteDataStore.GetTrailersCallback {
+public class MovieDetailPresenter implements MovieDetailsContract.Presenter
+        , MovieRemoteDataStore.GetTrailersCallback
+        , MovieRemoteDataStore.GetMovieCallback{
+
+    private Movie mMovie;
 
     @NonNull
-    private final Movie mMovie;
-
-    @NonNull
-    private final MovieRemoteDataStore mMovieRemoteDataStore;
+    private final AppRepository mAppRepository;
 
     @NonNull
     private final ImageLoader mImageLoader;
 
     private MovieDetailsContract.View mView;
 
-    public static final String TAG = MovieDetailPresenter.class.getSimpleName();
+    private static final String TAG = MovieDetailPresenter.class.getSimpleName();
 
-    MovieDetailPresenter(@NonNull Movie movie
-                        ,@NonNull MovieRemoteDataStore movieRemoteDataStore
+    MovieDetailPresenter(@NonNull AppRepository appRepository
                         ,@NonNull ImageLoader imageLoader
                         ,@NonNull MovieDetailsContract.View view){
 
-        mMovie = checkNotNull(movie, "Movie cannot be null");
-        mMovieRemoteDataStore = checkNotNull(movieRemoteDataStore, "movieRemoteDataStore cannot be null");
+        mAppRepository = checkNotNull(appRepository, "movieRemoteDataStore cannot be null");
         mImageLoader = checkNotNull(imageLoader, "imageLoader cannot be null");
         mView = checkNotNull(view, "view cannot be null");
+        mAppRepository.getMovie(this);
 
     }
 
@@ -73,7 +74,7 @@ public class MovieDetailPresenter implements MovieDetailsContract.Presenter, Mov
 
         mView.setBannerText(mMovie.getMovieTitle());
 
-        mMovieRemoteDataStore.getTrailers(String.valueOf(mMovie.getMovieId()), this);
+        mAppRepository.getTrailers(String.valueOf(mMovie.getMovieId()), this);
 
     }
 
@@ -82,6 +83,13 @@ public class MovieDetailPresenter implements MovieDetailsContract.Presenter, Mov
 
         mMovie.setTrailerList(trailerList);
         getOfficialYouTubeTrailerUrl();
+
+    }
+
+    @Override
+    public void onTrailerDataNotAvailable() {
+
+        mView.notifyUserNoTrailer();
 
     }
 
@@ -110,11 +118,15 @@ public class MovieDetailPresenter implements MovieDetailsContract.Presenter, Mov
     }
 
 
+    @Override
+    public void onMovieLoaded(Movie movie) {
+
+        mMovie = movie;
+
+    }
 
     @Override
-    public void onDataNotAvailable() {
-
-        mView.disableTrailerFab();
+    public void onMovieDataNotAvailable() {
 
     }
 }

@@ -15,25 +15,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import com.alvinsvitzer.flixbook.Injection;
 import com.alvinsvitzer.flixbook.R;
-import com.alvinsvitzer.flixbook.data.remote.MovieRemoteDataStore;
+import com.alvinsvitzer.flixbook.data.AppRepository;
 import com.alvinsvitzer.flixbook.extensions.AppBarStateChangeListener;
-import com.alvinsvitzer.flixbook.model.Movie;
 import com.alvinsvitzer.flixbook.utilities.VolleyNetworkSingleton;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.jakewharton.rxbinding.view.RxView;
-
-import org.parceler.Parcels;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
-
-import static com.alvinsvitzer.flixbook.movies.MovieActivity.INTENT_EXTRA_API_KEY;
-import static com.alvinsvitzer.flixbook.movies.MovieActivity.INTENT_EXTRA_MOVIE;
 
 public class DetailActivity extends AppCompatActivity implements MovieDetailsContract.View {
 
@@ -61,8 +56,6 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailsCon
     private MovieDetailsContract.Presenter mPresenter;
 
     private Uri mTrailerUri;
-    private String mApiKey;
-    private Movie mMovie;
 
     // Used to handle unsubscription during teardown of Fragment
     CompositeSubscription subscriptions = new CompositeSubscription();
@@ -78,14 +71,6 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailsCon
         setSupportActionBar(myToolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        Intent receivingIntent = getIntent();
-
-        if (receivingIntent != null) {
-
-            mApiKey = receivingIntent.getStringExtra(INTENT_EXTRA_API_KEY);
-            mMovie = Parcels.unwrap(receivingIntent.getParcelableExtra(INTENT_EXTRA_MOVIE));
-        }
 
         attachPresenter();
 
@@ -111,10 +96,11 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailsCon
         if (mPresenter == null) {
 
             VolleyNetworkSingleton volleyNetworkSingleton = VolleyNetworkSingleton.getInstance(this);
-            MovieRemoteDataStore movieRemoteDataStore = MovieRemoteDataStore.getInstance(volleyNetworkSingleton, mApiKey);
             ImageLoader imageLoader = volleyNetworkSingleton.getImageLoader();
 
-            mPresenter = new MovieDetailPresenter(mMovie, movieRemoteDataStore, imageLoader, this);
+            AppRepository appRepository = Injection.provideMovieDataStoreRepository(this);
+
+            mPresenter = new MovieDetailPresenter(appRepository, imageLoader, this);
 
         }else{
 
@@ -151,9 +137,7 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailsCon
 
     private void setupAdapter() {
         DetailsPagerAdapter pagerAdapter = new DetailsPagerAdapter(getSupportFragmentManager()
-                , this
-                , mApiKey
-                , Parcels.wrap(mMovie));
+                , this);
 
         mViewPager.setAdapter(pagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
@@ -235,7 +219,7 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailsCon
         CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.MovieDetailCoordLayout);
 
         Snackbar snackbar = Snackbar
-                .make(coordinatorLayout, R.string.toast_no_trailer, Snackbar.LENGTH_LONG);
+                .make(coordinatorLayout, R.string.text_no_trailer, Snackbar.LENGTH_LONG);
 
         snackbar.show();
     }

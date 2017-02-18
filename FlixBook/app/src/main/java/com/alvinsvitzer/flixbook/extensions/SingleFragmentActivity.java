@@ -5,10 +5,8 @@ import android.support.annotation.LayoutRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.alvinsvitzer.flixbook.R;
-import com.alvinsvitzer.flixbook.movies.MovieActivity;
 
 /**
  * Created by Alvin on 1/1/16.
@@ -16,8 +14,6 @@ import com.alvinsvitzer.flixbook.movies.MovieActivity;
  */
 public abstract class SingleFragmentActivity extends AppCompatActivity {
 
-    private String mMovieDBApiKey;
-    private static final String TAG = MovieActivity.class.getSimpleName();
     private Fragment mFragment;
 
     @LayoutRes
@@ -29,9 +25,6 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResId());
-
-        /** Set mMovieDBApiKey below to your API key for The MovieDB**/
-        setMovieDBApiKey(getString(R.string.the_movie_db_auth_key));
 
         FragmentManager fm = getSupportFragmentManager();
         mFragment = fm.findFragmentById(R.id.fragment_container);
@@ -46,27 +39,9 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
 
     }
 
-    public String getMovieDBApiKey(){
-
-        return mMovieDBApiKey;
-    }
-
     public Fragment getCurrentFragment(){
 
         return mFragment;
-    }
-
-    public void setMovieDBApiKey(String key){
-
-        if (key != null && !key.equals("")){
-
-            mMovieDBApiKey = key;
-
-        }else {
-
-            Log.e(TAG, "setMovieDBApiKey: key cannot be null or empty", new IllegalArgumentException());
-        }
-
     }
 
     protected abstract Fragment createFragment();
