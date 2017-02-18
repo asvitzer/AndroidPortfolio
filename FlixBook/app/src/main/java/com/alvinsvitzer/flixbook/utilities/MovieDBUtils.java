@@ -42,7 +42,7 @@ public class MovieDBUtils {
     final static String FIRST_PAGE = "1";
     final static String LANGUAGE_ENGLISH_US = "en-US";
 
-    public final static String ATTRIBUTE_VIDE_SITE_YOUTUBE = "YouTube";
+    public final static String ATTRIBUTE_VIDEO_SITE_YOUTUBE = "YouTube";
     public final static String ATTRIBUTE_VIDEO_TYPE_TRAILER = "Trailer";
 
     /**

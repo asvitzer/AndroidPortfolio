@@ -2,8 +2,8 @@ package com.alvinsvitzer.flixbook.utilities;
 
 import android.util.Log;
 
-import com.alvinsvitzer.flixbook.model.Movie;
-import com.alvinsvitzer.flixbook.model.Trailer;
+import com.alvinsvitzer.flixbook.data.model.Movie;
+import com.alvinsvitzer.flixbook.data.model.Trailer;
 
 import org.json.JSONArray;
 import org.json.JSONException;

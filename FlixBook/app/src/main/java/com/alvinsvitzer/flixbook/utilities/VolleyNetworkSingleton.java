@@ -25,7 +25,10 @@ public class VolleyNetworkSingleton {
     private static Context mCtx;
 
     private VolleyNetworkSingleton(Context context) {
-        mCtx = context;
+
+        // getApplicationContext() is key, it keeps you from leaking the
+        // Activity or BroadcastReceiver if someone passes one in.
+        mCtx = context.getApplicationContext();
         mRequestQueue = getRequestQueue();
 
         mImageLoader = new ImageLoader(mRequestQueue,
@@ -49,6 +52,7 @@ public class VolleyNetworkSingleton {
 
     public static synchronized VolleyNetworkSingleton getInstance(Context context) {
         if (mInstance == null) {
+
             mInstance = new VolleyNetworkSingleton(context);
         }
         return mInstance;
@@ -56,9 +60,8 @@ public class VolleyNetworkSingleton {
 
     public RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {
-            // getApplicationContext() is key, it keeps you from leaking the
-            // Activity or BroadcastReceiver if someone passes one in.
-            mRequestQueue = Volley.newRequestQueue(mCtx.getApplicationContext());
+
+            mRequestQueue = Volley.newRequestQueue(mCtx);
         }
         return mRequestQueue;
     }

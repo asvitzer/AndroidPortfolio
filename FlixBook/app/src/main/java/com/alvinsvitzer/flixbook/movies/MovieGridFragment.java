@@ -1,12 +1,9 @@
-package com.alvinsvitzer.flixbook;
+package com.alvinsvitzer.flixbook.movies;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -20,40 +17,31 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alvinsvitzer.flixbook.model.Movie;
-import com.alvinsvitzer.flixbook.utilities.MovieDBJSONUtils;
+import com.alvinsvitzer.flixbook.Injection;
+import com.alvinsvitzer.flixbook.R;
+import com.alvinsvitzer.flixbook.data.model.Movie;
 import com.alvinsvitzer.flixbook.utilities.MovieDBUtils;
 import com.alvinsvitzer.flixbook.utilities.VolleyNetworkSingleton;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.NetworkImageView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.alvinsvitzer.flixbook.MovieActivity.SORT_MENU_CHECKED_PREF;
+public class MovieGridFragment extends Fragment implements MoviesContract.View {
 
-public class MovieGridFragment extends Fragment {
+    public static final String SORT_MENU_CHECKED_PREF = "sortMenuChecked";
+    public static final String TAG = MovieGridFragment.class.getSimpleName();
 
-    private static final String TAG = MovieActivity.class.getSimpleName();
-    private static final String MOVIE_DB_API_KEY = "movieDbApiKey";
-    private int sortMenuIdChecked;
+    private MoviesFilterType mSortMenuIdChecked;
 
-    private String mMovieDBApiKey;
     private List<Movie> mMovieList;
     private MovieAdapter mMovieAdapter;
-    private VolleyNetworkSingleton mVolleyNetworkSingleton;
     private SharedPreferences mSharedPreferences;
+    private MoviesContract.Presenter mPresenter;
 
     @BindView(R.id.no_data_text_view)
     TextView mNoDataTextView;
@@ -62,17 +50,22 @@ public class MovieGridFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+
     public interface OnFragmentInteractionListener {
 
-        void onMovieClick(Movie movie);
+        void onMovieClick();
     }
 
-    public static MovieGridFragment newInstance(String movieDBApiKey) {
-        MovieGridFragment fragment = new MovieGridFragment();
-        Bundle args = new Bundle();
-        args.putString(MOVIE_DB_API_KEY, movieDBApiKey);
-        fragment.setArguments(args);
-        return fragment;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
     }
 
     @Override
@@ -81,17 +74,14 @@ public class MovieGridFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
-        if (getArguments() != null && mMovieDBApiKey == null) {
-            mMovieDBApiKey = getArguments().getString(MOVIE_DB_API_KEY);
-        }
-
-        mVolleyNetworkSingleton = VolleyNetworkSingleton.getInstance(getActivity());
-
         // Restore preferences for which sorting option was used
         mSharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-        sortMenuIdChecked = mSharedPreferences.getInt(SORT_MENU_CHECKED_PREF, R.id.action_sort_most_popular);
+        mSortMenuIdChecked = MoviesFilterType.valueOf(mSharedPreferences.getInt(SORT_MENU_CHECKED_PREF, MoviesFilterType.POPULAR_MOVIES.getValue()));
 
-        getActivity().setTitle(getString(R.string.movie_grid_fragment_title));
+        //Pass in an empty ArrayList for now. Data is added after Volley Network call.
+        mMovieList = new ArrayList<>();
+
+        mMovieAdapter = new MovieAdapter(mMovieList);
 
     }
 
@@ -105,32 +95,24 @@ public class MovieGridFragment extends Fragment {
         ButterKnife.bind(this, v);
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-
-        //Pass in an empty ArrayList for now. Data is added after Volley Network call.
-        mMovieList = new ArrayList<>();
-
-        mMovieAdapter = new MovieAdapter(mMovieList);
+        mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mMovieAdapter);
 
-        if(sortMenuIdChecked == R.id.action_sort_highest_rated){
-
-            grabHomeMovies(MovieDBUtils.buildHighestRatingURL(mMovieDBApiKey));
-
-        } else {
-
-            grabHomeMovies(MovieDBUtils.buildMostPopularURL(mMovieDBApiKey));
-        }
+        attachPresenter();
 
         return v;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
 
-        ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setDisplayShowHomeEnabled(false);
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
     }
 
     @Override
@@ -142,7 +124,6 @@ public class MovieGridFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
 
         switch (item.getItemId()) {
 
@@ -165,12 +146,24 @@ public class MovieGridFragment extends Fragment {
         PopupMenu popupMenu = new PopupMenu(getActivity(), menuItemView);
         popupMenu.inflate(R.menu.sub_menu_filter);
 
-        MenuItem mi = popupMenu.getMenu().findItem(sortMenuIdChecked);
+        int currentId;
+
+        switch(mSortMenuIdChecked){
+
+            case HIGHLY_RATED_MOVIES:
+                currentId = R.id.action_sort_highest_rated;
+                break;
+            case POPULAR_MOVIES:
+                currentId = R.id.action_sort_most_popular;
+                break;
+            default:
+                currentId = R.id.action_sort_most_popular;
+        }
+
+        MenuItem mi = popupMenu.getMenu().findItem(currentId);
 
         //Set the proper menu item to be checked based off shared preferences.
-        if (mi != null) {
-            mi.setChecked(true);
-        }
+        mi.setChecked(true);
 
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
@@ -180,13 +173,13 @@ public class MovieGridFragment extends Fragment {
 
                     case R.id.action_sort_highest_rated:
 
-                        saveCheckedItemState(item);
+                        saveCheckedItemState(item, MoviesFilterType.HIGHLY_RATED_MOVIES);
 
                         return true;
 
                     case R.id.action_sort_most_popular:
 
-                        saveCheckedItemState(item);
+                        saveCheckedItemState(item, MoviesFilterType.POPULAR_MOVIES);
 
                         return true;
 
@@ -197,7 +190,7 @@ public class MovieGridFragment extends Fragment {
 
             }
 
-            public void saveCheckedItemState(MenuItem item) {
+            private void saveCheckedItemState(MenuItem item, MoviesFilterType moviesFilterType) {
 
                 //No need to re-sort grid (involving network calls) if the current sort option is picked again.
                 if (item.isChecked()){
@@ -206,142 +199,94 @@ public class MovieGridFragment extends Fragment {
 
                 item.setChecked(true);
 
-                sortMenuIdChecked = item.getItemId();
+                mSortMenuIdChecked = moviesFilterType;
 
                 // Save which menu item is checked in saved preferences.
                 SharedPreferences.Editor editor = mSharedPreferences.edit();
-                editor.putInt(SORT_MENU_CHECKED_PREF, sortMenuIdChecked);
+                editor.putInt(SORT_MENU_CHECKED_PREF, mSortMenuIdChecked.getValue());
 
                 // Commit the edits!
                 editor.apply();
 
-
-                if(item.getItemId() == R.id.action_sort_highest_rated){
-
-                    grabHomeMovies(MovieDBUtils.buildHighestRatingURL(mMovieDBApiKey));
-
-                } else {
-
-                    grabHomeMovies(MovieDBUtils.buildMostPopularURL(mMovieDBApiKey));
-                }
+                //Reloads movies since sorting criteria has changed
+                mPresenter.loadMovies();
 
             }
-
 
         });
 
         popupMenu.show();
     }
 
+
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+    public MoviesFilterType getSortingId(){
+
+       return mSortMenuIdChecked;
+    }
+
+    @Override
+    public void attachPresenter() {
+
+        mPresenter = new MoviesPresenter(Injection.provideMovieDataStoreRepository(getActivity())
+                    , this
+                    , VolleyNetworkSingleton.getInstance(getActivity()).getImageLoader());
+
+        mPresenter.start();
+    }
+
+    @Override
+    public void onDestroyView() {
+        mPresenter.detachView();
+        super.onDestroyView();
+    }
+
+
+    @Override
+    public void showNoDataTextView(){
+
+        mRecyclerView.setVisibility(View.INVISIBLE);
+        mNoDataTextView.setVisibility(View.VISIBLE);
+
+        Toast.makeText(getActivity(), getString(R.string.no_movie_data_text), Toast.LENGTH_SHORT)
+                .show();
+    }
+
+    @Override
+    public void showMovies(List<Movie> movieList) {
+
+        mMovieList.clear();
+
+        for(Movie m: movieList){
+            mMovieList.add(m);
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        updateUI();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    public void grabHomeMovies(URL movieDbUrl) {
-
-        hideNoDataTextView();
-
-        JsonObjectRequest jsObjectRequest  = new JsonObjectRequest
-                (Request.Method.GET, movieDbUrl.toString(), null, new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        try {
-
-                            //Clear out list so that when sorting changes, data is not just added
-                            mMovieList.clear();
-
-                            List<Movie> addMovie = MovieDBJSONUtils.getMovieDataFromJSONObject(response);
-
-                            for (Movie m: addMovie){
-
-                                mMovieList.add(m);
-
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        updateUI();
-
-                    }
-
-
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                        Log.e(TAG, "onErrorResponse: ", error);
-
-                        showNoDataTextView();
-
-                        Toast.makeText(getActivity(), getString(R.string.no_movie_data_text), Toast.LENGTH_SHORT)
-                                .show();
-
-                    }
-                });
-
-        mVolleyNetworkSingleton.addToRequestQueue(jsObjectRequest);
-
-    }
-
-    private void updateUI() {
 
         if (mMovieAdapter == null){
 
             mMovieAdapter = new MovieAdapter(mMovieList);
             mRecyclerView.setAdapter(mMovieAdapter);
 
-        } else{
+        } else {
 
             mMovieAdapter.notifyDataSetChanged();
+
         }
 
     }
 
-    private void showNoDataTextView(){
-
-        mRecyclerView.setVisibility(View.INVISIBLE);
-        mNoDataTextView.setVisibility(View.VISIBLE);
-    }
-
-    private void hideNoDataTextView(){
+    @Override
+    public void hideNoDataTextView(){
 
         mRecyclerView.setVisibility(View.VISIBLE);
         mNoDataTextView.setVisibility(View.INVISIBLE);
 
     }
 
-
     private class MovieHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private NetworkImageView mMoviePoster;
-        private ImageLoader mImageLoader;
         private TextView mMovieTitle;
         private TextView mMovieReleaseDate;
-
 
 
         public MovieHolder(View itemView) {
@@ -354,28 +299,30 @@ public class MovieGridFragment extends Fragment {
             itemView.setOnClickListener(this);
         }
 
-        public void bindMovie(Movie movie){
+        private void bindMovie(Movie movie, ImageLoader imageLoader, String imageUrl){
 
             mMovieTitle.setText(movie.getMovieTitle());
             mMovieReleaseDate.setText(MovieDBUtils.getLocalDate(movie.getReleaseDate()));
 
-            String imageUrl = MovieDBUtils.buildMoviePosterURL(movie.getMoviePoster()).toString();
-
-            mImageLoader = mVolleyNetworkSingleton.getImageLoader();
-
             //Set Default Image & Error Images if can't be fetched from network
-            mImageLoader.get(imageUrl, ImageLoader.getImageListener(mMoviePoster,
+            imageLoader.get(imageUrl, ImageLoader.getImageListener(mMoviePoster,
                     R.drawable.small_movie_placeholder, android.R.drawable
                             .ic_dialog_alert));
-            mMoviePoster.setImageUrl(imageUrl,mImageLoader);
 
+            mMoviePoster.setImageUrl(imageUrl,imageLoader);
 
         }
 
         @Override
         public void onClick(View v) {
 
-            mListener.onMovieClick(mMovieList.get(getAdapterPosition()));
+            Movie movie = mMovieList.get(getAdapterPosition());
+
+            Log.i(TAG, "onMovieClick | " + "Pulling up detail for movie: " + movie.toString());
+
+            mPresenter.saveMovie(movie);
+            mListener.onMovieClick();
+
 
         }
     }
@@ -403,11 +350,12 @@ public class MovieGridFragment extends Fragment {
         public void onBindViewHolder(MovieHolder holder, int position) {
 
             Movie movie = mMovies.get(position);
-            holder.bindMovie(movie);
+
+            String imageUrl = mPresenter.buildMovieUrl(movie);
+
+            holder.bindMovie(movie, mPresenter.getImageLoader(), imageUrl);
 
         }
-
-
 
         @Override
         public int getItemCount() {
