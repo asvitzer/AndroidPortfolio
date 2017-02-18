@@ -1,4 +1,4 @@
-package com.alvinsvitzer.flixbook.moviedetail.fragments;
+package com.alvinsvitzer.flixbook.moviedetail.pagerfragments;
 
 
 import android.os.Bundle;

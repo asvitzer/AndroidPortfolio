@@ -1,10 +1,9 @@
 package com.alvinsvitzer.flixbook.movies;
 
-import android.support.annotation.NonNull;
-
 import com.alvinsvitzer.flixbook.BasePresenter;
 import com.alvinsvitzer.flixbook.BaseView;
-import com.alvinsvitzer.flixbook.model.Movie;
+import com.alvinsvitzer.flixbook.data.model.Movie;
+import com.android.volley.toolbox.ImageLoader;
 
 import java.util.List;
 
@@ -17,16 +16,17 @@ public interface MoviesContract {
     interface Presenter extends BasePresenter{
 
         void loadMovies();
-        void attachView(View view);
         void detachView();
         void saveMovie(Movie movie);
+        ImageLoader getImageLoader();
+        String buildMovieUrl(Movie movie);
 
     }
 
     interface View extends BaseView{
 
         MoviesFilterType getSortingId();
-        void setPresenter(@NonNull MoviesContract.Presenter presenter);
+        void attachPresenter();
         void hideNoDataTextView();
         void showNoDataTextView();
         void showMovies(List<Movie> movieList);

@@ -1,4 +1,4 @@
-package com.alvinsvitzer.flixbook.moviedetail.fragments;
+package com.alvinsvitzer.flixbook.moviedetail.pagerfragments;
 
 import com.alvinsvitzer.flixbook.BasePresenter;
 import com.alvinsvitzer.flixbook.BaseView;

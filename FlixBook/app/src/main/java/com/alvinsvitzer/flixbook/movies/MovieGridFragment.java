@@ -3,7 +3,6 @@ package com.alvinsvitzer.flixbook.movies;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -18,8 +17,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alvinsvitzer.flixbook.Injection;
 import com.alvinsvitzer.flixbook.R;
-import com.alvinsvitzer.flixbook.model.Movie;
+import com.alvinsvitzer.flixbook.data.model.Movie;
 import com.alvinsvitzer.flixbook.utilities.MovieDBUtils;
 import com.alvinsvitzer.flixbook.utilities.VolleyNetworkSingleton;
 import com.android.volley.toolbox.ImageLoader;
@@ -31,10 +31,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.android.volley.VolleyLog.TAG;
-import static com.google.common.base.Preconditions.checkNotNull;
-
 public class MovieGridFragment extends Fragment implements MoviesContract.View {
+
+    public static final String SORT_MENU_CHECKED_PREF = "sortMenuChecked";
+    public static final String TAG = MovieGridFragment.class.getSimpleName();
 
     private MoviesFilterType mSortMenuIdChecked;
 
@@ -50,13 +50,6 @@ public class MovieGridFragment extends Fragment implements MoviesContract.View {
 
     private OnFragmentInteractionListener mListener;
 
-    @Override
-    public void setPresenter(@NonNull MoviesContract.Presenter presenter) {
-
-        checkNotNull(presenter, "presenter cannot be null");
-        mPresenter = presenter;
-
-    }
 
     public interface OnFragmentInteractionListener {
 
@@ -83,12 +76,12 @@ public class MovieGridFragment extends Fragment implements MoviesContract.View {
 
         // Restore preferences for which sorting option was used
         mSharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-        mSortMenuIdChecked = MoviesFilterType.valueOf(mSharedPreferences.getInt(MovieActivity.SORT_MENU_CHECKED_PREF, MoviesFilterType.POPULAR_MOVIES.getValue()));
+        mSortMenuIdChecked = MoviesFilterType.valueOf(mSharedPreferences.getInt(SORT_MENU_CHECKED_PREF, MoviesFilterType.POPULAR_MOVIES.getValue()));
 
         //Pass in an empty ArrayList for now. Data is added after Volley Network call.
         mMovieList = new ArrayList<>();
 
-        mMovieAdapter = new MovieAdapter(mMovieList, getActivity());
+        mMovieAdapter = new MovieAdapter(mMovieList);
 
     }
 
@@ -105,6 +98,7 @@ public class MovieGridFragment extends Fragment implements MoviesContract.View {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mMovieAdapter);
 
+        attachPresenter();
 
         return v;
     }
@@ -113,7 +107,6 @@ public class MovieGridFragment extends Fragment implements MoviesContract.View {
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.start();
     }
 
     @Override
@@ -210,7 +203,7 @@ public class MovieGridFragment extends Fragment implements MoviesContract.View {
 
                 // Save which menu item is checked in saved preferences.
                 SharedPreferences.Editor editor = mSharedPreferences.edit();
-                editor.putInt(MovieActivity.SORT_MENU_CHECKED_PREF, mSortMenuIdChecked.getValue());
+                editor.putInt(SORT_MENU_CHECKED_PREF, mSortMenuIdChecked.getValue());
 
                 // Commit the edits!
                 editor.apply();
@@ -230,6 +223,22 @@ public class MovieGridFragment extends Fragment implements MoviesContract.View {
     public MoviesFilterType getSortingId(){
 
        return mSortMenuIdChecked;
+    }
+
+    @Override
+    public void attachPresenter() {
+
+        mPresenter = new MoviesPresenter(Injection.provideMovieDataStoreRepository(getActivity())
+                    , this
+                    , VolleyNetworkSingleton.getInstance(getActivity()).getImageLoader());
+
+        mPresenter.start();
+    }
+
+    @Override
+    public void onDestroyView() {
+        mPresenter.detachView();
+        super.onDestroyView();
     }
 
 
@@ -254,7 +263,7 @@ public class MovieGridFragment extends Fragment implements MoviesContract.View {
 
         if (mMovieAdapter == null){
 
-            mMovieAdapter = new MovieAdapter(mMovieList, getActivity());
+            mMovieAdapter = new MovieAdapter(mMovieList);
             mRecyclerView.setAdapter(mMovieAdapter);
 
         } else {
@@ -321,14 +330,11 @@ public class MovieGridFragment extends Fragment implements MoviesContract.View {
     private class MovieAdapter extends RecyclerView.Adapter<MovieHolder>{
 
         private List<Movie> mMovies;
-        private VolleyNetworkSingleton mVolleyNetworkSingleton;
-        private ImageLoader mImageLoader;
 
-        MovieAdapter(List<Movie> movies, Context context){
+        MovieAdapter(List<Movie> movies){
 
             mMovies = movies;
-            mVolleyNetworkSingleton = VolleyNetworkSingleton.getInstance(context);
-            mImageLoader = mVolleyNetworkSingleton.getImageLoader();
+
         }
 
         @Override
@@ -344,8 +350,10 @@ public class MovieGridFragment extends Fragment implements MoviesContract.View {
         public void onBindViewHolder(MovieHolder holder, int position) {
 
             Movie movie = mMovies.get(position);
-            String imageUrl = MovieDBUtils.buildMoviePosterURL(movie.getMoviePoster()).toString();
-            holder.bindMovie(movie, mImageLoader, imageUrl);
+
+            String imageUrl = mPresenter.buildMovieUrl(movie);
+
+            holder.bindMovie(movie, mPresenter.getImageLoader(), imageUrl);
 
         }
 

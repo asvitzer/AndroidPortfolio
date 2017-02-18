@@ -1,11 +1,11 @@
-package com.alvinsvitzer.flixbook.moviedetail.fragments;
+package com.alvinsvitzer.flixbook.moviedetail.pagerfragments;
 
 import android.support.annotation.NonNull;
 
 import com.alvinsvitzer.flixbook.data.AppRepository;
 import com.alvinsvitzer.flixbook.data.MovieDataStore;
-import com.alvinsvitzer.flixbook.model.Movie;
-import com.alvinsvitzer.flixbook.moviedetail.fragments.MovieOverviewContract.Presenter;
+import com.alvinsvitzer.flixbook.data.model.Movie;
+import com.alvinsvitzer.flixbook.moviedetail.pagerfragments.MovieOverviewContract.Presenter;
 import com.alvinsvitzer.flixbook.utilities.MovieDBUtils;
 
 import static com.google.common.base.Preconditions.checkNotNull;

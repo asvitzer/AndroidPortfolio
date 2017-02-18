@@ -3,8 +3,8 @@ package com.alvinsvitzer.flixbook.data.local;
 import android.support.annotation.NonNull;
 
 import com.alvinsvitzer.flixbook.data.MovieDataStore;
-import com.alvinsvitzer.flixbook.model.Movie;
-import com.alvinsvitzer.flixbook.model.Trailer;
+import com.alvinsvitzer.flixbook.data.model.Movie;
+import com.alvinsvitzer.flixbook.data.model.Trailer;
 import com.alvinsvitzer.flixbook.movies.MoviesFilterType;
 
 import java.util.List;

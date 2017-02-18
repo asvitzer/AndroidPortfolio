@@ -6,8 +6,8 @@ import android.util.Log;
 
 import com.alvinsvitzer.flixbook.data.AppRepository;
 import com.alvinsvitzer.flixbook.data.remote.MovieRemoteDataStore;
-import com.alvinsvitzer.flixbook.model.Movie;
-import com.alvinsvitzer.flixbook.model.Trailer;
+import com.alvinsvitzer.flixbook.data.model.Movie;
+import com.alvinsvitzer.flixbook.data.model.Trailer;
 import com.alvinsvitzer.flixbook.utilities.MovieDBUtils;
 import com.alvinsvitzer.flixbook.utilities.YouTubeUtils;
 import com.android.volley.toolbox.ImageLoader;

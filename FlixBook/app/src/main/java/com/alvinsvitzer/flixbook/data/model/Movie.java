@@ -1,4 +1,4 @@
-package com.alvinsvitzer.flixbook.model;
+package com.alvinsvitzer.flixbook.data.model;
 
 import org.parceler.Parcel;
 

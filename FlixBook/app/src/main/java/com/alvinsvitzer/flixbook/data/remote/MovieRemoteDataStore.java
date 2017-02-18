@@ -6,8 +6,8 @@ import android.util.Log;
 
 import com.alvinsvitzer.flixbook.R;
 import com.alvinsvitzer.flixbook.data.MovieDataStore;
-import com.alvinsvitzer.flixbook.model.Movie;
-import com.alvinsvitzer.flixbook.model.Trailer;
+import com.alvinsvitzer.flixbook.data.model.Movie;
+import com.alvinsvitzer.flixbook.data.model.Trailer;
 import com.alvinsvitzer.flixbook.movies.MoviesFilterType;
 import com.alvinsvitzer.flixbook.utilities.MovieDBJSONUtils;
 import com.alvinsvitzer.flixbook.utilities.MovieDBUtils;
