@@ -11,8 +11,9 @@ App to help users discover popular and highly rated movies on the web. A scrolli
 5. Parsing JSON
 6. MVP architecture
 7. Parcelable (via the Parceler API)
-8. ConstraintLayout
-8. Testing (via Espresso)
+8. MVP-architecture
+9. ConstraintLayout
+10. Testing (via Espresso & Mockito)
 
 ## Installation
 
