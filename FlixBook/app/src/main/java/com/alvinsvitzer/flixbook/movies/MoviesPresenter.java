@@ -18,7 +18,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class MoviesPresenter implements MoviesContract.Presenter, MovieDataStore.GetMoviesCallback {
 
     private final MovieDataStore mMovieRepo;
-    private MoviesContract.View mMoviesView;
+    protected MoviesContract.View mMoviesView;
     private final ImageLoader mImageLoader;
 
     MoviesPresenter(@NonNull MovieDataStore movieRepo
