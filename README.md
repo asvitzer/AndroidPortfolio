@@ -8,10 +8,12 @@ App to help users discover popular and highly rated movies on the web. A scrolli
 2. Image Caching (via the Volley API)
 3. Activities/Fragments
 4. RecyclerView
-5. JSON (via the Movie DB API)
-6. Intents
+5. Parsing JSON
+6. MVP architecture
 7. Parcelable (via the Parceler API)
-8. Testing (via Espresso)
+8. MVP-architecture
+9. ConstraintLayout
+10. Testing (via Espresso & Mockito)
 
 ## Installation
 
@@ -20,9 +22,15 @@ App to help users discover popular and highly rated movies on the web. A scrolli
 
 ## API Keys
 
-1. The Movie DB:        Place own key in the SingleFragmentActivity class (in package com.alvinsvitzer.flixbook.extensions) on line 33:
+The Movie DB:        
 
-setMovieDBApiKey("INSERT YOUR KEY HERE")
+1. Place own API key in in an XML values file and name the string resource "the_movie_db_auth_key".
+
+```
+<resources>
+    <string name="the_movie_db_auth_key">MovieDBApiKey</string>
+</resources>
+```
 
 https://www.themoviedb.org/documentation/api
 
