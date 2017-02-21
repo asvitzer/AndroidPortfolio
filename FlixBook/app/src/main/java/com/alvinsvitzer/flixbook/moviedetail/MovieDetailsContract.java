@@ -31,6 +31,7 @@ public interface MovieDetailsContract {
         void enableTrailerFab();
         void setTrailerUri(Uri uri);
         void notifyUserNoTrailer();
+        void notifyUserNoMovie();
         void setActivityTitle(String title);
 
     }

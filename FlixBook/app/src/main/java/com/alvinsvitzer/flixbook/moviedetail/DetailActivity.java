@@ -233,4 +233,15 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailsCon
 
     }
 
+    @Override
+    public void notifyUserNoMovie() {
+
+        CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.MovieDetailCoordLayout);
+
+        Snackbar snackbar = Snackbar
+                .make(coordinatorLayout, R.string.text_no_movie_data, Snackbar.LENGTH_LONG);
+
+        snackbar.show();
+    }
+
 }

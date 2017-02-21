@@ -2,12 +2,12 @@ package com.alvinsvitzer.flixbook.moviedetail;
 
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.alvinsvitzer.flixbook.data.AppRepository;
-import com.alvinsvitzer.flixbook.data.remote.MovieRemoteDataStore;
 import com.alvinsvitzer.flixbook.data.model.Movie;
+import com.alvinsvitzer.flixbook.data.model.NullMovie;
 import com.alvinsvitzer.flixbook.data.model.Trailer;
+import com.alvinsvitzer.flixbook.data.remote.MovieRemoteDataStore;
 import com.alvinsvitzer.flixbook.utilities.MovieDBUtils;
 import com.alvinsvitzer.flixbook.utilities.YouTubeUtils;
 import com.android.volley.toolbox.ImageLoader;
@@ -24,7 +24,7 @@ public class MovieDetailPresenter implements MovieDetailsContract.Presenter
         , MovieRemoteDataStore.GetTrailersCallback
         , MovieRemoteDataStore.GetMovieCallback{
 
-    private Movie mMovie;
+    protected Movie mMovie;
 
     @NonNull
     private final AppRepository mAppRepository;
@@ -32,7 +32,7 @@ public class MovieDetailPresenter implements MovieDetailsContract.Presenter
     @NonNull
     private final ImageLoader mImageLoader;
 
-    private MovieDetailsContract.View mView;
+    protected MovieDetailsContract.View mView;
 
     private static final String TAG = MovieDetailPresenter.class.getSimpleName();
 
@@ -44,6 +44,8 @@ public class MovieDetailPresenter implements MovieDetailsContract.Presenter
         mImageLoader = checkNotNull(imageLoader, "imageLoader cannot be null");
         mView = checkNotNull(view, "view cannot be null");
         mAppRepository.getMovie(this);
+        //Set this to the null movie until it's loaded from the data source.
+        mMovie = NullMovie.getInstance();
 
     }
 
@@ -98,7 +100,6 @@ public class MovieDetailPresenter implements MovieDetailsContract.Presenter
 
         if(mMovie.getTrailerList() == null){
 
-            Log.w(TAG, "getOfficialYouTubeTrailerUrl: Trailer List is empty");
             mView.notifyUserNoTrailer();
             return;
         }
@@ -112,7 +113,6 @@ public class MovieDetailPresenter implements MovieDetailsContract.Presenter
             }
         }
 
-        Log.w(TAG, "getOfficialYouTubeTrailerUrl: No trailer for YouTube.");
         mView.notifyUserNoTrailer();
 
     }
@@ -128,5 +128,6 @@ public class MovieDetailPresenter implements MovieDetailsContract.Presenter
     @Override
     public void onMovieDataNotAvailable() {
 
+        mView.notifyUserNoMovie();
     }
 }
