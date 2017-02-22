@@ -26,8 +26,8 @@ import static org.mockito.Mockito.verify;
  */
 
 @RunWith(PowerMockRunner.class)
-public class MovieDetailsPresenterTest implements MovieDetailsContract.Presenter
-        , MovieRemoteDataStore.GetTrailersCallback
+public class MovieDetailsPresenterTest implements
+         MovieRemoteDataStore.GetTrailersCallback
         , MovieRemoteDataStore.GetMovieCallback{
 
     private Movie mMovie;
@@ -107,45 +107,28 @@ public class MovieDetailsPresenterTest implements MovieDetailsContract.Presenter
         verify(mView).notifyUserNoMovie();
     }
 
-    /*    @PrepareForTest({ MovieDBUtils.class })
+/*    @PrepareForTest({ MovieDBUtils.class })
     @Test
     public void startLoadingMovieDetails(){
 
-        mMovie.setMoviePoster("/bbxtz5V0vvnTDA2qWbiiRC77Ok9.jpg");
-        mMovie.setMovieBackdrop("/xBKGJQsAIeweesB79KC89FpBrVr.jpg");
-
-        URL moviePosterUrl = null;
-        URL movieBackdropUrl = null;
-
-        try {
-            moviePosterUrl = new URL("http://image.tmdb.org/t/p/w185/bbxtz5V0vvnTDA2qWbiiRC77Ok9.jpg");
-            movieBackdropUrl = new URL("http://image.tmdb.org/t/p/w500/xBKGJQsAIeweesB79KC89FpBrVr.jpg");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        String posterImageUrl = moviePosterUrl.toString();
-        String backdropImageUrl = movieBackdropUrl.toString();
-
         PowerMockito.mockStatic(MovieDBUtils.class);
 
-        PowerMockito.when(MovieDBUtils.buildMoviePosterURL(mMovie.getMoviePoster()))
-                .thenReturn(moviePosterUrl);
+        PowerMockito.when(MovieDBUtils.buildMoviePosterURL(anyString()))
+                .thenReturn(any(URL.class));
 
-        PowerMockito.when(MovieDBUtils.buildMovieBackdropURL(mMovie.getMovieBackdrop()))
-                .thenReturn(movieBackdropUrl);
+        PowerMockito.when(MovieDBUtils.buildMovieBackdropURL(anyString()))
+                .thenReturn(any(URL.class));
 
         mPresenter.start();
 
         verify(mView).disableTrailerFab();
         verify(mView).setActivityTitle("");
         verify(mView).setBannerText(anyString());
-        verify(mView).setPosterImage(posterImageUrl, mImageLoader);
-        verify(mView).setBackdropImage(backdropImageUrl, mImageLoader);
-        verify(mAppRepository).getTrailers(anyString(), this);
+        verify(mView).setPosterImage(anyString(), any(ImageLoader.class));
+        verify(mView).setBackdropImage(anyString(), any(ImageLoader.class));
+        verify(mAppRepository).getTrailers(anyString(), any(MovieRemoteDataStore.GetTrailersCallback.class));
 
     }*/
-
 
     /**
      * The following methods are all blank since they are methods implemented
@@ -154,10 +137,6 @@ public class MovieDetailsPresenterTest implements MovieDetailsContract.Presenter
      * class. The AppRepository will be tested in other classes to see if it is correctly
      * calling a callback.
      */
-    @Override
-    public void start() {
-
-    }
 
     @Override
     public void onMovieLoaded(Movie movie) {
@@ -179,18 +158,4 @@ public class MovieDetailsPresenterTest implements MovieDetailsContract.Presenter
 
     }
 
-    @Override
-    public void attachView(MovieDetailsContract.View view) {
-
-    }
-
-    @Override
-    public void detachView() {
-
-    }
-
-    @Override
-    public void getOfficialYouTubeTrailerUrl() {
-
-    }
 }

@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.alvinsvitzer.flixbook.data.AppRepository;
 import com.alvinsvitzer.flixbook.data.MovieDataStore;
 import com.alvinsvitzer.flixbook.data.model.Movie;
+import com.alvinsvitzer.flixbook.data.model.NullMovie;
 import com.alvinsvitzer.flixbook.moviedetail.pagerfragments.MovieOverviewContract.Presenter;
 import com.alvinsvitzer.flixbook.utilities.MovieDBUtils;
 
@@ -16,7 +17,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class MovieOverviewPresenter implements Presenter, MovieDataStore.GetMovieCallback {
 
-    private MovieOverviewContract.View mView;
+    protected MovieOverviewContract.View mView;
     private Movie mMovie;
 
     @NonNull
@@ -26,6 +27,7 @@ public class MovieOverviewPresenter implements Presenter, MovieDataStore.GetMovi
 
         mView = checkNotNull(view, "View cannot be null");
         mAppRepository = checkNotNull(appRepository, "appRepository cannot be null");
+        mMovie = NullMovie.getInstance();
 
     }
 
