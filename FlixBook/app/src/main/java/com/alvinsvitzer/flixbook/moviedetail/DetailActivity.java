@@ -1,10 +1,12 @@
 package com.alvinsvitzer.flixbook.moviedetail;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,6 +14,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -53,9 +56,14 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailsCon
     @BindView(R.id.appbar)
     AppBarLayout mAppBarLayout;
 
+    @BindView(R.id.collapsing_toolbar)
+    CollapsingToolbarLayout mCollapsingToolbarLayout;
+
     private MovieDetailsContract.Presenter mPresenter;
 
     private Uri mTrailerUri;
+
+    private String mMovieTitle;
 
     // Used to handle unsubscription during teardown of Fragment
     CompositeSubscription subscriptions = new CompositeSubscription();
@@ -144,12 +152,51 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailsCon
     }
 
     private void setupAppBar() {
+
+        mCollapsingToolbarLayout.setExpandedTitleColor(Color.TRANSPARENT);
+
         mAppBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+
+            private State mCurrentState = State.IDLE;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+
+                if (verticalOffset == 0) {
+
+                    mCollapsingToolbarLayout.setTitle(" ");
+
+                    if (mCurrentState != State.EXPANDED) {
+                        onStateChanged(State.EXPANDED);
+                    }
+                    mCurrentState = State.EXPANDED;
+                } else if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()) {
+
+                    mCollapsingToolbarLayout.setTitle(mMovieTitle);
+
+                    if (mCurrentState != State.COLLAPSED) {
+                        onStateChanged(State.COLLAPSED);
+                    }
+                    mCurrentState = State.COLLAPSED;
+
+                } else {
+
+                    mCollapsingToolbarLayout.setTitle(" ");
+
+                    if (mCurrentState != State.IDLE) {
+                        onStateChanged(State.IDLE);
+                    }
+                    mCurrentState = State.IDLE;
+                }
+
+            }
+
             @Override
             public void onStateChanged(State state) {
                 switch (state) {
                     case COLLAPSED:
                         mPlayMovieFab.hide();
+                        Log.d("!!!!!", "onStateChanged: IM CHANGED");
                         break;
                     case EXPANDED:
                         mPlayMovieFab.show();
@@ -158,7 +205,10 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailsCon
                         mPlayMovieFab.show();
                         break;
                 }
-            }});
+            }
+
+        });
+
     }
 
     @Override
@@ -210,7 +260,8 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailsCon
 
     @Override
     public void setActivityTitle(String title) {
-        setTitle(title);
+        //setTitle(title);
+        mMovieTitle = title;
     }
 
     @Override

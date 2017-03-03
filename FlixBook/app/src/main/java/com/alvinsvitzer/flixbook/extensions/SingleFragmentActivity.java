@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import com.alvinsvitzer.flixbook.R;
 
 /**
- * Created by Alvin on 1/1/16.
  * Abstract Activity Class used to load a fragment onto a layout with a single fragment
  */
 public abstract class SingleFragmentActivity extends AppCompatActivity {
@@ -37,11 +36,6 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
                     .commit();
         }
 
-    }
-
-    public Fragment getCurrentFragment(){
-
-        return mFragment;
     }
 
     protected abstract Fragment createFragment();

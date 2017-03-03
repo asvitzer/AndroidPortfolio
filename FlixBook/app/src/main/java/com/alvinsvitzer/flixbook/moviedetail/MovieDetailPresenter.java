@@ -64,9 +64,11 @@ public class MovieDetailPresenter implements MovieDetailsContract.Presenter
     @Override
     public void start() {
 
+        mAppRepository.getMovie(this);
+
         mView.disableTrailerFab();
 
-        mView.setActivityTitle("");
+        mView.setActivityTitle(mMovie.getMovieTitle());
 
         String posterImageUrl = MovieDBUtils.buildMoviePosterURL(mMovie.getMoviePoster()).toString();
         mView.setPosterImage(posterImageUrl,mImageLoader);
