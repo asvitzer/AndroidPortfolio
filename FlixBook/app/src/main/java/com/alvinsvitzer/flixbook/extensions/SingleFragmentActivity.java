@@ -13,8 +13,6 @@ import com.alvinsvitzer.flixbook.R;
  */
 public abstract class SingleFragmentActivity extends AppCompatActivity {
 
-    private Fragment mFragment;
-
     @LayoutRes
     protected int getLayoutResId(){
         return R.layout.activity_fragment;
@@ -26,18 +24,19 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
         setContentView(getLayoutResId());
 
         FragmentManager fm = getSupportFragmentManager();
-        mFragment = fm.findFragmentById(R.id.fragment_container);
+        Fragment fragmentByTag = fm.findFragmentByTag(getTag());
 
-        if (mFragment == null){
+        if (fragmentByTag == null){
 
-            mFragment = createFragment();
+            fragmentByTag = createFragment();
             fm.beginTransaction()
-                    .add(R.id.fragment_container, mFragment)
+                    .replace(R.id.fragment_container, fragmentByTag, getTag())
                     .commit();
         }
 
     }
 
     protected abstract Fragment createFragment();
+    protected abstract String getTag();
 
 }

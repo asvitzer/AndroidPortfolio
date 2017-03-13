@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.alvinsvitzer.flixbook.data.MovieDataStore;
 import com.alvinsvitzer.flixbook.data.model.Movie;
+import com.alvinsvitzer.flixbook.data.model.Review;
 import com.alvinsvitzer.flixbook.data.model.Trailer;
 import com.alvinsvitzer.flixbook.movies.MoviesFilterType;
 
@@ -18,6 +19,7 @@ public class MovieLocalDataStore implements MovieDataStore {
     private static MovieLocalDataStore INSTANCE;
 
     private List<Trailer> mTrailerList;
+    private List<Review> mReviewList;
     private List<Movie> mMovieList;
     private Movie mCurrentMovie;
 
@@ -82,6 +84,19 @@ public class MovieLocalDataStore implements MovieDataStore {
 
     }
 
+    @Override
+    public void getReviews(@NonNull String movieId, @NonNull GetReviewsCallback callback) {
+
+        if (mReviewList != null){
+
+            callback.onReviewsLoaded(mReviewList);
+        } else {
+
+            callback.onReviewDataNotvailable();
+        }
+
+
+    }
 
     @Override
     public void saveMovie(Movie movie){

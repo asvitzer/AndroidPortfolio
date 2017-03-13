@@ -74,6 +74,9 @@ public class MoviesPresenter implements MoviesContract.Presenter, MovieDataStore
 
         mMoviesView.showMovies(movieList);
 
+        //Save movies to local cache.
+        mMovieRepo.saveMovies(movieList);
+
     }
 
     @Override

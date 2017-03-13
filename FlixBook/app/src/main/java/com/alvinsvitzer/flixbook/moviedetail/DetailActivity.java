@@ -14,7 +14,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -157,8 +156,6 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailsCon
 
         mAppBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
 
-            private State mCurrentState = State.IDLE;
-
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
@@ -196,7 +193,6 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailsCon
                 switch (state) {
                     case COLLAPSED:
                         mPlayMovieFab.hide();
-                        Log.d("!!!!!", "onStateChanged: IM CHANGED");
                         break;
                     case EXPANDED:
                         mPlayMovieFab.show();

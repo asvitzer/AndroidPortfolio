@@ -33,6 +33,8 @@ public class MovieOverviewFragment extends Fragment implements MovieOverviewCont
 
     private MovieOverviewContract.Presenter mPresenter;
 
+    private static final String TAG = MovieOverviewFragment.class.getSimpleName();
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
 
@@ -59,8 +61,11 @@ public class MovieOverviewFragment extends Fragment implements MovieOverviewCont
     @Override
     public void attachPresenter() {
 
-        mPresenter = new MovieOverviewPresenter(this, Injection.provideMovieDataStoreRepository(getActivity()));
-        mPresenter.start();
+        if (mPresenter == null ){
+
+            mPresenter = new MovieOverviewPresenter(this, Injection.provideMovieDataStoreRepository(getActivity()));
+            mPresenter.start();
+        }
 
     }
 
@@ -101,12 +106,6 @@ public class MovieOverviewFragment extends Fragment implements MovieOverviewCont
 
         snackbar.show();
 
-    }
-
-    @Override
-    public void onDestroyView() {
-        mPresenter.detachView();
-        super.onDestroyView();
     }
 
 }

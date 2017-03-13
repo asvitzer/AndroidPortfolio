@@ -12,13 +12,16 @@ import com.alvinsvitzer.flixbook.moviedetail.pagerfragments.MovieOverviewFragmen
  * Created by Alvin on 2/15/17.
  */
 
-public class DetailsPagerAdapter extends FragmentPagerAdapter{
+public class DetailsPagerAdapter extends FragmentPagerAdapter {
 
     final int PAGE_COUNT = 3;
     private String tabTitles[];
+    private Context mContext;
 
     public DetailsPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
+
+        mContext = context;
 
         tabTitles = new String[]{context.getString(R.string.tab_title_details)
                                  ,context.getString(R.string.tab_title_people)

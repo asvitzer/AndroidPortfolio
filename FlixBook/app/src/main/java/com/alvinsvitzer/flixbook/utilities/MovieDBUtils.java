@@ -28,6 +28,7 @@ public class MovieDBUtils {
     final static String PATH_POPULAR = "popular";
     final static String PATH_VIDEO = "videos";
     final static String PATH_TOP_RATED = "top_rated";
+    final static String PATH_REVIEW = "reviews";
 
     final static String PARAM_API_KEY = "api_key";
     final static String PARAM_LANGUAGE = "language";
@@ -152,6 +153,30 @@ public class MovieDBUtils {
         }
 
         return url;
+    }
+
+    public static URL buildMovieReviewURL(String apiKey, String movieId){
+
+        Uri finalUri = Uri.parse(MOVIEDB_BASE_URL).buildUpon()
+                .appendPath(movieId)
+                .appendPath(PATH_REVIEW)
+                .appendQueryParameter(PARAM_API_KEY, apiKey)
+                .appendQueryParameter(PARAM_LANGUAGE, LANGUAGE_ENGLISH_US)
+                .build();
+
+        Log.i(TAG, "buildMovieReviewURL: " + finalUri.toString());
+
+        URL url = null;
+
+        try {
+            url = new URL(finalUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
+
+
     }
 
     public static String getLocalDate(String dateToConvert){

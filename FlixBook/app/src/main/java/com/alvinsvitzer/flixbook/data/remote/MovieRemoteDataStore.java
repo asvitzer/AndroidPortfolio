@@ -7,6 +7,7 @@ import android.util.Log;
 import com.alvinsvitzer.flixbook.R;
 import com.alvinsvitzer.flixbook.data.MovieDataStore;
 import com.alvinsvitzer.flixbook.data.model.Movie;
+import com.alvinsvitzer.flixbook.data.model.Review;
 import com.alvinsvitzer.flixbook.data.model.Trailer;
 import com.alvinsvitzer.flixbook.movies.MoviesFilterType;
 import com.alvinsvitzer.flixbook.utilities.MovieDBJSONUtils;
@@ -16,11 +17,16 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -151,6 +157,46 @@ public class MovieRemoteDataStore implements MovieDataStore {
                 });
 
         mNetworkSingleton.addToRequestQueue(jsObjectRequest);
+
+    }
+
+    @Override
+    public void getReviews(@NonNull String movieId, @NonNull final GetReviewsCallback callback) {
+
+        URL url = MovieDBUtils.buildMovieReviewURL(mApiKey, movieId);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET
+                , url.toString(), new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+
+                List<Review> myReview;
+
+                GsonBuilder gsonBuilder = new GsonBuilder();
+                Gson gson = gsonBuilder.create();
+
+                JsonObject jsonObject = gson.fromJson(response, JsonObject.class);
+
+                myReview = Arrays.asList(gson.fromJson(jsonObject, Review[].class));
+
+                if(myReview != null && !myReview.isEmpty()){
+                    callback.onReviewsLoaded(myReview);
+                } else {
+                    callback.onReviewDataNotvailable();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                callback.onReviewDataNotvailable();
+
+            }
+        });
+
+        mNetworkSingleton.addToRequestQueue(stringRequest);
 
     }
 

@@ -12,9 +12,16 @@ import com.alvinsvitzer.flixbook.moviedetail.DetailActivity;
 public class MovieActivity extends SingleFragmentActivity
         implements MovieGridFragment.OnFragmentInteractionListener {
 
+    private static final String TAG_MOVIE_GRID = "MovieGridFragment";
+
     @Override
     protected Fragment createFragment() {
         return new MovieGridFragment();
+    }
+
+    @Override
+    protected String getTag() {
+        return TAG_MOVIE_GRID;
     }
 
     @Override

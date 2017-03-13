@@ -20,4 +20,5 @@
     <string name="text_no_trailer">No trailers available. Play button disabled.</string>
     <string name="text_no_movie_data">Movie data not available.</string>
     <string name="not_available_text">N/A</string>
+    <string name="snackbar_text_no_review">Reviews not available</string>
 </resources>

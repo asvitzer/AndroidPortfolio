@@ -74,6 +74,9 @@ public class MovieGridFragment extends Fragment implements MoviesContract.View {
 
         setHasOptionsMenu(true);
 
+        //Used to keep Presenter alive during rotation changes
+        setRetainInstance(true);
+
         // Restore preferences for which sorting option was used
         mSharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
         mSortMenuIdChecked = MoviesFilterType.valueOf(mSharedPreferences.getInt(SORT_MENU_CHECKED_PREF, MoviesFilterType.POPULAR_MOVIES.getValue()));
@@ -228,17 +231,23 @@ public class MovieGridFragment extends Fragment implements MoviesContract.View {
     @Override
     public void attachPresenter() {
 
-        mPresenter = new MoviesPresenter(Injection.provideMovieDataStoreRepository(getActivity())
+
+        if(mPresenter == null ){
+
+            mPresenter = new MoviesPresenter(Injection.provideMovieDataStoreRepository(getActivity())
                     , this
                     , VolleyNetworkSingleton.getInstance(getActivity()).getImageLoader());
 
-        mPresenter.start();
+            mPresenter.start();
+
+        }
+
     }
 
     @Override
-    public void onDestroyView() {
+    public void onDestroy() {
         mPresenter.detachView();
-        super.onDestroyView();
+        super.onDestroy();
     }
 
 
