@@ -15,4 +15,23 @@
     <dimen name="poster_image_padding">2dp</dimen>
     <dimen name="poster_image_padding_vertical">2dp</dimen>
 
+    <dimen name="card_elevation">2dp</dimen>
+    <dimen name="card_padding_vertical">8dp</dimen>
+
+    <dimen name="movie_poster_title_min_height">60dp</dimen>
+    <dimen name="movie_poster_title_max_height">60dp</dimen>
+
+    <dimen name="movie_poster_date_min_height">20dp</dimen>
+    <dimen name="movie_poster_date_max_height">20dp</dimen>
+
+    <dimen name="movie_detail_label_padding_vertical">8dp</dimen>
+    <dimen name="movie_detail_label_padding_horizontal">8dp</dimen>
+    <dimen name="movie_detail_text_padding_horizontal">16dp</dimen>
+    <dimen name="movie_detail_text_padding_vertical">8dp</dimen>
+
+    <dimen name="review_item_padding_vertical">8dp</dimen>
+    <dimen name="review_item_padding_horizontal">8dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+
 </resources>

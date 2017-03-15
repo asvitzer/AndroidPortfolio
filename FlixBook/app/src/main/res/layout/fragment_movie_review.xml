@@ -1,17 +1,17 @@
 <FrameLayout
     android:id="@+id/fragment_grid_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     >
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/review_recycler_view"
         android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         />
 
     <TextView
@@ -21,7 +21,7 @@
         android:layout_gravity="center_vertical"
         android:gravity="center"
         android:text="@string/no_movie_data_text"
-        android:visibility="invisible"
+        android:visibility="gone"
         />
 
 </FrameLayout>

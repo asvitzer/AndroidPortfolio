@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.alvinsvitzer.flixbook.R;
-import com.alvinsvitzer.flixbook.data.MovieDataStore;
 import com.alvinsvitzer.flixbook.data.model.Movie;
 import com.alvinsvitzer.flixbook.data.model.Review;
 import com.alvinsvitzer.flixbook.data.model.Trailer;
@@ -35,15 +34,15 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Created by Alvin on 2/15/17.
  */
 
-public class MovieRemoteDataStore implements MovieDataStore {
+public class MovieDataStoreRemoteImpl implements MovieDataStoreRemote {
 
     private VolleyNetworkSingleton mNetworkSingleton;
     private String mApiKey;
-    private static MovieRemoteDataStore INSTANCE;
-    private static final String TAG = MovieRemoteDataStore.class.getSimpleName();
+    private static MovieDataStoreRemoteImpl INSTANCE;
+    private static final String TAG = MovieDataStoreRemoteImpl.class.getSimpleName();
 
     // Prevent direct instantiation.
-    private MovieRemoteDataStore(@NonNull Context context) {
+    private MovieDataStoreRemoteImpl(@NonNull Context context) {
         checkNotNull(context);
 
         mNetworkSingleton = VolleyNetworkSingleton.getInstance(context);
@@ -51,12 +50,12 @@ public class MovieRemoteDataStore implements MovieDataStore {
 
     }
 
-    public static synchronized MovieRemoteDataStore getInstance(@NonNull Context context) {
+    public static synchronized MovieDataStoreRemoteImpl getInstance(@NonNull Context context) {
 
         checkNotNull(context);
 
         if (INSTANCE == null) {
-            INSTANCE = new MovieRemoteDataStore(context);
+            INSTANCE = new MovieDataStoreRemoteImpl(context);
         }
         return INSTANCE;
     }
@@ -90,7 +89,7 @@ public class MovieRemoteDataStore implements MovieDataStore {
 
                         } catch (JSONException e) {
 
-                            Log.e(MovieRemoteDataStore.TAG, "onResponse: ", e);
+                            Log.e(MovieDataStoreRemoteImpl.TAG, "onResponse: ", e);
                             e.printStackTrace();
 
                             callback.onMovieListDataNotAvailable();
@@ -111,11 +110,6 @@ public class MovieRemoteDataStore implements MovieDataStore {
                 });
 
         mNetworkSingleton.addToRequestQueue(jsObjectRequest);
-    }
-
-    @Override
-    public void getMovie(@NonNull GetMovieCallback callback) {
-
     }
 
     @Override
@@ -178,12 +172,12 @@ public class MovieRemoteDataStore implements MovieDataStore {
 
                 JsonObject jsonObject = gson.fromJson(response, JsonObject.class);
 
-                myReview = Arrays.asList(gson.fromJson(jsonObject, Review[].class));
+                myReview = Arrays.asList(gson.fromJson(jsonObject.get("results"), Review[].class));
 
                 if(myReview != null && !myReview.isEmpty()){
                     callback.onReviewsLoaded(myReview);
                 } else {
-                    callback.onReviewDataNotvailable();
+                    callback.onReviewDataNotAvailable();
                 }
 
             }
@@ -191,23 +185,12 @@ public class MovieRemoteDataStore implements MovieDataStore {
             @Override
             public void onErrorResponse(VolleyError error) {
 
-                callback.onReviewDataNotvailable();
+                callback.onReviewDataNotAvailable();
 
             }
         });
 
         mNetworkSingleton.addToRequestQueue(stringRequest);
-
-    }
-
-    @Override
-    public void saveMovie(@NonNull Movie movie) {
-        throw new RuntimeException("Operation Not Implemented");
-    }
-
-    @Override
-    public void saveMovies(@NonNull List<Movie> movieList) {
-        throw new RuntimeException("Operation Not Implemented");
 
     }
 

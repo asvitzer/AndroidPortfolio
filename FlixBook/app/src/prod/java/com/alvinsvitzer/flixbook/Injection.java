@@ -20,8 +20,8 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.alvinsvitzer.flixbook.data.AppRepository;
-import com.alvinsvitzer.flixbook.data.local.MovieLocalDataStore;
-import com.alvinsvitzer.flixbook.data.remote.MovieRemoteDataStore;
+import com.alvinsvitzer.flixbook.data.local.MovieLocalDataStoreImpl;
+import com.alvinsvitzer.flixbook.data.remote.MovieDataStoreRemoteImpl;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -35,20 +35,20 @@ public class Injection {
 
         checkNotNull(context);
 
-        return AppRepository.getInstance(MovieRemoteDataStore.getInstance(context)
-                , MovieLocalDataStore.getInstance());
+        return AppRepository.getInstance(MovieDataStoreRemoteImpl.getInstance(context)
+                , MovieLocalDataStoreImpl.getInstance());
     }
 
-    public static MovieRemoteDataStore provideRemoteDataSource(@NonNull Context context) {
+    public static MovieDataStoreRemoteImpl provideRemoteDataSource(@NonNull Context context) {
 
         checkNotNull(context);
 
-        return MovieRemoteDataStore.getInstance(context);
+        return MovieDataStoreRemoteImpl.getInstance(context);
     }
 
-    public static MovieLocalDataStore provideLocalDataSource() {
+    public static MovieLocalDataStoreImpl provideLocalDataSource() {
 
-        return MovieLocalDataStore.getInstance();
+        return MovieLocalDataStoreImpl.getInstance();
     }
 
 }

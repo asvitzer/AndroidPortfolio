@@ -2,8 +2,9 @@ package com.alvinsvitzer.flixbook.movies;
 
 import android.support.annotation.NonNull;
 
-import com.alvinsvitzer.flixbook.data.MovieDataStore;
+import com.alvinsvitzer.flixbook.data.AppRepository;
 import com.alvinsvitzer.flixbook.data.model.Movie;
+import com.alvinsvitzer.flixbook.data.remote.MovieDataStoreRemote;
 import com.alvinsvitzer.flixbook.utilities.MovieDBUtils;
 import com.android.volley.toolbox.ImageLoader;
 
@@ -15,13 +16,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Created by Alvin on 2/15/17.
  */
 
-public class MoviesPresenter implements MoviesContract.Presenter, MovieDataStore.GetMoviesCallback {
+public class MoviesPresenter implements MoviesContract.Presenter, MovieDataStoreRemote.GetMoviesCallback {
 
-    private final MovieDataStore mMovieRepo;
+    private final AppRepository mMovieRepo;
     protected MoviesContract.View mMoviesView;
     private final ImageLoader mImageLoader;
 
-    MoviesPresenter(@NonNull MovieDataStore movieRepo
+    MoviesPresenter(@NonNull AppRepository movieRepo
                     , @NonNull MoviesContract.View moviesView
                     , @NonNull ImageLoader imageLoader
                     ){
@@ -73,9 +74,6 @@ public class MoviesPresenter implements MoviesContract.Presenter, MovieDataStore
     public void onMoviesLoaded(List<Movie> movieList) {
 
         mMoviesView.showMovies(movieList);
-
-        //Save movies to local cache.
-        mMovieRepo.saveMovies(movieList);
 
     }
 

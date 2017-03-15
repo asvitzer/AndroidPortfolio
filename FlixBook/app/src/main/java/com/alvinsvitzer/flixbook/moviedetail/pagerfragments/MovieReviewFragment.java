@@ -2,14 +2,15 @@ package com.alvinsvitzer.flixbook.moviedetail.pagerfragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ import com.alvinsvitzer.flixbook.Injection;
 import com.alvinsvitzer.flixbook.R;
 import com.alvinsvitzer.flixbook.data.model.Review;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,17 +32,24 @@ public class MovieReviewFragment extends Fragment implements MovieReviewContract
 
     private MovieReviewContract.Presenter mPresenter;
     private List<Review> mReviewList;
+    private ReviewAdapter mReviewAdapter;
 
     private static final String TAG = MovieReviewFragment.class.getSimpleName();
 
-    @BindView(R.id.MovieDetailCoordLayout)
-    CoordinatorLayout mCoordinatorLayout;
+    @BindView(R.id.fragment_grid_container)
+    FrameLayout mFrameLayout;
+
+    @BindView(R.id.review_recycler_view)
+    RecyclerView mRecyclerView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mReviewList = new ArrayList<>();
+        mReviewAdapter = new ReviewAdapter(mReviewList);
         attachPresenter();
+
     }
 
     @Nullable
@@ -50,6 +59,9 @@ public class MovieReviewFragment extends Fragment implements MovieReviewContract
         View v = inflater.inflate(R.layout.fragment_movie_review, container, false);
 
         ButterKnife.bind(this, v);
+
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setAdapter(mReviewAdapter);
 
         return v;
     }
@@ -69,12 +81,22 @@ public class MovieReviewFragment extends Fragment implements MovieReviewContract
     @Override
     public void notifyNoReviews() {
 
-        Snackbar.make(mCoordinatorLayout, R.string.snackbar_text_no_review, Snackbar.LENGTH_LONG).show();
+        Snackbar.make(mFrameLayout, R.string.snackbar_text_no_review, Snackbar.LENGTH_LONG).show();
 
     }
 
     @Override
     public void displayReviews(List<Review> reviews) {
+
+        mReviewList.clear();
+
+        for(Review r: reviews){
+
+            mReviewList.add(r);
+        }
+
+        mReviewAdapter.notifyDataSetChanged();
+
 
     }
 
@@ -86,8 +108,8 @@ public class MovieReviewFragment extends Fragment implements MovieReviewContract
         public ReviewHolder(View itemView) {
             super(itemView);
 
-            mReviewText = (TextView) itemView.findViewById(R.id.movie_poster_title);
-            mAuthor = (TextView) itemView.findViewById(R.id.movie_poster_title);
+            mReviewText = (TextView) itemView.findViewById(R.id.textViewReview);
+            mAuthor = (TextView) itemView.findViewById(R.id.textViewReviewer);
 
             itemView.setOnClickListener(this);
         }
@@ -125,7 +147,7 @@ public class MovieReviewFragment extends Fragment implements MovieReviewContract
         public ReviewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
             LayoutInflater inflater = LayoutInflater.from(getActivity());
-            View v = inflater.inflate(R.layout.grid_item_movie, parent, false);
+            View v = inflater.inflate(R.layout.grid_item_review, parent, false);
 
             return new ReviewHolder(v);
         }

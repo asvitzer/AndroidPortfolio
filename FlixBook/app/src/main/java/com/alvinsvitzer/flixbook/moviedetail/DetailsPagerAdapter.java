@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.alvinsvitzer.flixbook.R;
 import com.alvinsvitzer.flixbook.moviedetail.pagerfragments.MovieOverviewFragment;
+import com.alvinsvitzer.flixbook.moviedetail.pagerfragments.MovieReviewFragment;
 
 /**
  * Created by Alvin on 2/15/17.
@@ -14,7 +15,7 @@ import com.alvinsvitzer.flixbook.moviedetail.pagerfragments.MovieOverviewFragmen
 
 public class DetailsPagerAdapter extends FragmentPagerAdapter {
 
-    final int PAGE_COUNT = 3;
+    final int PAGE_COUNT = 2;
     private String tabTitles[];
     private Context mContext;
 
@@ -42,10 +43,7 @@ public class DetailsPagerAdapter extends FragmentPagerAdapter {
                 MovieOverviewFragment tab1 = new MovieOverviewFragment();
                 return tab1;
             case 1:
-                MovieOverviewFragment tab2 =  new MovieOverviewFragment();
-                return tab2;
-            case 2:
-                MovieOverviewFragment tab3 =  new MovieOverviewFragment();
+                MovieReviewFragment tab3 =  new MovieReviewFragment();
                 return tab3;
             default:
                 return null;

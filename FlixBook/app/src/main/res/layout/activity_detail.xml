@@ -19,7 +19,7 @@
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
@@ -30,7 +30,7 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 >
 
                 <com.android.volley.toolbox.NetworkImageView
@@ -119,11 +119,11 @@
         android:id="@+id/playTrailerFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
         android:clickable="true"
         android:src="@drawable/ic_play_arrow_white_18dp"
         app:layout_anchor="@id/movie_backdrop_image"
         app:layout_anchorGravity="bottom|right|end"
+        style="@style/MaterialFAB"
         />
 
     <android.support.v4.view.ViewPager

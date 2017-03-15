@@ -4,10 +4,11 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import com.alvinsvitzer.flixbook.data.AppRepository;
+import com.alvinsvitzer.flixbook.data.local.MovieDataStoreLocal;
 import com.alvinsvitzer.flixbook.data.model.Movie;
 import com.alvinsvitzer.flixbook.data.model.NullMovie;
 import com.alvinsvitzer.flixbook.data.model.Trailer;
-import com.alvinsvitzer.flixbook.data.remote.MovieRemoteDataStore;
+import com.alvinsvitzer.flixbook.data.remote.MovieDataStoreRemote;
 import com.alvinsvitzer.flixbook.utilities.MovieDBUtils;
 import com.alvinsvitzer.flixbook.utilities.YouTubeUtils;
 import com.android.volley.toolbox.ImageLoader;
@@ -21,8 +22,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 
 public class MovieDetailPresenter implements MovieDetailsContract.Presenter
-        , MovieRemoteDataStore.GetTrailersCallback
-        , MovieRemoteDataStore.GetMovieCallback{
+        , MovieDataStoreRemote.GetTrailersCallback
+        , MovieDataStoreLocal.GetMovieCallback{
 
     protected Movie mMovie;
 
@@ -87,6 +88,7 @@ public class MovieDetailPresenter implements MovieDetailsContract.Presenter
 
         mMovie.setTrailerList(trailerList);
         getOfficialYouTubeTrailerUrl();
+
 
     }
 
