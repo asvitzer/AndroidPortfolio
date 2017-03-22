@@ -14,24 +14,24 @@ import java.util.List;
  * Created by Alvin on 2/17/17.
  */
 
-public class MovieLocalDataStoreImpl implements MovieDataStoreLocal {
+public class MovieDataStoreInMemoryImpl implements MovieDataStoreInMemory {
 
-    private static MovieLocalDataStoreImpl INSTANCE;
+    private static MovieDataStoreInMemoryImpl INSTANCE;
 
     private List<Trailer> mTrailerList;
     private List<Review> mReviewList;
     private Movie mCurrentMovie;
 
-    private MovieLocalDataStoreImpl(){
+    private MovieDataStoreInMemoryImpl() {
 
         mCurrentMovie = NullMovie.getInstance();
     }
 
-    public static synchronized MovieLocalDataStoreImpl getInstance(){
+    public static synchronized MovieDataStoreInMemoryImpl getInstance() {
 
-        if(INSTANCE == null){
+        if (INSTANCE == null) {
 
-           INSTANCE = new MovieLocalDataStoreImpl();
+            INSTANCE = new MovieDataStoreInMemoryImpl();
         }
 
         return INSTANCE;
@@ -39,9 +39,9 @@ public class MovieLocalDataStoreImpl implements MovieDataStoreLocal {
     }
 
     @Override
-    public void getMovie(@NonNull MovieDataStoreLocal.GetMovieCallback callback) {
+    public void getMovie(@NonNull MovieDataStoreInMemory.GetMovieCallback callback) {
 
-        if (mCurrentMovie != null){
+        if (mCurrentMovie != null) {
 
             callback.onMovieLoaded(mCurrentMovie);
 
@@ -56,7 +56,7 @@ public class MovieLocalDataStoreImpl implements MovieDataStoreLocal {
     @Override
     public void getTrailers(@NonNull String movieId, @NonNull MovieDataStore.GetTrailersCallback callback) {
 
-        if (mTrailerList != null && String.valueOf(mCurrentMovie.getMovieId()).equals(movieId)){
+        if (mTrailerList != null && String.valueOf(mCurrentMovie.getMovieId()).equals(movieId)) {
 
             callback.onTrailersLoaded(mTrailerList);
 
@@ -71,7 +71,7 @@ public class MovieLocalDataStoreImpl implements MovieDataStoreLocal {
     @Override
     public void getReviews(@NonNull String movieId, @NonNull MovieDataStore.GetReviewsCallback callback) {
 
-        if (mReviewList != null && String.valueOf(mCurrentMovie.getMovieId()).equals(movieId)){
+        if (mReviewList != null && String.valueOf(mCurrentMovie.getMovieId()).equals(movieId)) {
 
             callback.onReviewsLoaded(mReviewList);
         } else {
@@ -83,7 +83,7 @@ public class MovieLocalDataStoreImpl implements MovieDataStoreLocal {
     }
 
     @Override
-    public void saveMovie(Movie movie){
+    public void saveMovie(@NonNull Movie movie) {
 
         /**
          * If the movie being saved is different from the one cached then save it
@@ -91,7 +91,7 @@ public class MovieLocalDataStoreImpl implements MovieDataStoreLocal {
          * cached movie. Clearing them out results in the AppRepository deciding it
          * needs to make a network call to get new data if finds the local data store empty.
          */
-        if (movie.getMovieId() != mCurrentMovie.mMovieId){
+        if (movie.getMovieId() != mCurrentMovie.mMovieId) {
 
             mCurrentMovie = movie;
             mReviewList = null;

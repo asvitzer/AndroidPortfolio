@@ -13,7 +13,7 @@ import java.util.List;
  * Created by Alvin on 3/15/17.
  */
 
-public interface MovieDataStoreLocal extends MovieDataStore {
+public interface MovieDataStoreInMemory extends MovieDataStore {
 
     interface GetMovieCallback {
 

@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.alvinsvitzer.flixbook.data.AppRepository;
 import com.alvinsvitzer.flixbook.data.MovieDataStore;
-import com.alvinsvitzer.flixbook.data.local.MovieDataStoreLocal;
+import com.alvinsvitzer.flixbook.data.local.MovieDataStoreInMemory;
 import com.alvinsvitzer.flixbook.data.model.Movie;
 import com.alvinsvitzer.flixbook.data.model.NullMovie;
 import com.alvinsvitzer.flixbook.data.model.Review;
@@ -18,7 +18,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 
 public class MovieReviewPresenter implements MovieReviewContract.Presenter
-        , MovieDataStoreLocal.GetMovieCallback
+        , MovieDataStoreInMemory.GetMovieCallback
         , MovieDataStore.GetReviewsCallback{
 
     private final AppRepository mAppRepository;

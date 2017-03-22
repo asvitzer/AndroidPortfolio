@@ -4,7 +4,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import com.alvinsvitzer.flixbook.data.AppRepository;
-import com.alvinsvitzer.flixbook.data.local.MovieDataStoreLocal;
+import com.alvinsvitzer.flixbook.data.local.MovieDataStoreInMemory;
 import com.alvinsvitzer.flixbook.data.model.Movie;
 import com.alvinsvitzer.flixbook.data.model.NullMovie;
 import com.alvinsvitzer.flixbook.data.model.Trailer;
@@ -23,7 +23,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class MovieDetailPresenter implements MovieDetailsContract.Presenter
         , MovieDataStoreRemote.GetTrailersCallback
-        , MovieDataStoreLocal.GetMovieCallback{
+        , MovieDataStoreInMemory.GetMovieCallback {
 
     protected Movie mMovie;
 

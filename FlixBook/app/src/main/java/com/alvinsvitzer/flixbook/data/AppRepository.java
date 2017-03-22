@@ -2,8 +2,8 @@ package com.alvinsvitzer.flixbook.data;
 
 import android.support.annotation.NonNull;
 
-import com.alvinsvitzer.flixbook.data.local.MovieDataStoreLocal;
-import com.alvinsvitzer.flixbook.data.local.MovieLocalDataStoreImpl;
+import com.alvinsvitzer.flixbook.data.local.MovieDataStoreInMemory;
+import com.alvinsvitzer.flixbook.data.local.MovieDataStoreInMemoryImpl;
 import com.alvinsvitzer.flixbook.data.model.Movie;
 import com.alvinsvitzer.flixbook.data.model.Review;
 import com.alvinsvitzer.flixbook.data.model.Trailer;
@@ -19,25 +19,25 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Created by Alvin on 2/17/17.
  */
 
-public class AppRepository implements MovieDataStoreLocal, MovieDataStoreRemote {
+public class AppRepository implements MovieDataStoreInMemory, MovieDataStoreRemote {
 
     private static AppRepository INSTANCE = null;
 
     private final MovieDataStoreRemoteImpl mMovieDataStoreRemoteImpl;
-    private final MovieLocalDataStoreImpl mMovieLocalDataStoreImpl;
+    private final MovieDataStoreInMemoryImpl mMovieDataStoreInMemoryImpl;
 
     private AppRepository(@NonNull MovieDataStoreRemoteImpl movieDataStoreRemoteImpl
-            ,@NonNull MovieLocalDataStoreImpl movieLocalDataStoreImpl){
+            , @NonNull MovieDataStoreInMemoryImpl movieDataStoreInMemoryImpl) {
 
         mMovieDataStoreRemoteImpl = checkNotNull(movieDataStoreRemoteImpl,"movieDataStoreRemoteImpl cannot be null");
-        mMovieLocalDataStoreImpl = checkNotNull(movieLocalDataStoreImpl, "movieLocalDataStoreImpl cannot be null");
+        mMovieDataStoreInMemoryImpl = checkNotNull(movieDataStoreInMemoryImpl, "movieDataStoreInMemoryImpl cannot be null");
 
     }
 
     public static synchronized AppRepository getInstance(@NonNull MovieDataStoreRemoteImpl movieDataStoreRemoteImpl,
-                                                         @NonNull MovieLocalDataStoreImpl movieLocalDataStoreImpl) {
+                                                         @NonNull MovieDataStoreInMemoryImpl movieDataStoreInMemoryImpl) {
         if (INSTANCE == null) {
-            INSTANCE = new AppRepository(movieDataStoreRemoteImpl, movieLocalDataStoreImpl);
+            INSTANCE = new AppRepository(movieDataStoreRemoteImpl, movieDataStoreInMemoryImpl);
         }
         return INSTANCE;
     }
@@ -52,13 +52,13 @@ public class AppRepository implements MovieDataStoreLocal, MovieDataStoreRemote 
     @Override
     public void getMovie(@NonNull GetMovieCallback callback) {
 
-        mMovieLocalDataStoreImpl.getMovie(callback);
+        mMovieDataStoreInMemoryImpl.getMovie(callback);
     }
 
     @Override
     public void getTrailers(@NonNull final String movieId, @NonNull final GetTrailersCallback callback) {
 
-        mMovieLocalDataStoreImpl.getTrailers(movieId, new GetTrailersCallback() {
+        mMovieDataStoreInMemoryImpl.getTrailers(movieId, new GetTrailersCallback() {
             @Override
             public void onTrailersLoaded(List<Trailer> trailerList) {
 
@@ -91,7 +91,7 @@ public class AppRepository implements MovieDataStoreLocal, MovieDataStoreRemote 
     @Override
     public void getReviews(@NonNull final String movieId, @NonNull final GetReviewsCallback callback) {
 
-        mMovieLocalDataStoreImpl.getReviews(movieId, new GetReviewsCallback() {
+        mMovieDataStoreInMemoryImpl.getReviews(movieId, new GetReviewsCallback() {
             @Override
             public void onReviewsLoaded(List<Review> reviewList) {
                 callback.onReviewsLoaded(reviewList);
@@ -122,20 +122,20 @@ public class AppRepository implements MovieDataStoreLocal, MovieDataStoreRemote 
     @Override
     public void saveMovie(@NonNull Movie movie) {
 
-        mMovieLocalDataStoreImpl.saveMovie(movie);
+        mMovieDataStoreInMemoryImpl.saveMovie(movie);
 
     }
 
     @Override
     public void saveReviews(List<Review> reviews) {
 
-        mMovieLocalDataStoreImpl.saveReviews(reviews);
+        mMovieDataStoreInMemoryImpl.saveReviews(reviews);
     }
 
     @Override
     public void saveTrailers(List<Trailer> trailers) {
 
-        mMovieLocalDataStoreImpl.saveTrailers(trailers);
+        mMovieDataStoreInMemoryImpl.saveTrailers(trailers);
 
     }
 

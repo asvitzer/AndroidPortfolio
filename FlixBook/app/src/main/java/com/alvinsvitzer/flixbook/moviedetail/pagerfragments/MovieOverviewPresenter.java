@@ -3,7 +3,7 @@ package com.alvinsvitzer.flixbook.moviedetail.pagerfragments;
 import android.support.annotation.NonNull;
 
 import com.alvinsvitzer.flixbook.data.AppRepository;
-import com.alvinsvitzer.flixbook.data.local.MovieDataStoreLocal;
+import com.alvinsvitzer.flixbook.data.local.MovieDataStoreInMemory;
 import com.alvinsvitzer.flixbook.data.model.Movie;
 import com.alvinsvitzer.flixbook.data.model.NullMovie;
 import com.alvinsvitzer.flixbook.moviedetail.pagerfragments.MovieOverviewContract.Presenter;
@@ -15,7 +15,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Created by Alvin on 2/17/17.
  */
 
-public class MovieOverviewPresenter implements Presenter, MovieDataStoreLocal.GetMovieCallback {
+public class MovieOverviewPresenter implements Presenter, MovieDataStoreInMemory.GetMovieCallback {
 
     MovieOverviewContract.View mView;
     private Movie mMovie;
