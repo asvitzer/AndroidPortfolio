@@ -23,6 +23,7 @@ import com.alvinsvitzer.flixbook.data.AppRepository;
 import com.alvinsvitzer.flixbook.data.local.FavoriteDataStoreLocalImpl;
 import com.alvinsvitzer.flixbook.data.local.MovieDataStoreInMemoryImpl;
 import com.alvinsvitzer.flixbook.data.remote.MovieDataStoreRemoteImpl;
+import com.alvinsvitzer.flixbook.logger.LoggerImpl;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -39,6 +40,12 @@ public class Injection {
         return AppRepository.getInstance(MovieDataStoreRemoteImpl.getInstance(context)
                 , MovieDataStoreInMemoryImpl.getInstance()
                 , FavoriteDataStoreLocalImpl.getInstance(context.getContentResolver()));
+    }
+
+    public static LoggerImpl provideLogger() {
+
+        return LoggerImpl.getINSTANCE();
+
     }
 
     public static MovieDataStoreRemoteImpl provideRemoteDataSource(@NonNull Context context) {

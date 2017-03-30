@@ -8,6 +8,21 @@ import android.util.Log;
 
 public class LoggerImpl implements Logger {
 
+    public static LoggerImpl INSTANCE = null;
+
+    private LoggerImpl() {
+    }
+
+    public static LoggerImpl getINSTANCE() {
+
+        if (INSTANCE == null) {
+
+            INSTANCE = new LoggerImpl();
+        }
+
+        return INSTANCE;
+    }
+
     @Override
     public void logd(String tag, String message) {
         Log.d(tag, "logd: " + message);

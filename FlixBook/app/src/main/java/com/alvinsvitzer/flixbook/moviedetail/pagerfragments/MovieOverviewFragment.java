@@ -69,7 +69,10 @@ public class MovieOverviewFragment extends Fragment implements MovieOverviewCont
 
         if (mPresenter == null ){
 
-            mPresenter = new MovieOverviewPresenter(this, Injection.provideMovieDataStoreRepository(getActivity()));
+            mPresenter = new MovieOverviewPresenter(this
+                    , Injection.provideMovieDataStoreRepository(getActivity())
+                    , Injection.provideLogger());
+
             mPresenter.start();
         }
 

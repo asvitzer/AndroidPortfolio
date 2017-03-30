@@ -1,7 +1,7 @@
 
 package com.alvinsvitzer.flixbook.movies;
 
-import com.alvinsvitzer.flixbook.data.MovieDataStore;
+import com.alvinsvitzer.flixbook.data.AppRepository;
 import com.alvinsvitzer.flixbook.data.model.Movie;
 import com.alvinsvitzer.flixbook.utilities.MovieDBUtils;
 import com.android.volley.toolbox.ImageLoader;
@@ -31,7 +31,7 @@ import static org.mockito.Mockito.when;
 public class MoviesPresenterTest{
 
     @Mock
-    private MovieDataStore mAppRepository;
+    private AppRepository mAppRepository;
 
     @Mock
     private ImageLoader mImageLoader;

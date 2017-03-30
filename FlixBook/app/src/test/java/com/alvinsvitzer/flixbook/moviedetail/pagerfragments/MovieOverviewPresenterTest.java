@@ -1,8 +1,9 @@
 package com.alvinsvitzer.flixbook.moviedetail.pagerfragments;
 
 import com.alvinsvitzer.flixbook.data.AppRepository;
-import com.alvinsvitzer.flixbook.data.MovieDataStore;
+import com.alvinsvitzer.flixbook.data.local.MovieDataStoreInMemory;
 import com.alvinsvitzer.flixbook.data.model.Movie;
+import com.alvinsvitzer.flixbook.logger.Logger;
 import com.alvinsvitzer.flixbook.utilities.MovieDBUtils;
 
 import org.junit.Before;
@@ -24,7 +25,7 @@ import static org.mockito.Mockito.verify;
  */
 
 @RunWith(PowerMockRunner.class)
-public class MovieOverviewPresenterTest implements MovieDataStore.GetMovieCallback{
+public class MovieOverviewPresenterTest implements MovieDataStoreInMemory.GetMovieCallback {
 
     private Movie mMovie;
 
@@ -34,6 +35,9 @@ public class MovieOverviewPresenterTest implements MovieDataStore.GetMovieCallba
     @Mock
     private MovieOverviewContract.View mView;
 
+    @Mock
+    private Logger mLogger;
+
     private MovieOverviewPresenter mPresenter;
 
     @Before
@@ -41,7 +45,7 @@ public class MovieOverviewPresenterTest implements MovieDataStore.GetMovieCallba
 
         MockitoAnnotations.initMocks(this);
 
-        mPresenter = new MovieOverviewPresenter(mView, mAppRepository);
+        mPresenter = new MovieOverviewPresenter(mView, mAppRepository, mLogger);
 
         mMovie = new Movie();
         mMovie.setMovieTitle("The Best Movie");

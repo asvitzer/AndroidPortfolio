@@ -1,7 +1,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!--TODO Figure out how to get an icon to show up for the group header. -->
-
     <!-- menu group -->
     <group
         android:id="@+id/group_sort"
@@ -25,6 +23,12 @@
             android:id="@+id/action_sort_highest_rated"
             android:orderInCategory="2"
             android:title="@string/menu_sort_highest_rating"
+            />
+
+        <item
+            android:id="@+id/action_sort_favorite"
+            android:orderInCategory="3"
+            android:title="@string/menu_sort_favorite"
             />
     </group>
 </menu>

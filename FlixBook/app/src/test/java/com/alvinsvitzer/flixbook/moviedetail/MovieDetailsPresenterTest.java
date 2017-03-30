@@ -1,9 +1,10 @@
 package com.alvinsvitzer.flixbook.moviedetail;
 
 import com.alvinsvitzer.flixbook.data.AppRepository;
+import com.alvinsvitzer.flixbook.data.MovieDataStore;
+import com.alvinsvitzer.flixbook.data.local.MovieDataStoreInMemory;
 import com.alvinsvitzer.flixbook.data.model.Movie;
 import com.alvinsvitzer.flixbook.data.model.Trailer;
-import com.alvinsvitzer.flixbook.data.remote.MovieDataStoreRemoteImpl;
 import com.android.volley.toolbox.ImageLoader;
 
 import org.junit.Before;
@@ -27,8 +28,8 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(PowerMockRunner.class)
 public class MovieDetailsPresenterTest implements
-         MovieDataStoreRemoteImpl.GetTrailersCallback
-        , MovieDataStoreRemoteImpl.GetMovieCallback{
+        MovieDataStore.GetTrailersCallback
+        , MovieDataStoreInMemory.GetMovieCallback {
 
     private Movie mMovie;
 
