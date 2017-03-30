@@ -3,6 +3,8 @@
     <string name="movie_data_error_text">Unable to retrieve movie data.</string>
     <string name="no_movie_data_text">The movie data could not be loaded at this time.</string>
     <string name="menu_sort_title">Sort</string>
+    <string name="menu_add_favorite_title">Favorite Movie</string>
+    <string name="menu_remove_favorite_title">Unfavorite Movie</string>
     <string name="title_activity_movie_detail">MovieDetailActivity</string>
     <string name="menu_sort_most_popular">Most Popular</string>
     <string name="menu_sort_highest_rating">Highest Rating</string>

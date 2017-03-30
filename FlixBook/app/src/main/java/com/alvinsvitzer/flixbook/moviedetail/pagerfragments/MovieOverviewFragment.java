@@ -4,6 +4,7 @@ package com.alvinsvitzer.flixbook.moviedetail.pagerfragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -22,18 +23,16 @@ import butterknife.ButterKnife;
  */
 public class MovieOverviewFragment extends Fragment implements MovieOverviewContract.View {
 
+    private static final String TAG = MovieOverviewFragment.class.getSimpleName();
     @BindView(R.id.movie_plot_synopsis_textview)
     TextView mPlotSynopsis;
-
     @BindView(R.id.movie_release_date_textview)
     TextView mReleaseDate;
-
     @BindView(R.id.movie_vote_average_textview)
     TextView mVoteAverage;
-
+    @BindView(R.id.favoriteMovieFab)
+    FloatingActionButton mFavoriteMovie;
     private MovieOverviewContract.Presenter mPresenter;
-
-    private static final String TAG = MovieOverviewFragment.class.getSimpleName();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,6 +52,13 @@ public class MovieOverviewFragment extends Fragment implements MovieOverviewCont
         ButterKnife.bind(this, v);
 
         attachPresenter();
+
+        mFavoriteMovie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.favoriteFabClicked();
+            }
+        });
 
         // Inflate the layout for this fragment
         return v;
@@ -106,6 +112,26 @@ public class MovieOverviewFragment extends Fragment implements MovieOverviewCont
 
         snackbar.show();
 
+    }
+
+    @Override
+    public void setFavoriteFabImage(boolean isFavorite) {
+
+        if (isFavorite) {
+
+            mFavoriteMovie.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_favorite_white_24dp));
+
+        } else {
+
+            mFavoriteMovie.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_favorite_border_white_24dp));
+
+        }
+
+    }
+
+    @Override
+    public void setFavoriteFabEnabled(boolean isEnabled) {
+        mFavoriteMovie.setEnabled(isEnabled);
     }
 
 }

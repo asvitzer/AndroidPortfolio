@@ -1,7 +1,6 @@
 package com.alvinsvitzer.flixbook.data.local;
 
 import android.content.ContentProvider;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
@@ -10,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import static com.alvinsvitzer.flixbook.data.local.FavoriteContract.FavoriteEntry.TABLE_NAME;
 
@@ -19,13 +19,32 @@ import static com.alvinsvitzer.flixbook.data.local.FavoriteContract.FavoriteEntr
 
 public class FavoriteContentProvider extends ContentProvider {
 
-    private FavoriteDbHelper mFavoriteDbHelper;
-
     public static final int FAVORITES = 100;
     public static final int FAVORITE_WITH_MOVIE_ID = 101;
-
+    private static final String TAG = FavoriteContentProvider.class.getSimpleName();
     // CDeclare a static variable for the Uri matcher that you construct
     private static final UriMatcher sUriMatcher = buildUriMatcher();
+    private FavoriteDbHelper mFavoriteDbHelper;
+
+    /**
+     * Initialize a new matcher object without any matches,
+     * then use .addURI(String authority, String path, int match) to add matches
+     */
+    public static UriMatcher buildUriMatcher() {
+
+        // Initialize a UriMatcher with no matches by passing in NO_MATCH to the constructor
+        UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+
+        /*
+          All paths added to the UriMatcher have a corresponding int.
+          For each kind of uri you may want to access, add the corresponding match with addURI.
+          The two calls below add matches for the movie directory and a single movie by movieID.
+         */
+        uriMatcher.addURI(FavoriteContract.AUTHORITY, FavoriteContract.PATH_FAVORITE, FAVORITES);
+        uriMatcher.addURI(FavoriteContract.AUTHORITY, FavoriteContract.PATH_FAVORITE + "/#", FAVORITE_WITH_MOVIE_ID);
+
+        return uriMatcher;
+    }
 
     @Override
     public boolean onCreate() {
@@ -100,8 +119,14 @@ public class FavoriteContentProvider extends ContentProvider {
                 long id = db.insert(TABLE_NAME, null, values);
                 if (id > 0) {
 
-                    int movieId = values.getAsInteger(FavoriteContract.FavoriteEntry.COLUMN_MOVIE_ID);
-                    returnUri = ContentUris.withAppendedId(FavoriteContract.FavoriteEntry.CONTENT_URI, movieId);
+                    String movieId = values.getAsString(FavoriteContract.FavoriteEntry.COLUMN_MOVIE_ID);
+
+                    returnUri = FavoriteContract.FavoriteEntry.CONTENT_URI
+                            .buildUpon()
+                            .appendEncodedPath(movieId)
+                            .build();
+
+                    Log.d(TAG, "insert: returnUri: " + returnUri);
 
                 } else {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
@@ -141,7 +166,11 @@ public class FavoriteContentProvider extends ContentProvider {
                 favoritesDeleted = db.delete(TABLE_NAME,
                         FavoriteContract.FavoriteEntry.COLUMN_MOVIE_ID + " = ? "
                         , new String[]{id});
+
+                Log.d(TAG, "delete: delete for id " + id);
+
                 break;
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -165,25 +194,5 @@ public class FavoriteContentProvider extends ContentProvider {
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
         throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    /**
-     * Initialize a new matcher object without any matches,
-     * then use .addURI(String authority, String path, int match) to add matches
-     */
-    public static UriMatcher buildUriMatcher() {
-
-        // Initialize a UriMatcher with no matches by passing in NO_MATCH to the constructor
-        UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-
-        /*
-          All paths added to the UriMatcher have a corresponding int.
-          For each kind of uri you may want to access, add the corresponding match with addURI.
-          The two calls below add matches for the movie directory and a single movie by movieID.
-         */
-        uriMatcher.addURI(FavoriteContract.AUTHORITY, FavoriteContract.PATH_FAVORITE, FAVORITES);
-        uriMatcher.addURI(FavoriteContract.AUTHORITY, FavoriteContract.PATH_FAVORITE + "/#", FAVORITE_WITH_MOVIE_ID);
-
-        return uriMatcher;
     }
 }

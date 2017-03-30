@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/MovieDetailCoordLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/MovieDetailCoordLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -20,9 +20,9 @@
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             >
 
             <android.support.constraint.ConstraintLayout
@@ -43,9 +43,9 @@
                     android:adjustViewBounds="true"
                     android:scaleType="fitXY"
                     android:src="@drawable/large_movie_placeholder"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     />
 
                 <View
@@ -56,23 +56,23 @@
                     android:layout_alignParentStart="true"
                     android:layout_below="@id/movie_backdrop_image"
                     android:background="@color/colorPrimary"
-                    app:layout_constraintTop_toBottomOf="@+id/movie_backdrop_image"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintTop_toBottomOf="@+id/movie_backdrop_image"
                     />
 
                 <TextView
                     android:id="@+id/banner_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
-                    android:paddingStart="@dimen/movie_banner_padding_horizontal_start"
                     android:paddingEnd="@dimen/movie_banner_padding_horizontal_end"
-                    app:layout_constraintTop_toTopOf="@+id/movie_banner"
+                    android:paddingStart="@dimen/movie_banner_padding_horizontal_start"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:textColor="@android:color/white"
                     app:layout_constraintBottom_toBottomOf="@+id/movie_banner"
                     app:layout_constraintLeft_toRightOf="@+id/movie_poster_image"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    app:layout_constraintTop_toTopOf="@+id/movie_banner"
                     tools:text="Cool Runnings"
                     />
 
@@ -80,15 +80,15 @@
                     android:id="@+id/movie_poster_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/poster_image_padding_vertical"
+                    android:layout_marginStart="@dimen/movie_banner_padding_horizontal_start"
                     android:adjustViewBounds="true"
                     android:background="@android:color/white"
                     android:padding="@dimen/poster_image_padding"
-                    android:layout_marginBottom="@dimen/poster_image_padding_vertical"
-                    android:layout_marginStart="@dimen/movie_banner_padding_horizontal_start"
                     android:scaleType="fitXY"
                     android:src="@drawable/small_movie_placeholder"
-                    app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintBottom_toBottomOf="@id/banner_text_view"
+                    app:layout_constraintLeft_toLeftOf="parent"
                     />
 
             </android.support.constraint.ConstraintLayout>
@@ -97,8 +97,8 @@
                 android:id="@+id/my_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 app:layout_collapseMode="pin"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 />
 
         </android.support.design.widget.CollapsingToolbarLayout>
@@ -117,13 +117,13 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/playTrailerFab"
+        style="@style/MaterialFAB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:src="@drawable/ic_play_arrow_white_18dp"
+        android:src="@drawable/ic_play_arrow_white_24dp"
         app:layout_anchor="@id/movie_backdrop_image"
         app:layout_anchorGravity="bottom|right|end"
-        style="@style/MaterialFAB"
         />
 
     <android.support.v4.view.ViewPager

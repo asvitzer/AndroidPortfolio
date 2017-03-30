@@ -2,6 +2,8 @@ package com.alvinsvitzer.flixbook.data;
 
 import android.support.annotation.NonNull;
 
+import com.alvinsvitzer.flixbook.data.local.FavoriteDataStoreLocal;
+import com.alvinsvitzer.flixbook.data.local.FavoriteDataStoreLocalImpl;
 import com.alvinsvitzer.flixbook.data.local.MovieDataStoreInMemory;
 import com.alvinsvitzer.flixbook.data.local.MovieDataStoreInMemoryImpl;
 import com.alvinsvitzer.flixbook.data.model.Movie;
@@ -19,25 +21,29 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Created by Alvin on 2/17/17.
  */
 
-public class AppRepository implements MovieDataStoreInMemory, MovieDataStoreRemote {
+public class AppRepository implements MovieDataStoreInMemory, MovieDataStoreRemote, FavoriteDataStoreLocal {
 
     private static AppRepository INSTANCE = null;
 
     private final MovieDataStoreRemoteImpl mMovieDataStoreRemoteImpl;
     private final MovieDataStoreInMemoryImpl mMovieDataStoreInMemoryImpl;
+    private final FavoriteDataStoreLocalImpl mFavoriteDataStoreLocalImpl;
 
     private AppRepository(@NonNull MovieDataStoreRemoteImpl movieDataStoreRemoteImpl
-            , @NonNull MovieDataStoreInMemoryImpl movieDataStoreInMemoryImpl) {
+            , @NonNull MovieDataStoreInMemoryImpl movieDataStoreInMemoryImpl
+            , @NonNull FavoriteDataStoreLocalImpl favoriteDataStoreLocalImpl) {
 
         mMovieDataStoreRemoteImpl = checkNotNull(movieDataStoreRemoteImpl,"movieDataStoreRemoteImpl cannot be null");
         mMovieDataStoreInMemoryImpl = checkNotNull(movieDataStoreInMemoryImpl, "movieDataStoreInMemoryImpl cannot be null");
+        mFavoriteDataStoreLocalImpl = checkNotNull(favoriteDataStoreLocalImpl, "favoriteDataStoreLocalImpl cannot be null");
 
     }
 
     public static synchronized AppRepository getInstance(@NonNull MovieDataStoreRemoteImpl movieDataStoreRemoteImpl,
-                                                         @NonNull MovieDataStoreInMemoryImpl movieDataStoreInMemoryImpl) {
+                                                         @NonNull MovieDataStoreInMemoryImpl movieDataStoreInMemoryImpl
+            , @NonNull FavoriteDataStoreLocalImpl favoriteDataStoreLocalImpl) {
         if (INSTANCE == null) {
-            INSTANCE = new AppRepository(movieDataStoreRemoteImpl, movieDataStoreInMemoryImpl);
+            INSTANCE = new AppRepository(movieDataStoreRemoteImpl, movieDataStoreInMemoryImpl, favoriteDataStoreLocalImpl);
         }
         return INSTANCE;
     }
@@ -137,6 +143,23 @@ public class AppRepository implements MovieDataStoreInMemory, MovieDataStoreRemo
 
         mMovieDataStoreInMemoryImpl.saveTrailers(trailers);
 
+    }
+
+    @Override
+    public void checkFavorite(@NonNull String movieId, @NonNull CheckMovieCallback callback) {
+
+        mFavoriteDataStoreLocalImpl.checkFavorite(movieId, callback);
+
+    }
+
+    @Override
+    public void addFavoriteMovie(@NonNull String movieId) {
+        mFavoriteDataStoreLocalImpl.addFavoriteMovie(movieId);
+    }
+
+    @Override
+    public void removeFavoriteMovie(@NonNull String movieId) {
+        mFavoriteDataStoreLocalImpl.removeFavoriteMovie(movieId);
     }
 
 }

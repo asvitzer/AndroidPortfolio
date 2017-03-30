@@ -20,14 +20,15 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.alvinsvitzer.flixbook.data.AppRepository;
-import com.alvinsvitzer.flixbook.data.local.MovieLocalDataStoreImpl;
+import com.alvinsvitzer.flixbook.data.local.FavoriteDataStoreLocalImpl;
+import com.alvinsvitzer.flixbook.data.local.MovieDataStoreInMemoryImpl;
 import com.alvinsvitzer.flixbook.data.remote.MovieDataStoreRemoteImpl;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Will try to use this setup to inject mock implementations of the data store to be able to
- * more effectively using Espresso UI testing since I can override the mock version to use static data.
+ * Using this Injection class to handle creating the implementations that can also be switched out for mock
+ * implementations in testing.
  */
 public class Injection {
 
@@ -36,7 +37,8 @@ public class Injection {
         checkNotNull(context);
 
         return AppRepository.getInstance(MovieDataStoreRemoteImpl.getInstance(context)
-                , MovieLocalDataStoreImpl.getInstance());
+                , MovieDataStoreInMemoryImpl.getInstance()
+                , FavoriteDataStoreLocalImpl.getInstance(context.getContentResolver()));
     }
 
     public static MovieDataStoreRemoteImpl provideRemoteDataSource(@NonNull Context context) {
@@ -46,9 +48,9 @@ public class Injection {
         return MovieDataStoreRemoteImpl.getInstance(context);
     }
 
-    public static MovieLocalDataStoreImpl provideLocalDataSource() {
+    public static MovieDataStoreInMemoryImpl provideLocalDataSource() {
 
-        return MovieLocalDataStoreImpl.getInstance();
+        return MovieDataStoreInMemoryImpl.getInstance();
     }
 
 }
