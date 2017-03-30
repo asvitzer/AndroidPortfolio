@@ -33,7 +33,7 @@ public class AppRepository implements MovieDataStoreInMemory, MovieDataStoreRemo
             , @NonNull MovieDataStoreInMemoryImpl movieDataStoreInMemoryImpl
             , @NonNull FavoriteDataStoreLocalImpl favoriteDataStoreLocalImpl) {
 
-        mMovieDataStoreRemoteImpl = checkNotNull(movieDataStoreRemoteImpl,"movieDataStoreRemoteImpl cannot be null");
+        mMovieDataStoreRemoteImpl = checkNotNull(movieDataStoreRemoteImpl, "movieDataStoreRemoteImpl cannot be null");
         mMovieDataStoreInMemoryImpl = checkNotNull(movieDataStoreInMemoryImpl, "movieDataStoreInMemoryImpl cannot be null");
         mFavoriteDataStoreLocalImpl = checkNotNull(favoriteDataStoreLocalImpl, "favoriteDataStoreLocalImpl cannot be null");
 
@@ -153,13 +153,18 @@ public class AppRepository implements MovieDataStoreInMemory, MovieDataStoreRemo
     }
 
     @Override
-    public void addFavoriteMovie(@NonNull String movieId) {
-        mFavoriteDataStoreLocalImpl.addFavoriteMovie(movieId);
+    public void addFavoriteMovie(@NonNull Movie movie) {
+        mFavoriteDataStoreLocalImpl.addFavoriteMovie(movie);
     }
 
     @Override
     public void removeFavoriteMovie(@NonNull String movieId) {
         mFavoriteDataStoreLocalImpl.removeFavoriteMovie(movieId);
+    }
+
+    @Override
+    public void getFavorites(@NonNull GetFavoritesCallback callback) {
+        mFavoriteDataStoreLocalImpl.getFavorites(callback);
     }
 
 }

@@ -14,6 +14,8 @@
 
     <string name="not_available_text">N/A</string>
     <string name="snackbar_text_no_review">Reviews not available</string>
+    <string name="snackbar_movie_favorite">Favorited!</string>
+    <string name="snackbar_movie_unfavorited">Removed from favorites.</string>
 
     <string name="title_activity_movie_detail">MovieDetailActivity</string>
 

@@ -24,6 +24,13 @@ public class FavoriteContract {
 
         public static final String COLUMN_MOVIE_ID = "movie_id";
 
+        public static final String COLUMN_MOVIE_TITLE = "movie_title";
+
+        public static final String COLUMN_MOVIE_RELEASE_DATE = "movie_release_date";
+
+        public static final String COLUMN_MOVIE_POSTER_LINK = "movie_poster_link";
+
+
         /*
         The above table structure looks something like the sample table below.
         With the name of the table and columns on top, and potential contents in rows
@@ -31,19 +38,19 @@ public class FavoriteContract {
         Note: Because this implements BaseColumns, the _id column is generated automatically
 
         favorites
-         - - - - - - - - - - - -
-        | _id  |    movieID     |
-         - - - - - - - - - - - -
-        |  1   |  38484757748   |
-         - - - - - - - - - - - -
-        |  2   |  87484757473   |
-         - - - - - - - - - - - -
+         - - - - - - - - - - - - - - - - - - - - -
+        | _id  |    movieID     |    movieTitle   |
+         - - - - - - - - - - - - - - - - - - - - -
+        |  1   |  38484757748   |    Spanglish    |
+         - - - - - - - - - - - - - - - - - - - - -
+        |  2   |  87484757473   |    Moonlight    |
+         - - - - - - - - - - - - - - - - - - - - -
         .
         .
         .
-         - - - - - - - - - - - -
-        |  9   |  56484757473   |
-         - - - - - - - - - - - -
+         - - - - - - - - - - - - - - - - - - - - -
+        |  9   |  56484757473   |    Rise         |
+         - - - - - - - - - - - - - - - - - - - - -
 
          */
 

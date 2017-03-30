@@ -30,6 +30,7 @@ public class FavoriteDbHelper extends SQLiteOpenHelper {
         final String CREATE_TABLE = "CREATE TABLE " + FavoriteContract.FavoriteEntry.TABLE_NAME + " (" +
                 FavoriteContract.FavoriteEntry._ID + " INTEGER AUTOINCREMENT, " +
                 FavoriteContract.FavoriteEntry.COLUMN_MOVIE_ID + " INTEGER PRIMARY KEY, " +
+                FavoriteContract.FavoriteEntry.COLUMN_MOVIE_TITLE + " TEXT, " +
                 " UNIQUE (" + FavoriteContract.FavoriteEntry.COLUMN_MOVIE_ID + ") ON CONFLICT REPLACE);";
 
         Log.d(TAG, "onCreate: createQuery: " + CREATE_TABLE);

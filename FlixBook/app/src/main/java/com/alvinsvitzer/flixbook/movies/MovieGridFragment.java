@@ -35,27 +35,16 @@ public class MovieGridFragment extends Fragment implements MoviesContract.View {
 
     public static final String SORT_MENU_CHECKED_PREF = "sortMenuChecked";
     public static final String TAG = MovieGridFragment.class.getSimpleName();
-
-    private MoviesFilterType mSortMenuIdChecked;
-
-    private List<Movie> mMovieList;
-    private MovieAdapter mMovieAdapter;
-    private SharedPreferences mSharedPreferences;
-    private MoviesContract.Presenter mPresenter;
-
     @BindView(R.id.no_data_text_view)
     TextView mNoDataTextView;
     @BindView(R.id.movie_recycler_view)
     RecyclerView mRecyclerView;
-
+    private MoviesFilterType mSortMenuIdChecked;
+    private List<Movie> mMovieList;
+    private MovieAdapter mMovieAdapter;
+    private SharedPreferences mSharedPreferences;
+    private MoviesContract.Presenter mPresenter;
     private OnFragmentInteractionListener mListener;
-
-
-    public interface OnFragmentInteractionListener {
-
-        void onMovieClick();
-    }
-
 
     @Override
     public void onAttach(Context context) {
@@ -105,7 +94,6 @@ public class MovieGridFragment extends Fragment implements MoviesContract.View {
 
         return v;
     }
-
 
     @Override
     public void onResume() {
@@ -186,6 +174,10 @@ public class MovieGridFragment extends Fragment implements MoviesContract.View {
 
                         return true;
 
+                    case R.id.action_sort_favorite:
+
+                        saveCheckedItemState(item, MoviesFilterType.FAVORITE_MOVIES);
+
                     default:
 
                         return false;
@@ -221,7 +213,6 @@ public class MovieGridFragment extends Fragment implements MoviesContract.View {
         popupMenu.show();
     }
 
-
     @Override
     public MoviesFilterType getSortingId(){
 
@@ -249,7 +240,6 @@ public class MovieGridFragment extends Fragment implements MoviesContract.View {
         mPresenter.detachView();
         super.onDestroy();
     }
-
 
     @Override
     public void showNoDataTextView(){
@@ -289,6 +279,11 @@ public class MovieGridFragment extends Fragment implements MoviesContract.View {
         mRecyclerView.setVisibility(View.VISIBLE);
         mNoDataTextView.setVisibility(View.INVISIBLE);
 
+    }
+
+    public interface OnFragmentInteractionListener {
+
+        void onMovieClick();
     }
 
     private class MovieHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

@@ -65,11 +65,23 @@ public class MovieOverviewPresenter implements Presenter
     @Override
     public void favoriteFabClicked() {
 
+        //Set the image of the fab favorite icon when clicked
+        mView.setFavoriteFabEnabled(mIsFavorited);
+
         //Toggle the boolean to be the opposite of its current value
         mIsFavorited = !mIsFavorited;
 
-        //Set the image of the fab favorite icon when clicked
-        mView.setFavoriteFabEnabled(mIsFavorited);
+        if (mIsFavorited) {
+
+            mAppRepository.addFavoriteMovie(mMovie);
+            mView.displayFavorite();
+
+        } else {
+
+            mAppRepository.removeFavoriteMovie(String.valueOf(mMovie.getMovieId()));
+            mView.displayFavoriteRemoval();
+
+        }
 
     }
 
@@ -86,6 +98,10 @@ public class MovieOverviewPresenter implements Presenter
 
     @Override
     public void onMovieDataNotAvailable() {
+
+        mView.setPlot(mMovie.getPlotSynopsis());
+        mView.setReleaseDate(mMovie.getReleaseDate());
+        mView.setVoteAverage(mMovie.getVoteAverage());
 
         mView.notifyNoMovieData();
 

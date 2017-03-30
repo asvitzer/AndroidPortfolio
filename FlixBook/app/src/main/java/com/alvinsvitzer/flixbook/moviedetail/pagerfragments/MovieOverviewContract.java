@@ -25,10 +25,12 @@ public interface MovieOverviewContract {
         void setReleaseDate(String releaseDate);
         void setVoteAverage(Double voteAverage);
         void notifyNoMovieData();
-
         void setFavoriteFabImage(boolean isFavorite);
-
         void setFavoriteFabEnabled(boolean isEnabled);
+
+        void displayFavorite();
+
+        void displayFavoriteRemoval();
 
     }
 }

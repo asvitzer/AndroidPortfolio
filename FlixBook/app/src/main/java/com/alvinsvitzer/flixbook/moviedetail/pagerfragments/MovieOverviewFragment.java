@@ -18,12 +18,15 @@ import com.alvinsvitzer.flixbook.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.support.design.widget.Snackbar.make;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class MovieOverviewFragment extends Fragment implements MovieOverviewContract.View {
 
     private static final String TAG = MovieOverviewFragment.class.getSimpleName();
+
     @BindView(R.id.movie_plot_synopsis_textview)
     TextView mPlotSynopsis;
     @BindView(R.id.movie_release_date_textview)
@@ -32,6 +35,9 @@ public class MovieOverviewFragment extends Fragment implements MovieOverviewCont
     TextView mVoteAverage;
     @BindView(R.id.favoriteMovieFab)
     FloatingActionButton mFavoriteMovie;
+
+    ConstraintLayout mConstraintLayout;
+
     private MovieOverviewContract.Presenter mPresenter;
 
     @Override
@@ -52,6 +58,8 @@ public class MovieOverviewFragment extends Fragment implements MovieOverviewCont
         ButterKnife.bind(this, v);
 
         attachPresenter();
+
+        mConstraintLayout = (ConstraintLayout) getActivity().findViewById(R.id.OverviewConstraintLayout);
 
         mFavoriteMovie.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,14 +112,8 @@ public class MovieOverviewFragment extends Fragment implements MovieOverviewCont
     @Override
     public void notifyNoMovieData() {
 
-        mReleaseDate.setText(R.string.not_available_text);
-        mVoteAverage.setText(R.string.not_available_text);
-        mPlotSynopsis.setText(R.string.not_available_text);
-
-        ConstraintLayout constraintLayout = (ConstraintLayout) getActivity().findViewById(R.id.OverviewConstraintLayout);
-
-        Snackbar snackbar = Snackbar
-                .make(constraintLayout, R.string.text_no_movie_data, Snackbar.LENGTH_LONG);
+        Snackbar snackbar =
+                make(mConstraintLayout, R.string.text_no_movie_data, Snackbar.LENGTH_LONG);
 
         snackbar.show();
 
@@ -136,5 +138,19 @@ public class MovieOverviewFragment extends Fragment implements MovieOverviewCont
     public void setFavoriteFabEnabled(boolean isEnabled) {
         mFavoriteMovie.setEnabled(isEnabled);
     }
+
+    @Override
+    public void displayFavorite() {
+
+        Snackbar.make(mConstraintLayout, R.string.snackbar_movie_favorite, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void displayFavoriteRemoval() {
+
+        Snackbar.make(mConstraintLayout, R.string.snackbar_movie_unfavorited, Snackbar.LENGTH_LONG).show();
+
+    }
+
 
 }
