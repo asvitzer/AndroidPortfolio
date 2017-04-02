@@ -56,9 +56,44 @@ public class AppRepository implements MovieDataStoreInMemory, MovieDataStoreRemo
     }
 
     @Override
-    public void getMovie(@NonNull GetMovieCallback callback) {
+    public void getMovie(@NonNull GetMovieCallback callback, String movieId) {
 
-        mMovieDataStoreInMemoryImpl.getMovie(callback);
+        mMovieDataStoreRemoteImpl.getMovie(callback, movieId);
+
+    }
+
+    @Override
+    public void getMovie(@NonNull final GetMovieCallback callback) {
+
+
+        /**
+         * Checks if the in memory movie just has partial movie information stored. This happens
+         * for favorited movies since everything needed to display the movie details on the detail
+         * screen is not being saved locally for favorited movies. In that case, it will query the
+         * remote db to get the information.
+         */
+        mMovieDataStoreInMemoryImpl.getMovie(new GetMovieCallback() {
+            @Override
+            public void onMovieLoaded(Movie movie) {
+
+                if (movie.isPartial()) {
+
+                    mMovieDataStoreRemoteImpl.getMovie(callback, String.valueOf(movie.getMovieId()));
+                } else {
+
+                    callback.onMovieLoaded(movie);
+                }
+
+
+            }
+
+            @Override
+            public void onMovieDataNotAvailable() {
+
+                callback.onMovieDataNotAvailable();
+
+            }
+        });
     }
 
     @Override

@@ -3,7 +3,7 @@ package com.alvinsvitzer.flixbook.moviedetail.pagerfragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -36,7 +36,7 @@ public class MovieOverviewFragment extends Fragment implements MovieOverviewCont
     @BindView(R.id.favoriteMovieFab)
     FloatingActionButton mFavoriteMovie;
 
-    ConstraintLayout mConstraintLayout;
+    CoordinatorLayout mCoordinatorLayout;
 
     private MovieOverviewContract.Presenter mPresenter;
 
@@ -59,7 +59,7 @@ public class MovieOverviewFragment extends Fragment implements MovieOverviewCont
 
         attachPresenter();
 
-        mConstraintLayout = (ConstraintLayout) getActivity().findViewById(R.id.OverviewConstraintLayout);
+        mCoordinatorLayout = (CoordinatorLayout) v.findViewById(R.id.OverviewCoordinatorLayour);
 
         mFavoriteMovie.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,7 +113,7 @@ public class MovieOverviewFragment extends Fragment implements MovieOverviewCont
     public void notifyNoMovieData() {
 
         Snackbar snackbar =
-                make(mConstraintLayout, R.string.text_no_movie_data, Snackbar.LENGTH_LONG);
+                make(mCoordinatorLayout, R.string.text_no_movie_data, Snackbar.LENGTH_LONG);
 
         snackbar.show();
 
@@ -142,13 +142,13 @@ public class MovieOverviewFragment extends Fragment implements MovieOverviewCont
     @Override
     public void displayFavorite() {
 
-        Snackbar.make(mConstraintLayout, R.string.snackbar_movie_favorite, Snackbar.LENGTH_LONG).show();
+        Snackbar.make(mCoordinatorLayout, R.string.snackbar_movie_favorite, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
     public void displayFavoriteRemoval() {
 
-        Snackbar.make(mConstraintLayout, R.string.snackbar_movie_unfavorited, Snackbar.LENGTH_LONG).show();
+        Snackbar.make(mCoordinatorLayout, R.string.snackbar_movie_unfavorited, Snackbar.LENGTH_LONG).show();
 
     }
 

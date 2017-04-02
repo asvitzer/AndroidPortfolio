@@ -14,13 +14,15 @@ import java.util.List;
 
 public interface MovieDataStoreRemote extends MovieDataStore{
 
+    void getMovies(@NonNull GetMoviesCallback callback
+            , @NonNull MoviesFilterType moviesFilterType);
+
+    void getMovie(@NonNull GetMovieCallback callback, String movieId);
+
     interface GetMoviesCallback {
 
         void onMoviesLoaded(List<Movie> movieList);
 
         void onMovieListDataNotAvailable();
     }
-
-    void getMovies(@NonNull GetMoviesCallback callback
-            , @NonNull MoviesFilterType moviesFilterType);
 }

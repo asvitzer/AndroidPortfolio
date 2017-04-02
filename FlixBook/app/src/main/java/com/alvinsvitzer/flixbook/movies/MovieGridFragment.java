@@ -310,8 +310,7 @@ public class MovieGridFragment extends Fragment implements MoviesContract.View {
 
             //Set Default Image & Error Images if can't be fetched from network
             imageLoader.get(imageUrl, ImageLoader.getImageListener(mMoviePoster,
-                    R.drawable.small_movie_placeholder, android.R.drawable
-                            .ic_dialog_alert));
+                    R.drawable.small_movie_placeholder, R.drawable.small_movie_placeholder));
 
             mMoviePoster.setImageUrl(imageUrl,imageLoader);
 

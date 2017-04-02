@@ -25,12 +25,15 @@ public class Movie {
     public Double mVoteAverage;
     public String mReleaseDate;
     public List<Trailer> mTrailerList;
+    public boolean mIsPartial = true;
 
     public Movie(){
 
     }
 
-    public Movie (int movieId, String title, String moviePoster, String movieBackdrop, String plotSynopsis, Double voteAverage, String releaseDate){
+    public Movie(int movieId, String title, String moviePoster
+            , String movieBackdrop, String plotSynopsis, Double voteAverage
+            , String releaseDate, boolean isPartial) {
         
         mMovieId = movieId;
         mMovieTitle = title;
@@ -39,6 +42,7 @@ public class Movie {
         mPlotSynopsis = plotSynopsis;
         mVoteAverage = voteAverage;
         mReleaseDate = releaseDate;
+        mIsPartial = isPartial;
         
     }
 
@@ -112,4 +116,11 @@ public class Movie {
         mTrailerList = trailerList;
     }
 
+    public boolean isPartial() {
+        return mIsPartial;
+    }
+
+    public void setPartial(boolean partial) {
+        mIsPartial = partial;
+    }
 }

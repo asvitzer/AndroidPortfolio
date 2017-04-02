@@ -15,15 +15,6 @@ import java.util.List;
 
 public interface MovieDataStoreInMemory extends MovieDataStore {
 
-    interface GetMovieCallback {
-
-        void onMovieLoaded(Movie movie);
-
-        void onMovieDataNotAvailable();
-    }
-
-    void getMovie(@NonNull GetMovieCallback callback);
-
     void saveMovie(@NonNull Movie movie);
 
     void saveReviews(List<Review> reviews);

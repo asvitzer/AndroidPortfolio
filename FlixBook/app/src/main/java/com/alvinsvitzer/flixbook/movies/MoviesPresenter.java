@@ -107,6 +107,7 @@ public class MoviesPresenter implements MoviesContract.Presenter
             movie.setReleaseDate(favorites.getString(favorites.getColumnIndex(COLUMN_MOVIE_RELEASE_DATE)));
             movie.setMovieTitle(favorites.getString(favorites.getColumnIndex(COLUMN_MOVIE_TITLE)));
             movie.setMoviePoster(favorites.getString(favorites.getColumnIndex(COLUMN_MOVIE_POSTER_LINK)));
+            movie.setPartial(true);
 
             favoriteList.add(movie);
 

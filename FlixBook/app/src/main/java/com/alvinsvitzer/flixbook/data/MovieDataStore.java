@@ -2,6 +2,7 @@ package com.alvinsvitzer.flixbook.data;
 
 import android.support.annotation.NonNull;
 
+import com.alvinsvitzer.flixbook.data.model.Movie;
 import com.alvinsvitzer.flixbook.data.model.Review;
 import com.alvinsvitzer.flixbook.data.model.Trailer;
 
@@ -12,6 +13,12 @@ import java.util.List;
  */
 
 public interface MovieDataStore {
+
+    void getMovie(@NonNull GetMovieCallback callback);
+
+    void getTrailers(@NonNull String movieId, @NonNull GetTrailersCallback callback);
+
+    void getReviews(@NonNull String movieId, @NonNull GetReviewsCallback callback);
 
     interface GetTrailersCallback {
 
@@ -28,8 +35,11 @@ public interface MovieDataStore {
 
     }
 
-    void getTrailers(@NonNull String movieId, @NonNull GetTrailersCallback callback);
+    interface GetMovieCallback {
 
-    void getReviews(@NonNull String movieId, @NonNull GetReviewsCallback callback);
+        void onMovieLoaded(Movie movie);
+
+        void onMovieDataNotAvailable();
+    }
 
 }

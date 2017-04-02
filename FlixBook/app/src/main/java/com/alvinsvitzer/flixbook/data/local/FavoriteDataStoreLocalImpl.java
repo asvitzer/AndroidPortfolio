@@ -42,9 +42,15 @@ public class FavoriteDataStoreLocalImpl implements FavoriteDataStoreLocal {
 
                         //Sends a true or false back to movie stored based on whether the cursor
                         //is empty or not
-                        checkMovieCallback.movieStored(cursor.moveToFirst());
 
-                        cursor.close();
+                        if (cursor == null || cursor.moveToFirst() == false) {
+
+                            checkMovieCallback.movieStored(false);
+
+                        } else {
+                            checkMovieCallback.movieStored(true);
+                            cursor.close();
+                        }
 
                         break;
 
@@ -52,10 +58,9 @@ public class FavoriteDataStoreLocalImpl implements FavoriteDataStoreLocal {
 
                         GetFavoritesCallback getFavoritesCallback = (GetFavoritesCallback) cookie;
 
-                        if (cursor.moveToFirst() == false) {
+                        if (cursor == null || cursor.moveToFirst() == false) {
                             getFavoritesCallback.onDataNotAvailable();
 
-                            cursor.close();
                             break;
                         }
 

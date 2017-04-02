@@ -36,10 +36,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class MovieDataStoreRemoteImpl implements MovieDataStoreRemote {
 
+    private static final String TAG = MovieDataStoreRemoteImpl.class.getSimpleName();
+    private static MovieDataStoreRemoteImpl INSTANCE;
     private VolleyNetworkSingleton mNetworkSingleton;
     private String mApiKey;
-    private static MovieDataStoreRemoteImpl INSTANCE;
-    private static final String TAG = MovieDataStoreRemoteImpl.class.getSimpleName();
 
     // Prevent direct instantiation.
     private MovieDataStoreRemoteImpl(@NonNull Context context) {
@@ -110,6 +110,49 @@ public class MovieDataStoreRemoteImpl implements MovieDataStoreRemote {
                 });
 
         mNetworkSingleton.addToRequestQueue(jsObjectRequest);
+    }
+
+    @Override
+    public void getMovie(@NonNull final GetMovieCallback callback) {
+
+        throw new UnsupportedOperationException("Need movieId to query remote db. Use overloaded method instead.");
+    }
+
+    @Override
+    public void getMovie(@NonNull final GetMovieCallback callback, String movieId) {
+
+        URL url = MovieDBUtils.buildMovieURL(mApiKey, movieId);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET
+                , url.toString(), new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+
+                GsonBuilder gsonBuilder = new GsonBuilder();
+                Gson gson = gsonBuilder.create();
+
+                JsonObject jsonObject = gson.fromJson(response, JsonObject.class);
+
+                Movie movie = gson.fromJson(jsonObject.get("results"), Movie.class);
+
+                if (movie != null) {
+                    callback.onMovieLoaded(movie);
+                } else {
+                    callback.onMovieDataNotAvailable();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                callback.onMovieDataNotAvailable();
+
+            }
+        });
+
+        mNetworkSingleton.addToRequestQueue(stringRequest);
     }
 
     @Override

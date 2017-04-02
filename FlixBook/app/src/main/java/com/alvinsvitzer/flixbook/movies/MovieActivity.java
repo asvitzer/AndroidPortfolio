@@ -37,7 +37,6 @@ public class MovieActivity extends SingleFragmentActivity
 
     @Override
     public void onMovieClick() {
-
         Intent detailIntent = new Intent(this, DetailActivity.class);
         startActivity(detailIntent);
 

@@ -25,17 +25,14 @@ public class MovieDetailPresenter implements MovieDetailsContract.Presenter
         , MovieDataStoreRemote.GetTrailersCallback
         , MovieDataStoreInMemory.GetMovieCallback {
 
-    protected Movie mMovie;
-
+    private static final String TAG = MovieDetailPresenter.class.getSimpleName();
     @NonNull
     private final AppRepository mAppRepository;
 
     @NonNull
     private final ImageLoader mImageLoader;
-
+    protected Movie mMovie;
     protected MovieDetailsContract.View mView;
-
-    private static final String TAG = MovieDetailPresenter.class.getSimpleName();
 
     MovieDetailPresenter(@NonNull AppRepository appRepository
                         ,@NonNull ImageLoader imageLoader
@@ -68,18 +65,6 @@ public class MovieDetailPresenter implements MovieDetailsContract.Presenter
         mAppRepository.getMovie(this);
 
         mView.disableTrailerFab();
-
-        mView.setActivityTitle(mMovie.getMovieTitle());
-
-        String posterImageUrl = MovieDBUtils.buildMoviePosterURL(mMovie.getMoviePoster()).toString();
-        mView.setPosterImage(posterImageUrl,mImageLoader);
-
-        String backdropImageUrl = MovieDBUtils.buildMovieBackdropURL(mMovie.getMovieBackdrop()).toString();
-        mView.setBackdropImage(backdropImageUrl,mImageLoader);
-
-        mView.setBannerText(mMovie.getMovieTitle());
-
-        mAppRepository.getTrailers(String.valueOf(mMovie.getMovieId()), this);
 
     }
 
@@ -126,6 +111,18 @@ public class MovieDetailPresenter implements MovieDetailsContract.Presenter
     public void onMovieLoaded(Movie movie) {
 
         mMovie = movie;
+
+        mView.setActivityTitle(mMovie.getMovieTitle());
+
+        String posterImageUrl = MovieDBUtils.buildMoviePosterURL(mMovie.getMoviePoster()).toString();
+        mView.setPosterImage(posterImageUrl, mImageLoader);
+
+        String backdropImageUrl = MovieDBUtils.buildMovieBackdropURL(mMovie.getMovieBackdrop()).toString();
+        mView.setBackdropImage(backdropImageUrl, mImageLoader);
+
+        mView.setBannerText(mMovie.getMovieTitle());
+
+        mAppRepository.getTrailers(String.valueOf(mMovie.getMovieId()), this);
 
     }
 

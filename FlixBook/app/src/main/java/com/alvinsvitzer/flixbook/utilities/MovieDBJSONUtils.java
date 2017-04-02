@@ -39,6 +39,7 @@ public class MovieDBJSONUtils {
             addMovie.setVoteAverage(movieJson.getDouble("vote_average"));
             addMovie.setReleaseDate(movieJson.getString("release_date"));
             addMovie.setMovieId(movieJson.getInt("id"));
+            addMovie.setPartial(false);
 
             movieList.add(addMovie);
 
