@@ -56,7 +56,11 @@ public class MoviesPresenter implements MoviesContract.Presenter
 
         MoviesFilterType sortingId = mMoviesView.getSortingId();
 
-        mMovieRepo.getMovies(this, sortingId);
+        if (sortingId == MoviesFilterType.FAVORITE_MOVIES) {
+            mMovieRepo.getFavorites(this);
+        } else {
+            mMovieRepo.getMovies(this, sortingId);
+        }
 
     }
 
@@ -85,18 +89,20 @@ public class MoviesPresenter implements MoviesContract.Presenter
     public void onMoviesLoaded(List<Movie> movieList) {
 
         mMoviesView.showMovies(movieList);
+        mMoviesView.hideNoDataTextView();
 
     }
 
     @Override
-    public void onMovieListDataNotAvailable() {
+    public void onMoviesNotAvailable() {
 
+        mMoviesView.setNoDataTextView();
         mMoviesView.showNoDataTextView();
 
     }
 
     @Override
-    public void onLoad(Cursor favorites) {
+    public void onFavoritesLoaded(Cursor favorites) {
 
         List<Movie> favoriteList = new ArrayList<>();
 
@@ -116,15 +122,17 @@ public class MoviesPresenter implements MoviesContract.Presenter
         }
 
         mMoviesView.showMovies(favoriteList);
-
+        mMoviesView.hideNoDataTextView();
         favorites.close();
 
     }
 
     @Override
-    public void onDataNotAvailable() {
+    public void onFavoritesNotAvailable() {
 
+        mMoviesView.setNoFavoriteTextView();
         mMoviesView.showNoDataTextView();
+
     }
 }
 

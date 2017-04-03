@@ -29,6 +29,10 @@ public interface MoviesContract {
         void attachPresenter();
         void hideNoDataTextView();
         void showNoDataTextView();
+
+        void setNoFavoriteTextView();
+
+        void setNoDataTextView();
         void showMovies(List<Movie> movieList);
     }
 }

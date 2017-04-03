@@ -28,14 +28,17 @@ public class FavoriteDbHelper extends SQLiteOpenHelper {
 
         // Create tasks table (careful to follow SQL formatting rules)
         final String CREATE_TABLE = "CREATE TABLE " + FavoriteContract.FavoriteEntry.TABLE_NAME + " (" +
-                FavoriteContract.FavoriteEntry._ID + " INTEGER AUTOINCREMENT, " +
+                //FavoriteContract.FavoriteEntry._ID + " INTEGER AUTOINCREMENT, " +
                 FavoriteContract.FavoriteEntry.COLUMN_MOVIE_ID + " INTEGER PRIMARY KEY, " +
+                FavoriteContract.FavoriteEntry.COLUMN_MOVIE_RELEASE_DATE + " TEXT, " +
                 FavoriteContract.FavoriteEntry.COLUMN_MOVIE_TITLE + " TEXT, " +
+                FavoriteContract.FavoriteEntry.COLUMN_MOVIE_POSTER_LINK + " TEXT, " +
                 " UNIQUE (" + FavoriteContract.FavoriteEntry.COLUMN_MOVIE_ID + ") ON CONFLICT REPLACE);";
 
         Log.d(TAG, "onCreate: createQuery: " + CREATE_TABLE);
         db.execSQL(CREATE_TABLE);
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

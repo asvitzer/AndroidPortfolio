@@ -44,6 +44,7 @@ public class FavoriteContentProvider extends ContentProvider {
         uriMatcher.addURI(FavoriteContract.AUTHORITY, FavoriteContract.PATH_FAVORITE + "/#", FAVORITE_WITH_MOVIE_ID);
 
         return uriMatcher;
+
     }
 
     @Override
@@ -112,7 +113,7 @@ public class FavoriteContentProvider extends ContentProvider {
         Uri returnUri;
 
         switch (match) {
-            case FAVORITES:
+            case FAVORITE_WITH_MOVIE_ID:
 
                 // Insert new values into the database
 

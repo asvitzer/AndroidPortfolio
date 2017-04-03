@@ -25,7 +25,6 @@ public class DetailsPagerAdapter extends FragmentPagerAdapter {
         mContext = context;
 
         tabTitles = new String[]{context.getString(R.string.tab_title_details)
-                                 ,context.getString(R.string.tab_title_people)
                                  ,context.getString(R.string.tab_title_reviews)};
     }
 

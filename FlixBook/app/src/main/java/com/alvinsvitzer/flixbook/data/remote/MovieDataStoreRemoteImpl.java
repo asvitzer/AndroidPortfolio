@@ -92,7 +92,7 @@ public class MovieDataStoreRemoteImpl implements MovieDataStoreRemote {
                             Log.e(MovieDataStoreRemoteImpl.TAG, "onResponse: ", e);
                             e.printStackTrace();
 
-                            callback.onMovieListDataNotAvailable();
+                            callback.onMoviesNotAvailable();
                         }
 
                     }
@@ -104,7 +104,7 @@ public class MovieDataStoreRemoteImpl implements MovieDataStoreRemote {
 
                         Log.e(TAG, "onErrorResponse: ", error);
 
-                        callback.onMovieListDataNotAvailable();
+                        callback.onMoviesNotAvailable();
 
                     }
                 });

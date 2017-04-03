@@ -30,49 +30,7 @@ public class FavoriteDataStoreLocalImpl implements FavoriteDataStoreLocal {
 
     private FavoriteDataStoreLocalImpl(@NonNull ContentResolver contentResolver) {
 
-        mAsyncQueryHandler = new AsyncQueryHandler(contentResolver) {
-            @Override
-            protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
-                super.onQueryComplete(token, cookie, cursor);
-
-                switch (token) {
-                    case QUERY_MOVIE_CHECK_TOKEN:
-
-                        CheckMovieCallback checkMovieCallback = (CheckMovieCallback) cookie;
-
-                        //Sends a true or false back to movie stored based on whether the cursor
-                        //is empty or not
-
-                        if (cursor == null || cursor.moveToFirst() == false) {
-
-                            checkMovieCallback.movieStored(false);
-
-                        } else {
-                            checkMovieCallback.movieStored(true);
-                            cursor.close();
-                        }
-
-                        break;
-
-                    case QUERY_ALL_MOVIES_TOKEN:
-
-                        GetFavoritesCallback getFavoritesCallback = (GetFavoritesCallback) cookie;
-
-                        if (cursor == null || cursor.moveToFirst() == false) {
-                            getFavoritesCallback.onDataNotAvailable();
-
-                            break;
-                        }
-
-                        getFavoritesCallback.onLoad(cursor);
-
-                    default:
-                        Log.d(TAG, "onQueryComplete: No logic for token: " + token);
-                }
-
-
-            }
-        };
+        mAsyncQueryHandler = new MyAsyncQueryHandler(contentResolver);
 
     }
 
@@ -114,8 +72,8 @@ public class FavoriteDataStoreLocalImpl implements FavoriteDataStoreLocal {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(FavoriteContract.FavoriteEntry.COLUMN_MOVIE_ID, movieId);
-        contentValues.put(FavoriteContract.FavoriteEntry.COLUMN_MOVIE_TITLE, movie.getMovieTitle());
         contentValues.put(FavoriteContract.FavoriteEntry.COLUMN_MOVIE_RELEASE_DATE, movie.getReleaseDate());
+        contentValues.put(FavoriteContract.FavoriteEntry.COLUMN_MOVIE_TITLE, movie.getMovieTitle());
         contentValues.put(FavoriteContract.FavoriteEntry.COLUMN_MOVIE_POSTER_LINK, movie.getMoviePoster());
 
         mAsyncQueryHandler.startInsert(INSERT_TOKEN, null, uri, contentValues);
@@ -142,4 +100,56 @@ public class FavoriteDataStoreLocalImpl implements FavoriteDataStoreLocal {
         mAsyncQueryHandler.startQuery(QUERY_ALL_MOVIES_TOKEN, callback, uri, null, null, null, null);
 
     }
+
+    private static class MyAsyncQueryHandler extends AsyncQueryHandler {
+
+
+        public MyAsyncQueryHandler(ContentResolver cr) {
+            super(cr);
+        }
+
+        @Override
+        protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
+            super.onQueryComplete(token, cookie, cursor);
+
+            switch (token) {
+                case QUERY_MOVIE_CHECK_TOKEN:
+
+                    CheckMovieCallback checkMovieCallback = (CheckMovieCallback) cookie;
+
+                    //Sends a true or false back to movie stored based on whether the cursor
+                    //is empty or not
+
+                    if (cursor == null || cursor.moveToFirst() == false) {
+
+                        checkMovieCallback.movieStored(false);
+
+                    } else {
+                        checkMovieCallback.movieStored(true);
+                        cursor.close();
+                    }
+
+                    break;
+
+                case QUERY_ALL_MOVIES_TOKEN:
+
+                    GetFavoritesCallback getFavoritesCallback = (GetFavoritesCallback) cookie;
+
+                    if (cursor == null || cursor.moveToFirst() == false) {
+                        getFavoritesCallback.onFavoritesNotAvailable();
+
+                        break;
+                    }
+
+                    getFavoritesCallback.onFavoritesLoaded(cursor);
+
+                default:
+                    Log.d(TAG, "onQueryComplete: No logic for token: " + token);
+            }
+
+
+        }
+
+    }
+
 }

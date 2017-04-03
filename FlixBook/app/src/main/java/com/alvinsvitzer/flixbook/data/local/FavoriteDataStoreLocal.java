@@ -21,9 +21,9 @@ public interface FavoriteDataStoreLocal {
 
     interface GetFavoritesCallback {
 
-        void onLoad(Cursor favorites);
+        void onFavoritesLoaded(Cursor favorites);
 
-        void onDataNotAvailable();
+        void onFavoritesNotAvailable();
     }
 
     interface CheckMovieCallback {

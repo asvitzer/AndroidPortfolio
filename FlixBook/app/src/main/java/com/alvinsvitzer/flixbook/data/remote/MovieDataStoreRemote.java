@@ -23,6 +23,6 @@ public interface MovieDataStoreRemote extends MovieDataStore{
 
         void onMoviesLoaded(List<Movie> movieList);
 
-        void onMovieListDataNotAvailable();
+        void onMoviesNotAvailable();
     }
 }

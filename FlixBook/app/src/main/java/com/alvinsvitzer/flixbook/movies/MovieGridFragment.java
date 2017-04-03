@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alvinsvitzer.flixbook.Injection;
 import com.alvinsvitzer.flixbook.R;
@@ -30,6 +29,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.alvinsvitzer.flixbook.R.string.no_movie_data_text;
 
 public class MovieGridFragment extends Fragment implements MoviesContract.View {
 
@@ -147,6 +148,8 @@ public class MovieGridFragment extends Fragment implements MoviesContract.View {
             case POPULAR_MOVIES:
                 currentId = R.id.action_sort_most_popular;
                 break;
+            case FAVORITE_MOVIES:
+                currentId = R.id.action_sort_favorite;
             default:
                 currentId = R.id.action_sort_most_popular;
         }
@@ -177,6 +180,8 @@ public class MovieGridFragment extends Fragment implements MoviesContract.View {
                     case R.id.action_sort_favorite:
 
                         saveCheckedItemState(item, MoviesFilterType.FAVORITE_MOVIES);
+
+                        return true;
 
                     default:
 
@@ -247,8 +252,19 @@ public class MovieGridFragment extends Fragment implements MoviesContract.View {
         mRecyclerView.setVisibility(View.INVISIBLE);
         mNoDataTextView.setVisibility(View.VISIBLE);
 
-        Toast.makeText(getActivity(), getString(R.string.no_movie_data_text), Toast.LENGTH_SHORT)
-                .show();
+
+    }
+
+    @Override
+    public void setNoDataTextView() {
+
+        mNoDataTextView.setText(getString(no_movie_data_text));
+    }
+
+    @Override
+    public void setNoFavoriteTextView() {
+
+        mNoDataTextView.setText(getString(R.string.text_no_favorite_data));
     }
 
     @Override

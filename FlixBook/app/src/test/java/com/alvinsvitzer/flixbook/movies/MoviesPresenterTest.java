@@ -144,7 +144,7 @@ public class MoviesPresenterTest{
     @Test
     public void showNoDataMessageIfNoMovies(){
 
-        mPresenter.onMovieListDataNotAvailable();
+        mPresenter.onMoviesNotAvailable();
 
         verify(mView).showNoDataTextView();
     }
