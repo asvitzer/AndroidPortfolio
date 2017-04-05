@@ -80,7 +80,6 @@ public class MovieOverviewPresenter implements Presenter
 
             mAppRepository.removeFavoriteMovie(String.valueOf(mMovie.getMovieId()));
             mView.displayFavoriteRemoval();
-
         }
 
     }
