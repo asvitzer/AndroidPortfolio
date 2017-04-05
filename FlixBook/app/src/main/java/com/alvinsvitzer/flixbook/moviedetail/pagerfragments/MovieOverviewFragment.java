@@ -7,6 +7,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,7 @@ public class MovieOverviewFragment extends Fragment implements MovieOverviewCont
     TextView mVoteAverage;
     @BindView(R.id.favoriteMovieFab)
     FloatingActionButton mFavoriteMovie;
-
+    @BindView(R.id.OverviewCoordinatorLayout)
     CoordinatorLayout mCoordinatorLayout;
 
     private MovieOverviewContract.Presenter mPresenter;
@@ -58,8 +59,6 @@ public class MovieOverviewFragment extends Fragment implements MovieOverviewCont
         ButterKnife.bind(this, v);
 
         attachPresenter();
-
-        mCoordinatorLayout = (CoordinatorLayout) v.findViewById(R.id.OverviewCoordinatorLayour);
 
         mFavoriteMovie.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,11 +123,11 @@ public class MovieOverviewFragment extends Fragment implements MovieOverviewCont
 
         if (isFavorite) {
 
-            mFavoriteMovie.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_favorite_white_24dp));
+            mFavoriteMovie.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_favorite_white_24dp));
 
         } else {
 
-            mFavoriteMovie.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_favorite_border_white_24dp));
+            mFavoriteMovie.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_favorite_border_white_24dp));
 
         }
 
