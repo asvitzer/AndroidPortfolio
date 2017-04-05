@@ -65,11 +65,11 @@ public class MovieOverviewPresenter implements Presenter
     @Override
     public void favoriteFabClicked() {
 
-        //Set the image of the fab favorite icon when clicked
-        mView.setFavoriteFabEnabled(mIsFavorited);
-
         //Toggle the boolean to be the opposite of its current value
         mIsFavorited = !mIsFavorited;
+
+        //Set the image of the fab favorite icon when clicked
+        mView.setFavoriteFabImage(mIsFavorited);
 
         if (mIsFavorited) {
 
