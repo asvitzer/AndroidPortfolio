@@ -2,16 +2,17 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/OverviewCoordinatorLayour"
+    android:id="@+id/OverviewCoordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.alvinsvitzer.flixbook.moviedetail.pagerfragments.MovieOverviewFragment"
     >
 
     <android.support.constraint.ConstraintLayout
+
         android:id="@+id/OverviewConstraintLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
     >
 
     <TextView
@@ -85,7 +86,7 @@
         style="@style/MaterialFAB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
+        android:layout_gravity="bottom|end"
         android:src="@drawable/ic_favorite_border_white_24dp"
         />
 
