@@ -19,6 +19,10 @@ public interface MovieDetailsContract {
         void detachView();
         void getOfficialYouTubeTrailerUrl();
 
+        void isMovieStored();
+
+        void favoriteFabClicked();
+
 
     }
     interface View extends BaseView{
@@ -34,6 +38,13 @@ public interface MovieDetailsContract {
         void notifyUserNoMovie();
         void setActivityTitle(String title);
 
+        void setFavoriteFabImage(boolean isFavorite);
+
+        void setFavoriteFabEnabled(boolean isEnabled);
+
+        void displayFavorite();
+
+        void displayFavoriteRemoval();
     }
 }
 

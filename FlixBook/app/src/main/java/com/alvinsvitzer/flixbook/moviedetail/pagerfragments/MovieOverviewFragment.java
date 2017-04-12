@@ -4,10 +4,8 @@ package com.alvinsvitzer.flixbook.moviedetail.pagerfragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,16 +24,12 @@ import static android.support.design.widget.Snackbar.make;
  */
 public class MovieOverviewFragment extends Fragment implements MovieOverviewContract.View {
 
-    private static final String TAG = MovieOverviewFragment.class.getSimpleName();
-
     @BindView(R.id.movie_plot_synopsis_textview)
     TextView mPlotSynopsis;
     @BindView(R.id.movie_release_date_textview)
     TextView mReleaseDate;
     @BindView(R.id.movie_vote_average_textview)
     TextView mVoteAverage;
-    @BindView(R.id.favoriteMovieFab)
-    FloatingActionButton mFavoriteMovie;
     @BindView(R.id.OverviewCoordinatorLayout)
     CoordinatorLayout mCoordinatorLayout;
 
@@ -60,13 +54,6 @@ public class MovieOverviewFragment extends Fragment implements MovieOverviewCont
 
         attachPresenter();
 
-        mFavoriteMovie.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPresenter.favoriteFabClicked();
-            }
-        });
-
         // Inflate the layout for this fragment
         return v;
     }
@@ -77,8 +64,7 @@ public class MovieOverviewFragment extends Fragment implements MovieOverviewCont
         if (mPresenter == null ){
 
             mPresenter = new MovieOverviewPresenter(this
-                    , Injection.provideMovieDataStoreRepository(getActivity())
-                    , Injection.provideLogger());
+                    , Injection.provideMovieDataStoreRepository(getActivity()));
 
             mPresenter.start();
         }
@@ -118,38 +104,10 @@ public class MovieOverviewFragment extends Fragment implements MovieOverviewCont
 
     }
 
-    @Override
-    public void setFavoriteFabImage(boolean isFavorite) {
-
-        if (isFavorite) {
-
-            mFavoriteMovie.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_favorite_white_24dp));
-
-        } else {
-
-            mFavoriteMovie.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_favorite_border_white_24dp));
-
-        }
-
-    }
 
     @Override
-    public void setFavoriteFabEnabled(boolean isEnabled) {
-        mFavoriteMovie.setEnabled(isEnabled);
+    public void onDestroy() {
+        mPresenter.detachView();
+        super.onDestroy();
     }
-
-    @Override
-    public void displayFavorite() {
-
-        Snackbar.make(mCoordinatorLayout, R.string.snackbar_movie_favorite, Snackbar.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void displayFavoriteRemoval() {
-
-        Snackbar.make(mCoordinatorLayout, R.string.snackbar_movie_unfavorited, Snackbar.LENGTH_LONG).show();
-
-    }
-
-
 }

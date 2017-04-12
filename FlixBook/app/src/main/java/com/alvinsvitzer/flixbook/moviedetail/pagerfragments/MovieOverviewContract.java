@@ -13,10 +13,6 @@ public interface MovieOverviewContract {
 
         void detachView();
 
-        void isMovieStored();
-
-        void favoriteFabClicked();
-
     }
     interface View extends BaseView{
 
@@ -25,12 +21,6 @@ public interface MovieOverviewContract {
         void setReleaseDate(String releaseDate);
         void setVoteAverage(Double voteAverage);
         void notifyNoMovieData();
-        void setFavoriteFabImage(boolean isFavorite);
-        void setFavoriteFabEnabled(boolean isEnabled);
-
-        void displayFavorite();
-
-        void displayFavoriteRemoval();
 
     }
 }

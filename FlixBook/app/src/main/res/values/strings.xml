@@ -31,9 +31,10 @@
     <string name="tab_title_reviews">REVIEWS</string>
 
     <string name="action_settings">Settings</string>
-    <string name="text_no_trailer">No trailers available. Play button disabled.</string>
+    <string name="text_no_trailer">No trailers available. Play button removed.</string>
     <string name="text_no_movie_data">Movie data not available.</string>
-    <string name="text_no_favorite_data">There are no favorites stored.</string>
+    <string name="text_no_review_data">Review data not available.</string>
+    <string name="text_no_favorite_data">There are no favorites stored. \n Add some!</string>
 
     <string name="text_view_author_label">Reviewer:</string>
 

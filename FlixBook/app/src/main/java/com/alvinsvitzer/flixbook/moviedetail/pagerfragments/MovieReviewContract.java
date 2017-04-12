@@ -12,12 +12,18 @@ import java.util.List;
 
 public interface MovieReviewContract {
 
-    interface Presenter extends BasePresenter{}
+    interface Presenter extends BasePresenter {
+
+        void detachView();
+    }
 
     interface View extends BaseView{
 
         void attachPresenter();
-        void notifyNoReviews();
+
+        void showNoDataTextView();
+
+        void hideNoDataTextView();
         void displayReviews(List<Review> reviews);
 
     }

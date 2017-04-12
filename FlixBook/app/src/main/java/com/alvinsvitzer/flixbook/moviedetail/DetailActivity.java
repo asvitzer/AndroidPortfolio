@@ -14,6 +14,9 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -24,13 +27,9 @@ import com.alvinsvitzer.flixbook.extensions.AppBarStateChangeListener;
 import com.alvinsvitzer.flixbook.utilities.VolleyNetworkSingleton;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
-import com.jakewharton.rxbinding.view.RxView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.subscriptions.CompositeSubscription;
 
 public class DetailActivity extends AppCompatActivity implements MovieDetailsContract.View {
 
@@ -57,8 +56,10 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailsCon
 
     @BindView(R.id.collapsing_toolbar)
     CollapsingToolbarLayout mCollapsingToolbarLayout;
-    // Used to handle unsubscription during teardown of Fragment
-    CompositeSubscription subscriptions = new CompositeSubscription();
+
+    @BindView(R.id.MovieDetailCoordLayout)
+    CoordinatorLayout mCoordinatorLayout;
+
     private MovieDetailsContract.Presenter mPresenter;
     private Uri mTrailerUri;
     private String mMovieTitle;
@@ -77,7 +78,7 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailsCon
 
         attachPresenter();
 
-        setupSubscription();
+        setupListener();
 
         setupAdapter();
 
@@ -103,7 +104,7 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailsCon
 
             AppRepository appRepository = Injection.provideMovieDataStoreRepository(this);
 
-            mPresenter = new MovieDetailPresenter(appRepository, imageLoader, this);
+            mPresenter = new MovieDetailPresenter(appRepository, imageLoader, this, Injection.provideLogger());
 
         }else{
 
@@ -113,29 +114,21 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailsCon
 
     }
 
-    private void setupSubscription() {
+    private void setupListener() {
 
-        subscriptions.add(RxView.clicks(mPlayMovieFab).map(new Func1<Void, Intent>() {
-
+        mPlayMovieFab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public Intent call(Void aVoid) {
+            public void onClick(View v) {
 
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(mTrailerUri);
 
-                return intent;
-
-            }
-
-        }).subscribe(new Action1<Intent>() {
-            @Override
-            public void call(Intent intent) {
                 if (intent.resolveActivity(getPackageManager()) != null){
                     startActivity(intent);
                 }
 
             }
-        }));
+        });
     }
 
     private void setupAdapter() {
@@ -204,6 +197,25 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailsCon
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.detail_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.favorite_movie_button:
+                mPresenter.favoriteFabClicked();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     public void setPosterImage(@NonNull String imageUrl, @NonNull ImageLoader imageLoader) {
 
         mPosterImage.setImageUrl(imageUrl, imageLoader);
@@ -252,7 +264,6 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailsCon
 
     @Override
     public void setActivityTitle(String title) {
-        //setTitle(title);
         mMovieTitle = title;
     }
 
@@ -265,13 +276,14 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailsCon
                 .make(coordinatorLayout, R.string.text_no_trailer, Snackbar.LENGTH_LONG);
 
         snackbar.show();
+
+        mPlayMovieFab.setVisibility(View.INVISIBLE);
     }
 
     @Override
     protected void onDestroy() {
 
         mPresenter.detachView();
-        subscriptions.unsubscribe();
         super.onDestroy();
 
     }
@@ -279,12 +291,45 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailsCon
     @Override
     public void notifyUserNoMovie() {
 
-        CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.MovieDetailCoordLayout);
-
         Snackbar snackbar = Snackbar
-                .make(coordinatorLayout, R.string.text_no_movie_data, Snackbar.LENGTH_LONG);
+                .make(mCoordinatorLayout, R.string.text_no_movie_data, Snackbar.LENGTH_LONG);
 
         snackbar.show();
+    }
+
+    @Override
+    public void setFavoriteFabImage(boolean isFavorite) {
+
+        if (isFavorite) {
+
+            // mFavoriteMovie.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_favorite_white_24dp));
+
+        } else {
+
+            // mFavoriteMovie.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_favorite_border_white_24dp));
+
+        }
+
+    }
+
+    @Override
+    public void setFavoriteFabEnabled(boolean isEnabled) {
+        // mFavoriteMovie.setEnabled(isEnabled);
+    }
+
+    @Override
+    public void displayFavorite() {
+
+        Snackbar.make(mCoordinatorLayout, R.string.snackbar_movie_favorite, Snackbar.LENGTH_LONG)
+                .show();
+    }
+
+    @Override
+    public void displayFavoriteRemoval() {
+
+        Snackbar.make(mCoordinatorLayout, R.string.snackbar_movie_unfavorited, Snackbar.LENGTH_LONG)
+                .show();
+
     }
 
 }

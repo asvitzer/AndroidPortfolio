@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="exitUntilCollapsed"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             >
 
             <android.support.constraint.ConstraintLayout
@@ -97,6 +97,7 @@
                 android:id="@+id/my_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 />

@@ -49,7 +49,7 @@ public class MovieReviewPresenter implements MovieReviewContract.Presenter
     @Override
     public void onMovieDataNotAvailable() {
 
-        mView.notifyNoReviews();
+        mView.showNoDataTextView();
 
     }
 
@@ -57,12 +57,18 @@ public class MovieReviewPresenter implements MovieReviewContract.Presenter
     public void onReviewsLoaded(List<Review> reviewList) {
 
         mView.displayReviews(reviewList);
+        mView.hideNoDataTextView();
     }
 
     @Override
     public void onReviewDataNotAvailable() {
 
-        mView.notifyNoReviews();
+        mView.showNoDataTextView();
 
+    }
+
+    @Override
+    public void detachView() {
+        mView = null;
     }
 }

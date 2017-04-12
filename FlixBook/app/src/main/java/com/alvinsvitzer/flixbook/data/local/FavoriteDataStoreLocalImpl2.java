@@ -16,7 +16,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Created by alvin.svitzer on 25/03/2017.
  */
 
-public class FavoriteDataStoreLocalImpl implements FavoriteDataStoreLocal {
+public class FavoriteDataStoreLocalImpl2 implements FavoriteDataStoreLocal {
 
     private static final String TAG = FavoriteDataStoreLocal.class.getSimpleName();
     private static final int INSERT_TOKEN = 1;
@@ -24,22 +24,22 @@ public class FavoriteDataStoreLocalImpl implements FavoriteDataStoreLocal {
     private static final int QUERY_MOVIE_CHECK_TOKEN = 3;
     private static final int QUERY_ALL_MOVIES_TOKEN = 4;
 
-    private static FavoriteDataStoreLocalImpl INSTANCE = null;
+    private static FavoriteDataStoreLocalImpl2 INSTANCE = null;
     private AsyncQueryHandler mAsyncQueryHandler;
 
 
-    private FavoriteDataStoreLocalImpl(@NonNull ContentResolver contentResolver) {
+    private FavoriteDataStoreLocalImpl2(@NonNull ContentResolver contentResolver) {
 
         mAsyncQueryHandler = new MyAsyncQueryHandler(contentResolver);
 
     }
 
-    public static FavoriteDataStoreLocalImpl getInstance(@NonNull ContentResolver contentResolver) {
+    public static FavoriteDataStoreLocalImpl2 getInstance(@NonNull ContentResolver contentResolver) {
 
         checkNotNull(contentResolver, "contentProvider cannot be null");
 
         if (INSTANCE == null) {
-            INSTANCE = new FavoriteDataStoreLocalImpl(contentResolver);
+            INSTANCE = new FavoriteDataStoreLocalImpl2(contentResolver);
         }
 
         return INSTANCE;
@@ -101,7 +101,7 @@ public class FavoriteDataStoreLocalImpl implements FavoriteDataStoreLocal {
 
     }
 
-    private class MyAsyncQueryHandler extends AsyncQueryHandler {
+    private static class MyAsyncQueryHandler extends AsyncQueryHandler {
 
 
         public MyAsyncQueryHandler(ContentResolver cr) {

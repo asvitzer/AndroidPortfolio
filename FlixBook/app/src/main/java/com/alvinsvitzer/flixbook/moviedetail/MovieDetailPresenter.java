@@ -2,13 +2,16 @@ package com.alvinsvitzer.flixbook.moviedetail;
 
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 
 import com.alvinsvitzer.flixbook.data.AppRepository;
+import com.alvinsvitzer.flixbook.data.local.FavoriteDataStoreLocal;
 import com.alvinsvitzer.flixbook.data.local.MovieDataStoreInMemory;
 import com.alvinsvitzer.flixbook.data.model.Movie;
 import com.alvinsvitzer.flixbook.data.model.NullMovie;
 import com.alvinsvitzer.flixbook.data.model.Trailer;
 import com.alvinsvitzer.flixbook.data.remote.MovieDataStoreRemote;
+import com.alvinsvitzer.flixbook.logger.Logger;
 import com.alvinsvitzer.flixbook.utilities.MovieDBUtils;
 import com.alvinsvitzer.flixbook.utilities.YouTubeUtils;
 import com.android.volley.toolbox.ImageLoader;
@@ -23,25 +26,33 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class MovieDetailPresenter implements MovieDetailsContract.Presenter
         , MovieDataStoreRemote.GetTrailersCallback
-        , MovieDataStoreInMemory.GetMovieCallback {
+        , MovieDataStoreInMemory.GetMovieCallback
+        , FavoriteDataStoreLocal.CheckMovieCallback {
 
     private static final String TAG = MovieDetailPresenter.class.getSimpleName();
     @NonNull
     private final AppRepository mAppRepository;
-
     @NonNull
     private final ImageLoader mImageLoader;
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     protected Movie mMovie;
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     protected MovieDetailsContract.View mView;
 
+    private boolean mIsFavorited;
+    private Logger mLogger;
+
     MovieDetailPresenter(@NonNull AppRepository appRepository
-                        ,@NonNull ImageLoader imageLoader
-                        ,@NonNull MovieDetailsContract.View view){
+                        , @NonNull ImageLoader imageLoader
+            , @NonNull MovieDetailsContract.View view
+            , @NonNull Logger logger) {
 
         mAppRepository = checkNotNull(appRepository, "movieRemoteDataStore cannot be null");
         mImageLoader = checkNotNull(imageLoader, "imageLoader cannot be null");
         mView = checkNotNull(view, "view cannot be null");
-        mAppRepository.getMovie(this);
+        mLogger = checkNotNull(logger, "logger cannot be null");
+
         //Set this to the null movie until it's loaded from the data source.
         mMovie = NullMovie.getInstance();
 
@@ -65,6 +76,7 @@ public class MovieDetailPresenter implements MovieDetailsContract.Presenter
         mAppRepository.getMovie(this);
 
         mView.disableTrailerFab();
+        mView.setFavoriteFabEnabled(false);
 
     }
 
@@ -124,6 +136,8 @@ public class MovieDetailPresenter implements MovieDetailsContract.Presenter
 
         mAppRepository.getTrailers(String.valueOf(mMovie.getMovieId()), this);
 
+        isMovieStored();
+
     }
 
     @Override
@@ -131,4 +145,47 @@ public class MovieDetailPresenter implements MovieDetailsContract.Presenter
 
         mView.notifyUserNoMovie();
     }
+
+    @Override
+    public void favoriteFabClicked() {
+
+        //Toggle the boolean to be the opposite of its current value
+        mIsFavorited = !mIsFavorited;
+
+        //Set the image of the fab favorite icon when clicked
+        mView.setFavoriteFabImage(mIsFavorited);
+
+        if (mIsFavorited) {
+
+            mAppRepository.addFavoriteMovie(mMovie);
+            mView.displayFavorite();
+
+        } else {
+
+            mAppRepository.removeFavoriteMovie(String.valueOf(mMovie.getMovieId()));
+            mView.displayFavoriteRemoval();
+        }
+
+    }
+
+    @Override
+    public void movieStored(boolean movieStored) {
+
+        mView.setFavoriteFabEnabled(true);
+
+        mIsFavorited = movieStored;
+
+        mView.setFavoriteFabImage(mIsFavorited);
+
+        mLogger.logd(TAG, "method: movieStored | " + mMovie.getMovieId() + " isFavorite: " + mIsFavorited);
+    }
+
+    @Override
+    public void isMovieStored() {
+
+        mAppRepository.checkFavorite(String.valueOf(mMovie.getMovieId())
+                , this);
+    }
+
+
 }

@@ -2,7 +2,6 @@ package com.alvinsvitzer.flixbook.moviedetail.pagerfragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,17 +29,16 @@ import butterknife.ButterKnife;
 
 public class MovieReviewFragment extends Fragment implements MovieReviewContract.View {
 
+    private static final String TAG = MovieReviewFragment.class.getSimpleName();
+    @BindView(R.id.fragment_grid_container)
+    FrameLayout mFrameLayout;
+    @BindView(R.id.review_recycler_view)
+    RecyclerView mRecyclerView;
+    @BindView(R.id.no_data_text_view_review)
+    TextView mNoDataTextView;
     private MovieReviewContract.Presenter mPresenter;
     private List<Review> mReviewList;
     private ReviewAdapter mReviewAdapter;
-
-    private static final String TAG = MovieReviewFragment.class.getSimpleName();
-
-    @BindView(R.id.fragment_grid_container)
-    FrameLayout mFrameLayout;
-
-    @BindView(R.id.review_recycler_view)
-    RecyclerView mRecyclerView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,7 +46,7 @@ public class MovieReviewFragment extends Fragment implements MovieReviewContract
 
         mReviewList = new ArrayList<>();
         mReviewAdapter = new ReviewAdapter(mReviewList);
-        attachPresenter();
+
 
     }
 
@@ -62,6 +60,8 @@ public class MovieReviewFragment extends Fragment implements MovieReviewContract
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mReviewAdapter);
+
+        attachPresenter();
 
         return v;
     }
@@ -79,9 +79,28 @@ public class MovieReviewFragment extends Fragment implements MovieReviewContract
     }
 
     @Override
-    public void notifyNoReviews() {
+    public void showNoDataTextView() {
 
-        Snackbar.make(mFrameLayout, R.string.snackbar_text_no_review, Snackbar.LENGTH_LONG).show();
+        if (!mNoDataTextView.isShown()) {
+            mNoDataTextView.setVisibility(View.VISIBLE);
+        }
+
+        if (mRecyclerView.isShown()) {
+            mRecyclerView.setVisibility(View.INVISIBLE);
+        }
+
+    }
+
+    @Override
+    public void hideNoDataTextView() {
+
+        if (mNoDataTextView.isShown()) {
+            mNoDataTextView.setVisibility(View.INVISIBLE);
+        }
+
+        if (!mRecyclerView.isShown()) {
+            mRecyclerView.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -98,6 +117,12 @@ public class MovieReviewFragment extends Fragment implements MovieReviewContract
         mReviewAdapter.notifyDataSetChanged();
 
 
+    }
+
+    @Override
+    public void onDestroy() {
+        mPresenter.detachView();
+        super.onDestroy();
     }
 
     private class ReviewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

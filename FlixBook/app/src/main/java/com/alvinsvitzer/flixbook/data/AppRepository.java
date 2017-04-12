@@ -78,7 +78,8 @@ public class AppRepository implements MovieDataStoreInMemory, MovieDataStoreRemo
 
                 if (movie.isPartial()) {
 
-                    mMovieDataStoreRemoteImpl.getMovie(callback, String.valueOf(movie.getMovieId()));
+                    getMovie(callback, String.valueOf(movie.getMovieId()));
+
                 } else {
 
                     callback.onMovieLoaded(movie);

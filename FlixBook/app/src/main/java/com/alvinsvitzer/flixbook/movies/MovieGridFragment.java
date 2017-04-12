@@ -138,6 +138,7 @@ public class MovieGridFragment extends Fragment implements MoviesContract.View {
         PopupMenu popupMenu = new PopupMenu(getActivity(), menuItemView);
         popupMenu.inflate(R.menu.sub_menu_filter);
 
+        //Set the menu item that was chosen last time. If first time, use default.
         int currentId;
 
         switch(mSortMenuIdChecked){
@@ -150,6 +151,7 @@ public class MovieGridFragment extends Fragment implements MoviesContract.View {
                 break;
             case FAVORITE_MOVIES:
                 currentId = R.id.action_sort_favorite;
+                break;
             default:
                 currentId = R.id.action_sort_most_popular;
         }
