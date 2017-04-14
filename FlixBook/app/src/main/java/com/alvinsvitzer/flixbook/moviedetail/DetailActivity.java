@@ -14,6 +14,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -63,6 +64,7 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailsCon
     private MovieDetailsContract.Presenter mPresenter;
     private Uri mTrailerUri;
     private String mMovieTitle;
+    private boolean mIsFavoriteMovie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -243,7 +245,6 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailsCon
     @Override
     public void disableTrailerFab(){
 
-
         mPlayMovieFab.setVisibility(View.INVISIBLE);
 
     }
@@ -300,21 +301,30 @@ public class DetailActivity extends AppCompatActivity implements MovieDetailsCon
     @Override
     public void setFavoriteFabImage(boolean isFavorite) {
 
-        if (isFavorite) {
-
-            // mFavoriteMovie.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_favorite_white_24dp));
-
-        } else {
-
-            // mFavoriteMovie.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_favorite_border_white_24dp));
-
-        }
+        mIsFavoriteMovie = isFavorite;
+        invalidateOptionsMenu();
 
     }
 
     @Override
-    public void setFavoriteFabEnabled(boolean isEnabled) {
-        // mFavoriteMovie.setEnabled(isEnabled);
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        MenuItem favoriteMenu = menu.findItem(R.id.favorite_movie_button);
+
+        Log.d("DAAAAAA", "onPrepareOptionsMenu: menu " + (menu == null) + " " + menu);
+
+        if (mIsFavoriteMovie) {
+
+            favoriteMenu.setIcon(getResources().getDrawable(R.drawable.ic_favorite_white_24dp));
+
+        } else {
+
+            favoriteMenu.setIcon(getResources().getDrawable(R.drawable.ic_favorite_border_white_24dp));
+
+        }
+
+        return super.onPrepareOptionsMenu(menu);
+
     }
 
     @Override

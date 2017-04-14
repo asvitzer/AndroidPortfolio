@@ -8,7 +8,6 @@ import com.alvinsvitzer.flixbook.data.AppRepository;
 import com.alvinsvitzer.flixbook.data.local.FavoriteDataStoreLocal;
 import com.alvinsvitzer.flixbook.data.local.MovieDataStoreInMemory;
 import com.alvinsvitzer.flixbook.data.model.Movie;
-import com.alvinsvitzer.flixbook.data.model.NullMovie;
 import com.alvinsvitzer.flixbook.data.model.Trailer;
 import com.alvinsvitzer.flixbook.data.remote.MovieDataStoreRemote;
 import com.alvinsvitzer.flixbook.logger.Logger;
@@ -53,9 +52,6 @@ public class MovieDetailPresenter implements MovieDetailsContract.Presenter
         mView = checkNotNull(view, "view cannot be null");
         mLogger = checkNotNull(logger, "logger cannot be null");
 
-        //Set this to the null movie until it's loaded from the data source.
-        mMovie = NullMovie.getInstance();
-
     }
 
     @Override
@@ -76,7 +72,6 @@ public class MovieDetailPresenter implements MovieDetailsContract.Presenter
         mAppRepository.getMovie(this);
 
         mView.disableTrailerFab();
-        mView.setFavoriteFabEnabled(false);
 
     }
 
@@ -170,8 +165,6 @@ public class MovieDetailPresenter implements MovieDetailsContract.Presenter
 
     @Override
     public void movieStored(boolean movieStored) {
-
-        mView.setFavoriteFabEnabled(true);
 
         mIsFavorited = movieStored;
 

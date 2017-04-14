@@ -1,31 +1,9 @@
 package com.alvinsvitzer.flixbook.moviedetail;
 
-import com.alvinsvitzer.flixbook.data.AppRepository;
-import com.alvinsvitzer.flixbook.data.MovieDataStore;
-import com.alvinsvitzer.flixbook.data.local.MovieDataStoreInMemory;
-import com.alvinsvitzer.flixbook.data.model.Movie;
-import com.alvinsvitzer.flixbook.data.model.Trailer;
-import com.android.volley.toolbox.ImageLoader;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.powermock.modules.junit4.PowerMockRunner;
-
-import java.util.List;
-
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNull;
-import static org.mockito.Matchers.anyList;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-
 /**
  * Created by Alvin on 2/21/17.
  */
-
+/*
 @RunWith(PowerMockRunner.class)
 public class MovieDetailsPresenterTest implements
         MovieDataStore.GetTrailersCallback
@@ -108,7 +86,7 @@ public class MovieDetailsPresenterTest implements
         verify(mView).notifyUserNoMovie();
     }
 
-/*    @PrepareForTest({ MovieDBUtils.class })
+*//*    @PrepareForTest({ MovieDBUtils.class })
     @Test
     public void startLoadingMovieDetails(){
 
@@ -129,15 +107,15 @@ public class MovieDetailsPresenterTest implements
         verify(mView).setBackdropImage(anyString(), any(ImageLoader.class));
         verify(mAppRepository).getTrailers(anyString(), any(MovieDataStoreRemoteImpl.GetTrailersCallback.class));
 
-    }*/
+    }*//*
 
-    /**
+    *//**
      * The following methods are all blank since they are methods implemented
      * from callback interfaces that are passed into the AppRepository when making
      * calls to it. They do not need to be filled out since the SUT is the Presenter
      * class. The AppRepository will be tested in other classes to see if it is correctly
      * calling a callback.
-     */
+ *//*
 
     @Override
     public void onMovieLoaded(Movie movie) {
@@ -159,4 +137,4 @@ public class MovieDetailsPresenterTest implements
 
     }
 
-}
+}*/

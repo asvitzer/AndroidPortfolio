@@ -60,9 +60,13 @@ public class FavoriteContentProvider extends ContentProvider {
 
         final SQLiteDatabase db = mFavoriteDbHelper.getReadableDatabase();
 
+        Log.d(TAG, "query: uri " + uri);
+
         // Write URI match code and set a variable to return a Cursor
         int match = sUriMatcher.match(uri);
         Cursor retCursor;
+
+        Log.d(TAG, "query: UriIntMatch " + match);
 
         switch (match) {
 
@@ -103,6 +107,8 @@ public class FavoriteContentProvider extends ContentProvider {
 
     @Override
     public Uri insert(@NonNull Uri uri, @NonNull ContentValues values) {
+
+        Log.d(TAG, "insert: uri " + uri);
 
         // Get access to the task database (to write new data to)
         final SQLiteDatabase db = mFavoriteDbHelper.getWritableDatabase();
@@ -148,6 +154,8 @@ public class FavoriteContentProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
+
+        Log.d(TAG, "delete: uri " + uri);
 
         // Get access to the database and write URI matching code to recognize a single item
         final SQLiteDatabase db = mFavoriteDbHelper.getWritableDatabase();

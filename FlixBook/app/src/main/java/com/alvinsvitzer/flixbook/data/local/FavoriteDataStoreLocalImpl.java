@@ -18,7 +18,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class FavoriteDataStoreLocalImpl implements FavoriteDataStoreLocal {
 
-    private static final String TAG = FavoriteDataStoreLocal.class.getSimpleName();
+    private static final String TAG = FavoriteDataStoreLocalImpl.class.getSimpleName();
     private static final int INSERT_TOKEN = 1;
     private static final int DELETE_TOKEN = 2;
     private static final int QUERY_MOVIE_CHECK_TOKEN = 3;
@@ -31,6 +31,8 @@ public class FavoriteDataStoreLocalImpl implements FavoriteDataStoreLocal {
     private FavoriteDataStoreLocalImpl(@NonNull ContentResolver contentResolver) {
 
         mAsyncQueryHandler = new MyAsyncQueryHandler(contentResolver);
+
+        Log.d(TAG, "FavoriteDataStoreLocalImpl: instatiating Favo9resDataStoreLocalImp");
 
     }
 
@@ -58,6 +60,8 @@ public class FavoriteDataStoreLocalImpl implements FavoriteDataStoreLocal {
 
         mAsyncQueryHandler.startQuery(QUERY_MOVIE_CHECK_TOKEN, callback, uri, null, null, null, null);
 
+        Log.d(TAG, "checkFavorite: startQuery checkFavorite " + movieId);
+
     }
 
     @Override
@@ -78,6 +82,8 @@ public class FavoriteDataStoreLocalImpl implements FavoriteDataStoreLocal {
 
         mAsyncQueryHandler.startInsert(INSERT_TOKEN, null, uri, contentValues);
 
+        Log.d(TAG, "startInsert addFavoriteMovie " + movieId);
+
     }
 
     @Override
@@ -90,6 +96,8 @@ public class FavoriteDataStoreLocalImpl implements FavoriteDataStoreLocal {
 
         mAsyncQueryHandler.startDelete(DELETE_TOKEN, null, uri, null, null);
 
+        Log.d(TAG, "removeFavoriteMovie: startDelete " + movieId);
+
     }
 
     @Override
@@ -97,20 +105,61 @@ public class FavoriteDataStoreLocalImpl implements FavoriteDataStoreLocal {
 
         Uri uri = FavoriteContract.FavoriteEntry.CONTENT_URI;
 
+        Log.d(TAG, "getFavorites URI: uri " + uri);
+
         mAsyncQueryHandler.startQuery(QUERY_ALL_MOVIES_TOKEN, callback, uri, null, null, null, null);
+
+        Log.d(TAG, "getFavorites: startQuery ");
 
     }
 
     private class MyAsyncQueryHandler extends AsyncQueryHandler {
 
+        ContentResolver cr;
 
         public MyAsyncQueryHandler(ContentResolver cr) {
             super(cr);
+            this.cr = cr;
+        }
+
+        @Override
+        public void startQuery(int token, Object cookie, Uri uri, String[] projection, String selection, String[] selectionArgs, String orderBy) {
+            super.startQuery(token, cookie, uri, projection, selection, selectionArgs, orderBy);
+
+            Log.d(TAG, "startQuery: MyAsyncQueryHandler");
+            Log.d(TAG, "startQuery: content resolver null?" + (cr == null) + cr.toString());
+        }
+
+        @Override
+        protected void onInsertComplete(int token, Object cookie, Uri uri) {
+            super.onInsertComplete(token, cookie, uri);
+
+            Log.d(TAG, "onInsertComplete: MyAsyncQueryHandler");
+            Log.d(TAG, "startQuery: content resolver null?" + (cr == null) + cr.toString());
+        }
+
+        @Override
+        protected void onUpdateComplete(int token, Object cookie, int result) {
+            super.onUpdateComplete(token, cookie, result);
+
+            Log.d(TAG, "onUpdateComplete: MyAsyncQueryHandler");
+            Log.d(TAG, "startQuery: content resolver null?" + (cr == null) + cr.toString());
+        }
+
+        @Override
+        protected void onDeleteComplete(int token, Object cookie, int result) {
+            super.onDeleteComplete(token, cookie, result);
+
+            Log.d(TAG, "onDeleteComplete: MyAsyncQueryHandler");
+            Log.d(TAG, "startQuery: content resolver null?" + (cr == null) + cr.toString());
         }
 
         @Override
         protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
             super.onQueryComplete(token, cookie, cursor);
+
+            Log.d(TAG, "onQueryComplete: Token " + token);
+            Log.d(TAG, "startQuery: content resolver null?" + (cr == null) + cr.toString());
 
             switch (token) {
                 case QUERY_MOVIE_CHECK_TOKEN:
@@ -142,6 +191,8 @@ public class FavoriteDataStoreLocalImpl implements FavoriteDataStoreLocal {
                     }
 
                     getFavoritesCallback.onFavoritesLoaded(cursor);
+
+                    break;
 
                 default:
                     Log.d(TAG, "onQueryComplete: No logic for token: " + token);
